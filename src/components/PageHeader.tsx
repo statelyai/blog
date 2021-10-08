@@ -30,6 +30,11 @@ export const PageHeader: React.FC = () => (
             </Link>
           </li>
           <li>
+            <Link href="https://xstate.js.org/docs" isExternal>
+              Documentation <ExternalLinkIcon />
+            </Link>
+          </li>
+          <li>
             <Link href="https://github.com/stately.ai/eng-blog" isExternal>
               Github <ExternalLinkIcon />
             </Link>
