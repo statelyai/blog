@@ -5,8 +5,8 @@ import { Logo } from "./Logo";
 export const PageHeader: React.FC = () => (
   <Stack
     as="header"
-    padding="3"
-    borderBottom="1px solid"
+    py="3"
+    px="6"
     display="flex"
     justifyContent="space-between"
     alignItems="left"
