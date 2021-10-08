@@ -9,7 +9,11 @@ const theme = extendTheme({
       500: "#8A8A99",
       400: "#ACACB4"
     }
-  }
+  },
+  fonts: {
+    heading: "TTCommons, Arial, sans-serif",
+    body: "TTCommons, Arial, sans-serif",
+  },
 })
 
 export default theme;

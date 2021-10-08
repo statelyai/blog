@@ -1,0 +1,8 @@
+@font-face {
+  font-family: 'TTCommons';
+  src: url('/fonts/ttcommons.woff2') format('woff2');
+}
+
+body {
+  font-variation-settings: 'wght' 450;
+}
