@@ -8,10 +8,16 @@ import { Post } from "../src/types";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { getAllPosts } from "../src/posts";
 import { Layout } from "../src/components/Layout";
-import { Box, Heading, Text, HStack, Button } from "@chakra-ui/react";
+import {
+  Box,
+  Heading,
+  Text,
+  HStack,
+  Button,
+  Link as ChakraLink,
+} from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { toUrl } from "../src/utils";
 
 type MDX = ReturnType<typeof serialize>;
 
@@ -49,16 +55,21 @@ const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({
         <Heading size="xl" as="h1" fontWeight="medium">
           {post.title}
         </Heading>
-        <HStack marginTop="5" display="block">
-          <small>
-            <Link href={`/authors/${post.author}`}>
-              <a>{post.author}</a>
-            </Link>
-          </small>
-          <small>{post.publishedAt}</small>
+        <HStack marginTop="5">
+          <Link href={`/authors/${post.author}`} passHref>
+            <ChakraLink color="gray.200">{post.author}</ChakraLink>
+          </Link>
+          <span>{post.publishedAt}</span>
+          <HStack as="small" width="auto">
+            {post.keywords.map((keyword) => (
+              <Link href={`/keyword/${keyword}`} passHref key={keyword}>
+                <ChakraLink color="gray.200">{`#${keyword}`}</ChakraLink>
+              </Link>
+            ))}
+          </HStack>
         </HStack>
         <Box paddingTop="2">
-          <MDXRemote {...mdx} />
+          <MDXRemote {...mdx} components={components} />
         </Box>
       </Box>
     </Layout>

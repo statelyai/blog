@@ -1,4 +1,11 @@
-import { Box, List, ListItem, Heading, HStack } from "@chakra-ui/react";
+import {
+  Box,
+  List,
+  ListItem,
+  Heading,
+  HStack,
+  Link as ChakraLink,
+} from "@chakra-ui/react";
 import type { NextPage } from "next";
 import { Layout } from "../src/components/Layout";
 import { getAllPosts } from "../src/posts";
@@ -9,18 +16,22 @@ const Home: NextPage<{ posts: Post[] }> = ({ posts }) => {
   return (
     <Layout posts={posts}>
       <Box padding="24">
-        <List spacing="12">
+        <List spacing="8">
           {posts.map((post) => (
             <ListItem key={post.id}>
               <Heading size="2">
                 <Link href={post.slug} passHref>
-                  <a>
+                  <ChakraLink
+                    padding="4"
+                    _hover={{ bg: "whiteAlpha.100" }}
+                    display="block"
+                  >
                     {post.title}{" "}
-                    <HStack display="block" color="gray.500">
+                    <HStack as="span" display="block" color="gray.500">
                       <small>{post.author}</small>
                       <small>{post.publishedAt}</small>
                     </HStack>
-                  </a>
+                  </ChakraLink>
                 </Link>
               </Heading>
             </ListItem>
@@ -33,6 +44,7 @@ const Home: NextPage<{ posts: Post[] }> = ({ posts }) => {
 
 export const getStaticProps = async () => {
   const posts = await getAllPosts();
+  console.log(posts);
   return { props: { posts } };
 };
 

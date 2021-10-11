@@ -1,5 +1,6 @@
 import "../styles/globals.css";
 import "../styles/nprogress.css";
+import "../styles/highlight.css";
 import "../styles/post.scss";
 import type { AppProps } from "next/app";
 import { ChakraProvider } from "@chakra-ui/react";

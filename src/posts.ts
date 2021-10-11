@@ -3,16 +3,13 @@ import path from "path";
 import matter from "gray-matter";
 import { Post } from "./types";
 import { v4 } from "uuid";
-import { stringHashCode } from "./utils";
+import { slugify, stringHashCode } from "./utils";
 
 const POSTS_DIR = path.join(process.cwd(), "content/posts");
 
 const getPostFrontMatter = async (fileName: string) => {
   return matter(await fs.readFile(path.join(POSTS_DIR, fileName)));
 };
-
-const makeSlugFromTitle = (title: string): string =>
-  title.toLowerCase().replace(/\s/g, "-");
 
 export const getAllPosts = async (): Promise<Array<Post>> => {
   let posts = [];
@@ -30,11 +27,15 @@ export const getAllPosts = async (): Promise<Array<Post>> => {
       ...frontMatter,
       id,
       title,
-      slug: makeSlugFromTitle(title),
+      slug: slugify(title),
       keywords: keywords.split(" "),
       excerpt,
       content,
     });
   }
-  return posts as Post[];
+
+  // Most recent to the oldest
+  return (posts as Post[]).sort((a, b) =>
+    a.publishedAt < b.publishedAt ? 1 : -1
+  );
 };
