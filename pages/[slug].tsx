@@ -8,9 +8,20 @@ import { Post } from "../src/types";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { getAllPosts } from "../src/posts";
 import { Layout } from "../src/components/Layout";
-import { Box, Heading } from "@chakra-ui/react";
+import { Box, Heading, Text, HStack } from "@chakra-ui/react";
 
 type MDX = ReturnType<typeof serialize>;
+
+const components = {
+  p: (props) => <Text {...props} as="p" />,
+  h1: (props) => <Heading {...props} as="h1" />,
+  h2: (props) => <Heading {...props} as="h2" />,
+  h3: (props) => <Heading {...props} as="h3" />,
+  h4: (props) => <Heading {...props} as="h4" />,
+  h5: (props) => <Heading {...props} as="h5" />,
+  h6: (props) => <Heading {...props} as="h6" />,
+  ul: (props) => <ul {...props} style={{ paddingLeft: "1rem" }} />,
+};
 
 const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({
   posts,

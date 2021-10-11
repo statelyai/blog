@@ -10,32 +10,51 @@ export const PageHeader: React.FC = () => (
     display="flex"
     justifyContent="space-between"
     alignItems="left"
-    direction={{ base:"column", md:"row"}}
+    direction={{ base: "column", md: "row" }}
   >
     <Logo />
     <Box as="nav">
-      <Stack spacing="6" direction={{ base:"column", md:"row"}}>
+      <Stack spacing="6" direction={{ base: "column", md: "row" }}>
         <form>
           <Input
             borderRadius="3xl"
             placeholder="Search"
             size="sm"
             type="search"
+            _placeholder={{ color: "white" }}
           />
         </form>
         <Stack as={List} listStyleType="none" direction="row" wrap="wrap">
           <Box as="li">
-            <Link href="https://stately.ai" isExternal display="block" padding="2" color="gray.500">
+            <Link
+              href="https://stately.ai"
+              isExternal
+              display="block"
+              padding="2"
+              color="gray.500"
+            >
               Stately.ai <ExternalLinkIcon />
             </Link>
           </Box>
           <Box as="li">
-            <Link href="https://xstate.js.org/docs" isExternal display="block" padding="2" color="gray.500">
+            <Link
+              href="https://xstate.js.org/docs"
+              isExternal
+              display="block"
+              padding="2"
+              color="gray.500"
+            >
               Documentation <ExternalLinkIcon />
             </Link>
           </Box>
           <Box as="li">
-            <Link href="https://github.com/stately.ai/eng-blog" isExternal display="block" padding="2" color="gray.500">
+            <Link
+              href="https://github.com/stately.ai/eng-blog"
+              isExternal
+              display="block"
+              padding="2"
+              color="gray.500"
+            >
               Github <ExternalLinkIcon />
             </Link>
           </Box>
