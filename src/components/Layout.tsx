@@ -10,6 +10,7 @@ export const Layout: React.FC<{ posts: Post[] }> = ({ posts, children }) => (
     <Box
       as="main"
       display="flex"
+      justifyContent="center"
       flexDir={{ base: "column", md: "row" }}
       flex="1"
     >

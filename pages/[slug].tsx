@@ -8,7 +8,10 @@ import { Post } from "../src/types";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { getAllPosts } from "../src/posts";
 import { Layout } from "../src/components/Layout";
-import { Box, Heading, Text, HStack } from "@chakra-ui/react";
+import { Box, Heading, Text, HStack, Button } from "@chakra-ui/react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { toUrl } from "../src/utils";
 
 type MDX = ReturnType<typeof serialize>;
 
@@ -28,12 +31,32 @@ const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({
   post,
   mdx,
 }) => {
+  const router = useRouter();
   return (
     <Layout posts={posts}>
       <Box as="article" padding="12" maxW="4xl">
+        <Button
+          as="a"
+          onClick={() => {
+            router.back();
+          }}
+          marginBottom="8"
+          cursor="pointer"
+          textDecoration="none"
+        >
+          &lt; Back
+        </Button>
         <Heading size="xl" as="h1">
           {post.title}
         </Heading>
+        <HStack marginTop="5" display="block">
+          <small>
+            <Link href={`/authors/${post.author}`}>
+              <a>{post.author}</a>
+            </Link>
+          </small>
+          <small>{post.publishedAt}</small>
+        </HStack>
         <Box paddingTop="2">
           <MDXRemote {...mdx} />
         </Box>

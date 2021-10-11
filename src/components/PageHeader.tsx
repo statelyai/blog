@@ -14,12 +14,15 @@ export const PageHeader: React.FC = () => (
   >
     <Logo />
     <Box as="nav">
-      <Stack spacing="6" direction={{ base: "column", md: "row" }}>
+      <Stack
+        spacing="6"
+        direction={{ base: "column", md: "row" }}
+        alignItems="center"
+      >
         <form>
           <Input
-            borderRadius="3xl"
             placeholder="Search"
-            size="sm"
+            size="md"
             type="search"
             _placeholder={{ color: "white" }}
           />

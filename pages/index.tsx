@@ -1,4 +1,4 @@
-import { Box, List, ListItem, Heading } from "@chakra-ui/react";
+import { Box, List, ListItem, Heading, HStack } from "@chakra-ui/react";
 import type { NextPage } from "next";
 import { Layout } from "../src/components/Layout";
 import { getAllPosts } from "../src/posts";
@@ -14,7 +14,13 @@ const Home: NextPage<{ posts: Post[] }> = ({ posts }) => {
             <ListItem key={post.id}>
               <Heading size="2">
                 <Link href={post.slug} passHref>
-                  <a>{post.title}</a>
+                  <a>
+                    {post.title}{" "}
+                    <HStack display="block" color="gray.500">
+                      <small>{post.author}</small>
+                      <small>{post.publishedAt}</small>
+                    </HStack>
+                  </a>
                 </Link>
               </Heading>
             </ListItem>
