@@ -18,7 +18,7 @@ export const getAllPosts = async (): Promise<Array<Post>> => {
   );
   for (let fileName of files) {
     const {
-      data: { title, keywords, ...frontMatter },
+      data: { title, keywords = "", ...frontMatter },
       excerpt,
       content,
     } = await getPostFrontMatter(fileName);

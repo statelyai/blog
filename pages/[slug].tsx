@@ -18,6 +18,7 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { Tweet, YouTube } from "mdx-embed";
 
 type MDX = ReturnType<typeof serialize>;
 
@@ -30,6 +31,20 @@ const components = {
   h5: (props) => <Heading {...props} as="h5" />,
   h6: (props) => <Heading {...props} as="h6" />,
   ul: (props) => <ul {...props} style={{ paddingLeft: "1rem" }} />,
+  Tweet: ({ id, ...props }) => (
+    <Tweet
+      {...props}
+      hideConversation
+      tweetLink={`anyuser/status/${id}`}
+      theme="dark"
+      align="center"
+    />
+  ),
+  Youtube: ({ id, ...props }) => (
+    <Box marginY="5">
+      <YouTube {...props} youTubeId={id} />
+    </Box>
+  ),
 };
 
 const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({

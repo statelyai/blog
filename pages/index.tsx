@@ -44,7 +44,6 @@ const Home: NextPage<{ posts: Post[] }> = ({ posts }) => {
 
 export const getStaticProps = async () => {
   const posts = await getAllPosts();
-  console.log(posts);
   return { props: { posts } };
 };
 
