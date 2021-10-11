@@ -21,8 +21,8 @@ export const Sidebar: React.FC<{ posts: Post[] }> = ({ posts }) => {
       <Accordion allowMultiple defaultIndex={[0]}>
         {Object.keys(postsByCategory).map((category) => (
           <AccordionItem key={category}>
-            <AccordionButton px="0" py="3">
-              <Box flex="1" textAlign="left" as="h2" textTransform="uppercase" color="gray.500">
+            <AccordionButton px="1" py="3">
+              <Box flex="1" textAlign="left" as="h2" textTransform="uppercase" color="gray" letterSpacing="wider">
                 {category}
               </Box>
               <AccordionIcon />
@@ -32,7 +32,7 @@ export const Sidebar: React.FC<{ posts: Post[] }> = ({ posts }) => {
                 {postsByCategory[category].map((post) => (
                   <ListItem key={post.slug}>
                     <Link href={post.slug} passHref>
-                      <CharkaLink display="block" paddingX="0" paddingY="2" color="gray.400">
+                      <CharkaLink display="block" paddingX="1" paddingY="2" color="gray">
                         {post.title}
                       </CharkaLink>
                     </Link>

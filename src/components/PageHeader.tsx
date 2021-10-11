@@ -25,17 +25,17 @@ export const PageHeader: React.FC = () => (
         </form>
         <Stack as={List} listStyleType="none" direction="row" wrap="wrap">
           <Box as="li">
-            <Link href="https://stately.ai" isExternal display="block" padding="2" color="gray.400">
+            <Link href="https://stately.ai" isExternal display="block" padding="2" color="gray">
               Stately.ai <ExternalLinkIcon />
             </Link>
           </Box>
           <Box as="li">
-            <Link href="https://xstate.js.org/docs" isExternal display="block" padding="2" color="gray.400">
+            <Link href="https://xstate.js.org/docs" isExternal display="block" padding="2" color="gray">
               Documentation <ExternalLinkIcon />
             </Link>
           </Box>
           <Box as="li">
-            <Link href="https://github.com/stately.ai/eng-blog" isExternal display="block" padding="2" color="gray.400">
+            <Link href="https://github.com/stately.ai/eng-blog" isExternal display="block" padding="2" color="gray">
               Github <ExternalLinkIcon />
             </Link>
           </Box>
