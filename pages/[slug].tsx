@@ -20,7 +20,7 @@ const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({
   return (
     <Layout posts={posts}>
       <Box as="article" padding="12" maxW="4xl">
-        <Heading size="xl" as="h1">
+        <Heading size="xl" as="h1" fontWeight="medium">
           {post.title}
         </Heading>
         <Box paddingTop="2">
