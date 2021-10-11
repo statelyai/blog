@@ -23,11 +23,26 @@ body {
   }
 }
 
+article {
+  /* make text colour lower contrast to be easier on the eyes */
+  color: var(--chakra-colors-gray-200);
+}
+
 article a {
+  color: var(--chakra-colors-primary-300);
   text-decoration: underline;
   text-underline-offset: 0.1em;
   text-decoration-thickness: 0.05em;
   text-decoration-skip-ink: skip;
+}
+
+article a:hover, article a:active {
+  color: var(--chakra-colors-primary-400);
+}
+
+/* make strong and emphasised text slightly brighter */
+article strong, article b, article em, article i {
+  color: var(--chakra-colors-gray-100);
 }
 
 article strong, article b {
@@ -74,6 +89,7 @@ h1 {
 }
 
 article h2 a, article h3 a, article h4 a, article h5 a, article h6 a {
+  color: var(--chakra-colors-gray-100);
   text-decoration: none
 }
 
