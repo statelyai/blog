@@ -7,3 +7,69 @@ body {
   font-variation-settings: 'wght' 450;
   font-size: 1.2em;
 }
+
+article a {
+  text-decoration: underline;
+  text-underline-offset: 0.1em;
+}
+
+article strong, article b {
+  font-weight: var(--chakra-fontWeights-bold);
+}
+
+article em {
+  font-style: italic;
+}
+
+article h2, article h3, article h4, article h5, article h6 {
+  font-weight: var(--chakra-fontWeights-bold);
+  line-height: 1.2;
+  margin: 2em 0 1em;
+}
+
+article h2 a, article h3 a, article h4 a, article h5 a, article h6 a {
+  text-decoration: none
+}
+
+article h2 {
+  font-size: var(--chakra-fontSizes-3xl);
+}
+
+article h3 {
+  font-size: var(--chakra-fontSizes-2xl);
+}
+
+article h4 {
+  font-size: var(--chakra-fontSizes-xl);
+}
+
+article h5 {
+  font-size: var(--chakra-fontSizes-lg);
+}
+
+article h6 {
+  font-size: var(--chakra-fontSizes-md);
+}
+
+article blockquote,
+article dl,
+article dd,
+article hr,
+article figure,
+article p,
+article pre {
+  margin: 1em 0;
+}
+
+article ul, article ol {
+  margin-left: 1.6rem;
+}
+
+article blockquote {
+  border-left: 0.2em solid var(--chakra-colors-gray-500);
+  padding-left: 1.4rem;
+}
+
+article code {
+  font-family: var(--chakra-fonts-mono);
+}
