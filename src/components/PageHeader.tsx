@@ -1,20 +1,20 @@
-import { Box, Link, HStack, List, Input } from "@chakra-ui/react";
+import { Flex, Box, Link, Stack, List, Input } from "@chakra-ui/react";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { Logo } from "./Logo";
 
 export const PageHeader: React.FC = () => (
-  <Box
+  <Stack
     as="header"
-    height="60px"
-    padding="6"
-    borderBottom="1px solid"
+    py="3"
+    px="6"
     display="flex"
     justifyContent="space-between"
-    alignItems="center"
+    alignItems="left"
+    direction={{ base:"column", md:"row"}}
   >
     <Logo />
     <Box as="nav">
-      <HStack spacing="6">
+      <Stack spacing="6" direction={{ base:"column", md:"row"}}>
         <form>
           <Input
             borderRadius="3xl"
@@ -23,19 +23,24 @@ export const PageHeader: React.FC = () => (
             type="search"
           />
         </form>
-        <HStack as={List} spacing="6" listStyleType="none">
-          <li>
-            <Link href="https://stately.ai" isExternal>
+        <Stack as={List} listStyleType="none" direction="row" wrap="wrap">
+          <Box as="li">
+            <Link href="https://stately.ai" isExternal display="block" padding="2" color="gray.500">
               Stately.ai <ExternalLinkIcon />
             </Link>
-          </li>
-          <li>
-            <Link href="https://github.com/stately.ai/eng-blog" isExternal>
+          </Box>
+          <Box as="li">
+            <Link href="https://xstate.js.org/docs" isExternal display="block" padding="2" color="gray.500">
+              Documentation <ExternalLinkIcon />
+            </Link>
+          </Box>
+          <Box as="li">
+            <Link href="https://github.com/stately.ai/eng-blog" isExternal display="block" padding="2" color="gray.500">
               Github <ExternalLinkIcon />
             </Link>
-          </li>
-        </HStack>
-      </HStack>
+          </Box>
+        </Stack>
+      </Stack>
     </Box>
-  </Box>
+  </Stack>
 );
