@@ -22,7 +22,7 @@ export const Sidebar: React.FC<{ posts: Post[] }> = ({ posts }) => {
         {Object.keys(postsByCategory).map((category) => (
           <AccordionItem key={category} border="none">
             <AccordionButton px="1" py="3">
-              <Box flex="1" textAlign="left" as="h2" textTransform="uppercase" color="gray.500" letterSpacing="wider">
+              <Box flex="1" textAlign="left" as="h2" textTransform="uppercase" color="gray.400" letterSpacing="wider">
                 {category}
               </Box>
               <AccordionIcon />
@@ -32,7 +32,7 @@ export const Sidebar: React.FC<{ posts: Post[] }> = ({ posts }) => {
                 {postsByCategory[category].map((post) => (
                   <ListItem key={post.slug}>
                     <Link href={post.slug} passHref>
-                      <CharkaLink display="block" paddingX="1" paddingY="2" color="gray.500">
+                      <CharkaLink display="block" paddingX="1" paddingY="2" color="gray.400">
                         {post.title}
                       </CharkaLink>
                     </Link>
