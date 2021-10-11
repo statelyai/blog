@@ -6,7 +6,7 @@ import { Post } from "../types";
 
 export const Layout: React.FC<{ posts: Post[] }> = ({ posts, children }) => (
   <Box display="flex" flexDir="column" height="100%">
-    <PageHeader />
+    <PageHeader posts={posts} />
     <Box
       as="main"
       display="flex"
