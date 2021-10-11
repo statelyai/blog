@@ -46,7 +46,7 @@ const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({
         >
           &lt; Back
         </Button>
-        <Heading size="xl" as="h1">
+        <Heading size="xl" as="h1" fontWeight="medium">
           {post.title}
         </Heading>
         <HStack marginTop="5" display="block">

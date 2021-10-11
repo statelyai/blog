@@ -27,7 +27,7 @@ export const Sidebar: React.FC<{ posts: Post[] }> = ({ posts }) => {
                 textAlign="left"
                 as="h2"
                 textTransform="uppercase"
-                color="gray.500"
+                color="gray.400"
                 letterSpacing="wider"
               >
                 {category}
@@ -43,7 +43,7 @@ export const Sidebar: React.FC<{ posts: Post[] }> = ({ posts }) => {
                         display="block"
                         paddingX="1"
                         paddingY="2"
-                        color="gray.500"
+                        color="gray.400"
                       >
                         {post.title}
                       </CharkaLink>

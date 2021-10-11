@@ -34,7 +34,7 @@ export const PageHeader: React.FC = () => (
               isExternal
               display="block"
               padding="2"
-              color="gray.500"
+              color="gray.400"
             >
               Stately.ai <ExternalLinkIcon />
             </Link>
@@ -45,7 +45,7 @@ export const PageHeader: React.FC = () => (
               isExternal
               display="block"
               padding="2"
-              color="gray.500"
+              color="gray.400"
             >
               Documentation <ExternalLinkIcon />
             </Link>
@@ -56,7 +56,7 @@ export const PageHeader: React.FC = () => (
               isExternal
               display="block"
               padding="2"
-              color="gray.500"
+              color="gray.400"
             >
               Github <ExternalLinkIcon />
             </Link>
