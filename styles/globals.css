@@ -3,28 +3,74 @@
   src: url('/fonts/ttcommons.woff2') format('woff2');
 }
 
+@supports (font-weight: 450 600) {
+  @font-face {
+    font-weight: 450 600;
+  }
+}
+
+/* bump up root font size in all interface */
 body {
-  font-variation-settings: 'wght' 450;
   font-size: 1.2em;
+}
+
+@supports (font-variation-settings: 'wght' 450) {
+  body {
+    font-weight: 450;
+    font-variation-settings: 'wght' 450;
+    /* fix for Safari italicising variable fonts by default */
+    font-variation-settings: 'slnt' 0;
+  }
 }
 
 article a {
   text-decoration: underline;
   text-underline-offset: 0.1em;
+  text-decoration-thickness: 0.05em;
+  text-decoration-skip-ink: skip;
 }
 
 article strong, article b {
-  font-weight: var(--chakra-fontWeights-bold);
+  font-weight: bold;
+  font-synthesis: none;
 }
 
-article em {
+@supports (font-variation-settings: 'wght' 450) {
+  article strong, article b {
+    font-weight: 700;
+    font-variation-settings: 'wght' 700;
+    /* fix for Safari italicising variable fonts by default */
+    font-variation-settings: 'slnt' 0;
+  }
+}
+
+article em, article i {
   font-style: italic;
 }
 
-article h2, article h3, article h4, article h5, article h6 {
-  font-weight: var(--chakra-fontWeights-bold);
+@supports (font-variation-settings: 'ital' 1) {
+  article em, article i {
+    font-variation-settings: 'ital' 1;
+  }
+}
+
+h1, article h1, article h2, article h3, article h4, article h5, article h6 {
+  font-weight: bold;
   line-height: 1.2;
   margin: 2em 0 1em;
+}
+
+@supports (font-variation-settings: 'wght' 450) {
+  h1, article h1, article h2, article h3, article h4, article h5, article h6 {
+    font-weight: 500;
+    font-variation-settings: 'wght' 500;
+    /* fix for Safari italicising variable fonts by default */
+    font-variation-settings: 'slnt' 0;
+  }
+}
+
+h1 {
+  font-size: var(--chakra-fontSizes-4xl);
 }
 
 article h2 a, article h3 a, article h4 a, article h5 a, article h6 a {
