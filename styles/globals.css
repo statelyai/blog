@@ -61,11 +61,14 @@ article strong, article b {
 
 article em, article i {
   font-style: italic;
+  font-synthesis: none;
 }
 
-@supports (font-variation-settings: 'ital' 1) {
+@supports (font-variation-settings: 'slnt' 10) {
   article em, article i {
-    font-variation-settings: 'ital' 1;
+    /* workaround to stop Chrome from applying italics *then* slnt */
+    font-style: normal;
+    font-variation-settings: 'slnt' 10;
   }
 }
 
