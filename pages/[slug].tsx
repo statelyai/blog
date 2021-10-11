@@ -19,11 +19,11 @@ const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({
 }) => {
   return (
     <Layout posts={posts}>
-      <Box as="article" padding="12">
+      <Box as="article" padding="12" maxW="4xl">
         <Heading size="xl" as="h1">
           {post.title}
         </Heading>
-        <Box paddingTop="6">
+        <Box paddingTop="2">
           <MDXRemote {...mdx} />
         </Box>
       </Box>
