@@ -15,8 +15,8 @@ import Link from "next/link";
 const Home: NextPage<{ posts: Post[] }> = ({ posts }) => {
   return (
     <Layout posts={posts}>
-      <Heading as="h1" padding={{ base: "6", md: "24" }} paddingBottom={{ base: "6", md: "12" }}>Stately Engineering Blog</Heading>
-      <Box padding={{ base: "3", md: "12" }} display="flex" flexDirction="column" align="center">
+      <Box padding={{ base: "3", md: "12" }} display="flex" flexDirection="column" align="center">
+        <Heading as="h1" padding="4" paddingBottom={{ base: "8", md: "12" }} align="left">Stately Engineering Blog</Heading>
         <List spacing="8" maxW="4xl" align="left">
           {posts.map((post) => (
             <ListItem key={post.id}>
@@ -28,9 +28,8 @@ const Home: NextPage<{ posts: Post[] }> = ({ posts }) => {
                     display="block"
                   >
                     {post.title}{" "}
-                    <HStack as="span" display="block" color="gray.500">
-                      <small>{post.author}</small>
-                      <small>{post.publishedAt}</small>
+                    <HStack as="p" display="block" color="gray.500" size="smaller">
+                      <span>{post.publishedAt}</span><span>by {post.author}</span>
                     </HStack>
                   </ChakraLink>
                 </Link>
