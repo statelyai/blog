@@ -1,92 +1,20 @@
 @font-face {
   font-family: "TTCommons";
   src: url("/fonts/ttcommons.woff2") format("woff2");
-}
-
-@supports (font-weight: 450 600) {
-  @font-face {
-    font-weight: 450 600;
-  }
-}
-
-/* bump up root font size in all interface */
-body {
-  /* make text colour lower contrast to be easier on the eyes */
-  color: var(--chakra-colors-gray-200);
-  font-size: 1.2em;
-}
-
-@supports (font-variation-settings: "wght" 450) {
-  body {
-    font-weight: 450;
-    font-variation-settings: "wght" 450;
-    /* fix for Safari italicising variable fonts by default */
-    font-variation-settings: "slnt" 0;
-  }
-}
-
-a {
-  color: var(--chakra-colors-primary-300);
-  text-decoration: underline;
-  text-underline-offset: 0.1em;
-  text-decoration-thickness: 0.05em;
-  text-decoration-skip-ink: skip;
-}
-
-a:hover,
-a:active {
-  color: var(--chakra-colors-primary-400);
-}
-
-/* make strong and emphasised text slightly brighter */
-strong, b, em, i {
-  color: var(--chakra-colors-gray-100);
-}
-
-strong, b {
-  font-weight: bold;
-  font-synthesis: none;
-}
-
-@supports (font-variation-settings: "wght" 450) {
-  strong, b {
-    font-weight: 700;
-    font-variation-settings: "wght" 700;
-    /* fix for Safari italicising variable fonts by default */
-    font-variation-settings: "slnt" 0;
-  }
-}
-
-em, i {
-  font-style: italic;
-  font-synthesis: none;
-}
-
-@supports (font-variation-settings: "slnt" 10) {
-  em, i {
-    /* workaround to stop Chrome from applying italics *then* slnt */
-    font-style: normal;
-    font-variation-settings: "slnt" 10;
-  }
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-weight: bold;
-  line-height: 1.2;
-  margin: 2em 0 1em;
-}
-
-@supports (font-variation-settings: "wght" 450) {
-  h1, h2, h3, h4, h5, h6 {
-    font-weight: 500;
-    font-variation-settings: "wght" 500;
-    /* fix for Safari italicising variable fonts by default */
-    font-variation-settings: "slnt" 0;
-  }
+  font-weight: 450 600;
 }
 
 h1 {
   font-size: var(--chakra-fontSizes-4xl);
+}
+
+.blog-post h2,
+.blog-post h3,
+.blog-post h4,
+.blog-post h5,
+.blog-post h6 {
+  line-height: 1.2;
+  margin: 2em 0 1em;
 }
 
 .blog-post h2 a,
