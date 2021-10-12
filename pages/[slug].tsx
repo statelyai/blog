@@ -14,6 +14,8 @@ import {
   Text,
   HStack,
   Button,
+  UnorderedList,
+  ListItem,
   Link as ChakraLink,
 } from "@chakra-ui/react";
 import Link from "next/link";
@@ -55,7 +57,7 @@ const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({
   const router = useRouter();
   return (
     <Layout posts={posts}>
-      <Box as="article" padding="12" maxW="4xl" className="blog-post">
+      <Box as="article" padding="12" maxW="4xl" className="blog-post" textAlign="left">
         <Button
           as="a"
           onClick={() => {
@@ -71,17 +73,22 @@ const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({
           {post.title}
         </Heading>
         <HStack marginTop="5">
+          <Box as="p">By&nbsp;
           <Link href={`/authors/${post.author}`} passHref>
             <ChakraLink color="gray.200">{post.author}</ChakraLink>
           </Link>
+          &nbsp;on&nbsp;
           <span>{post.publishedAt}</span>
-          <HStack as="small" width="auto">
+          </Box>
+          <UnorderedList width="auto" fontSize="smaller" listStyleType="none" display="flex" flexWrap="row">
             {post.keywords.map((keyword) => (
-              <Link href={`/keyword/${keyword}`} passHref key={keyword}>
-                <ChakraLink color="gray.200">{`#${keyword}`}</ChakraLink>
-              </Link>
+              <ListItem key={keyword}>
+                <Link href={`/keyword/${keyword}`} passHref key={keyword}>
+                  <ChakraLink color="gray.200" padding="1" >{`#${keyword}`}</ChakraLink>
+                </Link>
+              </ListItem>
             ))}
-          </HStack>
+          </UnorderedList>
         </HStack>
         <Box paddingTop="2">
           <MDXRemote {...mdx} components={components} />
