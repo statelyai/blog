@@ -15,8 +15,9 @@ import Link from "next/link";
 const Home: NextPage<{ posts: Post[] }> = ({ posts }) => {
   return (
     <Layout posts={posts}>
-      <Box padding="24">
-        <List spacing="8">
+      <Heading as="h1" padding={{ base: "6", md: "24" }} paddingBottom={{ base: "6", md: "12" }}>Stately Engineering Blog</Heading>
+      <Box padding={{ base: "3", md: "12" }} display="flex" flexDirction="column" align="center">
+        <List spacing="8" maxW="4xl" align="left">
           {posts.map((post) => (
             <ListItem key={post.id}>
               <Heading size="2">
