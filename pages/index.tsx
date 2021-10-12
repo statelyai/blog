@@ -17,7 +17,7 @@ const Home: NextPage<{ posts: Post[] }> = ({ posts }) => {
     <Layout posts={posts}>
       <Box padding={{ base: "3", md: "12" }} display="flex" flexDirection="column" align="center">
         <Heading as="h1" padding="4" paddingBottom={{ base: "8", md: "12" }} align="left" fontWeight="normal">Stately Engineering Blog</Heading>
-        <List spacing="8" maxW="4xl" align="left">
+        <List spacing="4" maxW="4xl" align="left">
           {posts.map((post) => (
             <ListItem key={post.id} marginTop="0">
                 <Link href={post.slug} passHref>
