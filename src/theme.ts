@@ -15,8 +15,6 @@ const theme = extendTheme({
         backgroundColor: "gray.900",
         // make text colour lower contrast to be easier on the eyes
         color: "gray.200",
-        // bump up root font size across interface
-        fontSize: "1.1em",
         fontWeight: "450",
         // slnt is fix for Safari italicising variable fonts by default
         fontVariationSettings: "'wght' 450, 'slnt' 0",

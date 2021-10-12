@@ -4,6 +4,11 @@
   font-weight: 450 600;
 }
 
+main {
+  /* bump up font size in main area */
+  font-size: 1.2em;
+}
+
 h1 {
   font-size: var(--chakra-fontSizes-4xl);
 }
