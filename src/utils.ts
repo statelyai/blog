@@ -47,3 +47,13 @@ export const stringHashCode = (str: string): number => {
     h = (Math.imul(31, h) + str.charCodeAt(i)) | 0;
   return h;
 };
+
+export const toUrl = (str: string): string => encodeURIComponent(str);
+
+export const slugify = (str: string) =>
+  str
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, "")
+    .replace(/[\s_-]+/g, "-")
+    .replace(/^-+|-+$/g, "");

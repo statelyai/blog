@@ -1,34 +1,123 @@
 @font-face {
-  font-family: 'TTCommons';
-  src: url('/fonts/ttcommons.woff2') format('woff2');
+  font-family: "TTCommons";
+  src: url("/fonts/ttcommons.woff2") format("woff2");
 }
 
+@supports (font-weight: 450 600) {
+  @font-face {
+    font-weight: 450 600;
+  }
+}
+
+/* bump up root font size in all interface */
 body {
-  font-variation-settings: 'wght' 450;
   font-size: 1.2em;
 }
 
+@supports (font-variation-settings: "wght" 450) {
+  body {
+    font-weight: 450;
+    font-variation-settings: "wght" 450;
+    /* fix for Safari italicising variable fonts by default */
+    font-variation-settings: "slnt" 0;
+  }
+}
+
+article {
+  /* make text colour lower contrast to be easier on the eyes */
+  color: var(--chakra-colors-gray-200);
+}
+
 article a {
+  color: var(--chakra-colors-primary-300);
   text-decoration: underline;
   text-underline-offset: 0.1em;
+  text-decoration-thickness: 0.05em;
+  text-decoration-skip-ink: skip;
 }
 
-article strong, article b {
-  font-weight: var(--chakra-fontWeights-bold);
+article a:hover,
+article a:active {
+  color: var(--chakra-colors-primary-400);
 }
 
-article em {
+/* make strong and emphasised text slightly brighter */
+article strong,
+article b,
+article em,
+article i {
+  color: var(--chakra-colors-gray-100);
+}
+
+article strong,
+article b {
+  font-weight: bold;
+  font-synthesis: none;
+}
+
+@supports (font-variation-settings: "wght" 450) {
+  article strong,
+  article b {
+    font-weight: 700;
+    font-variation-settings: "wght" 700;
+    /* fix for Safari italicising variable fonts by default */
+    font-variation-settings: "slnt" 0;
+  }
+}
+
+article em,
+article i {
   font-style: italic;
+  font-synthesis: none;
 }
 
-article h2, article h3, article h4, article h5, article h6 {
-  font-weight: var(--chakra-fontWeights-bold);
+@supports (font-variation-settings: "slnt" 10) {
+  article em,
+  article i {
+    /* workaround to stop Chrome from applying italics *then* slnt */
+    font-style: normal;
+    font-variation-settings: "slnt" 10;
+  }
+}
+
+h1,
+article h1,
+article h2,
+article h3,
+article h4,
+article h5,
+article h6 {
+  font-weight: bold;
   line-height: 1.2;
   margin: 2em 0 1em;
 }
 
-article h2 a, article h3 a, article h4 a, article h5 a, article h6 a {
-  text-decoration: none
+@supports (font-variation-settings: "wght" 450) {
+  h1,
+  article h1,
+  article h2,
+  article h3,
+  article h4,
+  article h5,
+  article h6 {
+    font-weight: 500;
+    font-variation-settings: "wght" 500;
+    /* fix for Safari italicising variable fonts by default */
+    font-variation-settings: "slnt" 0;
+  }
+}
+
+h1 {
+  font-size: var(--chakra-fontSizes-4xl);
+}
+
+article h2 a,
+article h3 a,
+article h4 a,
+article h5 a,
+article h6 a {
+  color: var(--chakra-colors-gray-100);
+  text-decoration: none;
 }
 
 article h2 {
@@ -61,7 +150,8 @@ article pre {
   margin: 1em 0;
 }
 
-article ul, article ol {
+article ul,
+article ol {
   margin-left: 1.6rem;
 }
 
@@ -72,4 +162,8 @@ article blockquote {
 
 article code {
   font-family: var(--chakra-fonts-mono);
+}
+
+article img {
+  margin: 0 auto;
 }

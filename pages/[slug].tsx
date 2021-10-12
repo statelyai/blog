@@ -8,23 +8,83 @@ import { Post } from "../src/types";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { getAllPosts } from "../src/posts";
 import { Layout } from "../src/components/Layout";
-import { Box, Heading } from "@chakra-ui/react";
+import {
+  Box,
+  Heading,
+  Text,
+  HStack,
+  Button,
+  Link as ChakraLink,
+} from "@chakra-ui/react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { Tweet, YouTube } from "mdx-embed";
 
 type MDX = ReturnType<typeof serialize>;
+
+const components = {
+  p: (props) => <Text {...props} as="p" />,
+  h1: (props) => <Heading {...props} as="h1" />,
+  h2: (props) => <Heading {...props} as="h2" />,
+  h3: (props) => <Heading {...props} as="h3" />,
+  h4: (props) => <Heading {...props} as="h4" />,
+  h5: (props) => <Heading {...props} as="h5" />,
+  h6: (props) => <Heading {...props} as="h6" />,
+  ul: (props) => <ul {...props} style={{ paddingLeft: "1rem" }} />,
+  Tweet: ({ id, ...props }) => (
+    <Tweet
+      {...props}
+      hideConversation
+      tweetLink={`anyuser/status/${id}`}
+      theme="dark"
+      align="center"
+    />
+  ),
+  Youtube: ({ id, ...props }) => (
+    <Box marginY="5">
+      <YouTube {...props} youTubeId={id} />
+    </Box>
+  ),
+};
 
 const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({
   posts,
   post,
   mdx,
 }) => {
+  const router = useRouter();
   return (
     <Layout posts={posts}>
       <Box as="article" padding="12" maxW="4xl">
-        <Heading size="xl" as="h1">
+        <Button
+          as="a"
+          onClick={() => {
+            router.back();
+          }}
+          marginBottom="8"
+          cursor="pointer"
+          textDecoration="none"
+        >
+          &lt; Back
+        </Button>
+        <Heading size="xl" as="h1" fontWeight="medium">
           {post.title}
         </Heading>
+        <HStack marginTop="5">
+          <Link href={`/authors/${post.author}`} passHref>
+            <ChakraLink color="gray.200">{post.author}</ChakraLink>
+          </Link>
+          <span>{post.publishedAt}</span>
+          <HStack as="small" width="auto">
+            {post.keywords.map((keyword) => (
+              <Link href={`/keyword/${keyword}`} passHref key={keyword}>
+                <ChakraLink color="gray.200">{`#${keyword}`}</ChakraLink>
+              </Link>
+            ))}
+          </HStack>
+        </HStack>
         <Box paddingTop="2">
-          <MDXRemote {...mdx} />
+          <MDXRemote {...mdx} components={components} />
         </Box>
       </Box>
     </Layout>
