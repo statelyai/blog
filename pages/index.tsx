@@ -19,7 +19,7 @@ const Home: NextPage<{ posts: Post[] }> = ({ posts }) => {
         <Heading as="h1" padding="4" paddingBottom={{ base: "8", md: "12" }} align="left" fontWeight="normal">Stately Engineering Blog</Heading>
         <List spacing="8" maxW="4xl" align="left">
           {posts.map((post) => (
-            <ListItem key={post.id}>
+            <ListItem key={post.id} marginTop="0">
                 <Link href={post.slug} passHref>
                   <ChakraLink
                     padding="4"
