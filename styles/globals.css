@@ -11,6 +11,8 @@
 
 /* bump up root font size in all interface */
 body {
+  /* make text colour lower contrast to be easier on the eyes */
+  color: var(--chakra-colors-gray-200);
   font-size: 1.2em;
 }
 
@@ -23,12 +25,7 @@ body {
   }
 }
 
-article {
-  /* make text colour lower contrast to be easier on the eyes */
-  color: var(--chakra-colors-gray-200);
-}
-
-article a {
+a {
   color: var(--chakra-colors-primary-300);
   text-decoration: underline;
   text-underline-offset: 0.1em;
@@ -36,28 +33,23 @@ article a {
   text-decoration-skip-ink: skip;
 }
 
-article a:hover,
-article a:active {
+a:hover,
+a:active {
   color: var(--chakra-colors-primary-400);
 }
 
 /* make strong and emphasised text slightly brighter */
-article strong,
-article b,
-article em,
-article i {
+strong, b, em, i {
   color: var(--chakra-colors-gray-100);
 }
 
-article strong,
-article b {
+strong, b {
   font-weight: bold;
   font-synthesis: none;
 }
 
 @supports (font-variation-settings: "wght" 450) {
-  article strong,
-  article b {
+  strong, b {
     font-weight: 700;
     font-variation-settings: "wght" 700;
     /* fix for Safari italicising variable fonts by default */
@@ -65,41 +57,27 @@ article b {
   }
 }
 
-article em,
-article i {
+em, i {
   font-style: italic;
   font-synthesis: none;
 }
 
 @supports (font-variation-settings: "slnt" 10) {
-  article em,
-  article i {
+  em, i {
     /* workaround to stop Chrome from applying italics *then* slnt */
     font-style: normal;
     font-variation-settings: "slnt" 10;
   }
 }
 
-h1,
-article h1,
-article h2,
-article h3,
-article h4,
-article h5,
-article h6 {
+h1, h2, h3, h4, h5, h6 {
   font-weight: bold;
   line-height: 1.2;
   margin: 2em 0 1em;
 }
 
 @supports (font-variation-settings: "wght" 450) {
-  h1,
-  article h1,
-  article h2,
-  article h3,
-  article h4,
-  article h5,
-  article h6 {
+  h1, h2, h3, h4, h5, h6 {
     font-weight: 500;
     font-variation-settings: "wght" 500;
     /* fix for Safari italicising variable fonts by default */
@@ -111,59 +89,59 @@ h1 {
   font-size: var(--chakra-fontSizes-4xl);
 }
 
-article h2 a,
-article h3 a,
-article h4 a,
-article h5 a,
-article h6 a {
+.blog-post h2 a,
+.blog-post h3 a,
+.blog-post h4 a,
+.blog-post h5 a,
+.blog-post h6 a {
   color: var(--chakra-colors-gray-100);
   text-decoration: none;
 }
 
-article h2 {
+.blog-post h2 {
   font-size: var(--chakra-fontSizes-3xl);
 }
 
-article h3 {
+.blog-post h3 {
   font-size: var(--chakra-fontSizes-2xl);
 }
 
-article h4 {
+.blog-post h4 {
   font-size: var(--chakra-fontSizes-xl);
 }
 
-article h5 {
+.blog-post h5 {
   font-size: var(--chakra-fontSizes-lg);
 }
 
-article h6 {
+.blog-post h6 {
   font-size: var(--chakra-fontSizes-md);
 }
 
-article blockquote,
-article dl,
-article dd,
-article hr,
-article figure,
-article p,
-article pre {
+.blog-post blockquote,
+.blog-post dl,
+.blog-post dd,
+.blog-post hr,
+.blog-post figure,
+.blog-post p,
+.blog-post pre {
   margin: 1em 0;
 }
 
-article ul,
-article ol {
+.blog-post ul,
+.blog-post ol {
   margin-left: 1.6rem;
 }
 
-article blockquote {
+.blog-post blockquote {
   border-left: 0.2em solid var(--chakra-colors-gray-500);
   padding-left: 1.4rem;
 }
 
-article code {
+.blog-post code {
   font-family: var(--chakra-fonts-mono);
 }
 
-article img {
+.blog-post img {
   margin: 0 auto;
 }
