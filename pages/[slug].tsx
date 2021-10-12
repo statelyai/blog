@@ -55,7 +55,7 @@ const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({
   const router = useRouter();
   return (
     <Layout posts={posts}>
-      <Box as="article" padding="12" maxW="4xl">
+      <Box as="article" padding="12" maxW="4xl" className="blog-post">
         <Button
           as="a"
           onClick={() => {
