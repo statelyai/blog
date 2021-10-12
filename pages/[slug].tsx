@@ -65,7 +65,7 @@ const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({
           cursor="pointer"
           textDecoration="none"
         >
-          &lt; Back
+          &lt; All blog posts
         </Button>
         <Heading size="xl" as="h1" fontWeight="medium">
           {post.title}
