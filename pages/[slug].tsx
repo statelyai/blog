@@ -12,7 +12,7 @@ import {
   Box,
   Heading,
   Text,
-  HStack,
+  Stack,
   Button,
   UnorderedList,
   ListItem,
@@ -57,7 +57,7 @@ const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({
   const router = useRouter();
   return (
     <Layout posts={posts}>
-      <Box as="article" padding="12" maxW="4xl" className="blog-post" textAlign="left">
+      <Box as="article" className="blog-post" textAlign="left" padding="4" maxW="3xl">
         <Button
           as="a"
           onClick={() => {
@@ -72,7 +72,7 @@ const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({
         <Heading size="xl" as="h1" fontWeight="medium">
           {post.title}
         </Heading>
-        <HStack marginTop="5">
+        <Stack marginTop="5" direction={{base:"column", md:"row"}} alignItems={{base: "left", md:"center"}}>
           <Box as="p">By&nbsp;
           <Link href={`/authors/${post.author}`} passHref>
             <ChakraLink color="gray.200">{post.author}</ChakraLink>
@@ -80,7 +80,7 @@ const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({
           &nbsp;on&nbsp;
           <span>{post.publishedAt}</span>
           </Box>
-          <UnorderedList width="auto" fontSize="smaller" listStyleType="none" display="flex" flexWrap="row">
+          <UnorderedList width="auto" fontSize="smaller" listStyleType="none" display="flex" wrap="row" flexDirection={{base:"column", md:"row"}}>
             {post.keywords.map((keyword) => (
               <ListItem key={keyword}>
                 <Link href={`/keyword/${keyword}`} passHref key={keyword}>
@@ -89,7 +89,7 @@ const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({
               </ListItem>
             ))}
           </UnorderedList>
-        </HStack>
+        </Stack>
         <Box paddingTop="2">
           <MDXRemote {...mdx} components={components} />
         </Box>

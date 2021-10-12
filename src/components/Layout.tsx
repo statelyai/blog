@@ -11,7 +11,7 @@ export const Layout: React.FC<{ posts: Post[] }> = ({ posts, children }) => (
       as="main"
       display="flex"
       flexDir="column"
-      alignItems="center"
+      alignItems={{base: "left", md:"center"}}
       flex="1"
     >
       {/* <Sidebar posts={posts} /> */}

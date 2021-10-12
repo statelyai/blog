@@ -73,9 +73,9 @@ export const PageHeader: React.FC<{ posts: Post[] }> = ({ posts }) => {
       <Logo />
       <Box as="nav">
         <Stack
-          spacing="6"
+          spacing="4"
           direction={{ base: "column", md: "row" }}
-          alignItems="center"
+          alignItems={{ base: "left", md: "center" }}
         >
           <form style={{ position: "relative" }}>
             <Input
@@ -83,6 +83,7 @@ export const PageHeader: React.FC<{ posts: Post[] }> = ({ posts }) => {
               size="md"
               type="search"
               rounded="none"
+              marginTop={{base: "3", md: "0"}}
               _placeholder={{ color: "white" }}
               value={searchValue}
               onChange={(e) => {
@@ -95,17 +96,17 @@ export const PageHeader: React.FC<{ posts: Post[] }> = ({ posts }) => {
                 position="absolute"
                 top="100%"
                 left="0"
-                width="400px"
+                width={{base: "100%", md: "400px"}}
                 padding="5"
                 bg="gray.900"
                 border="1px solid"
                 borderColor="whiteAlpha.400"
               >
-                <List alignItems="flex-start" spacing="5">
+                <List alignItems="flex-start">
                   {result.map((p) => (
-                    <ListItem key={p.id}>
+                    <ListItem key={p.id} marginInlineStart="0">
                       <Link href={p.slug} passHref>
-                        <ChakraLink>
+                        <ChakraLink padding="5">
                           <small>{p.title}</small>
                         </ChakraLink>
                       </Link>
