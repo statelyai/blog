@@ -1,5 +1,8 @@
 import React from "react";
 import { Post } from "./types";
+import { Feed } from "feed";
+import { blogInfo, authors } from "../content/metadata";
+import fs from "fs";
 
 export function createRequiredContext<T>(displayName: string) {
   const context = React.createContext<T | null>(null);
@@ -57,3 +60,39 @@ export const slugify = (str: string) =>
     .replace(/[^\w\s-]/g, "")
     .replace(/[\s_-]+/g, "-")
     .replace(/^-+|-+$/g, "");
+
+export const generateRSSFeed = (posts: Post[]) => {
+  const feed = new Feed({
+    title: blogInfo.title,
+    description: blogInfo.description,
+    id: blogInfo.url,
+    link: blogInfo.url,
+    language: "en",
+    feedLinks: {
+      rss2: `${blogInfo.url}/rss.xml`,
+    },
+    copyright: "All rights reserved to Stately.ai",
+  });
+
+  authors.forEach((author) => {
+    feed.addContributor({ name: author.name, link: author.twitterHandle });
+  });
+
+  posts.forEach((post) => {
+    const postUrl = `${blogInfo.url}/${post.slug}`;
+    feed.addItem({
+      title: post.title,
+      id: postUrl,
+      link: postUrl,
+      description: post.description,
+      content: post.content,
+      author: [{ name: post.author }],
+      published: new Date(post.publishedAt),
+      date: new Date(),
+    });
+  });
+
+  // Write the RSS output to a public file, making it
+  // accessible at /rss.xml
+  fs.writeFileSync("public/rss.xml", feed.rss2());
+};

@@ -13,6 +13,7 @@
     "@chakra-ui/react": "^1.6.8",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
+    "feed": "^4.2.2",
     "framer-motion": "^4",
     "fuzzy-search": "^3.2.1",
     "gray-matter": "^4.0.3",
