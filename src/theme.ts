@@ -13,7 +13,42 @@ const theme = extendTheme({
     global: {
       "html, body": {
         backgroundColor: "gray.900",
+        // make text colour lower contrast to be easier on the eyes
+        color: "gray.200",
+        fontWeight: "450",
+        // slnt is fix for Safari italicising variable fonts by default
+        fontVariationSettings: "'wght' 450, 'slnt' 0",
       },
+      "a": {
+        color: "primary.300",
+        textDecoration: "underline",
+        textUnderlineOffset: "0.1em",
+        textDecorationThickness: "0.05em",
+        textDecorationSkipInk: "skip",
+      },
+      "a:hover, a:active": {
+        color: "primary.400",
+      },
+      // make strong and emphasised text slightly brighter
+      "strong, b, em, i": {
+        color: "gray.100",
+        fontSynthesis: "none",
+      },
+      "strong, b": {
+        fontWeight: "700",
+        // slnt is fix for Safari italicising variable fonts by default
+        fontVariationSettings: "'wght' 700, 'slnt' 0",
+      },
+      "em, i" : {
+        fontStyle: "italic",
+        fontSynthesis: "none",
+        fontVariationSettings: "'slnt' 10",
+      },
+      "h1, h2, h3, h4, h5, h6" : {
+        fontWeight: "500",
+        // slnt is fix for Safari italicising variable fonts by default
+        fontVariationSettings: "'wght' 500, 'slnt' 0",
+      }
     },
   },
   shadows: {

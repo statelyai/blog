@@ -12,8 +12,10 @@ import {
   Box,
   Heading,
   Text,
-  HStack,
+  Stack,
   Button,
+  UnorderedList,
+  ListItem,
   Link as ChakraLink,
 } from "@chakra-ui/react";
 import Link from "next/link";
@@ -55,7 +57,7 @@ const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({
   const router = useRouter();
   return (
     <Layout posts={posts}>
-      <Box as="article" padding="12" maxW="4xl">
+      <Box as="article" className="blog-post" textAlign="left" padding="4" maxW="3xl">
         <Button
           as="a"
           onClick={() => {
@@ -65,24 +67,29 @@ const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({
           cursor="pointer"
           textDecoration="none"
         >
-          &lt; Back
+          &lt; All blog posts
         </Button>
         <Heading size="xl" as="h1" fontWeight="medium">
           {post.title}
         </Heading>
-        <HStack marginTop="5">
+        <Stack marginTop="5" direction={{base:"column", md:"row"}} alignItems={{base: "left", md:"center"}}>
+          <Box as="p">By&nbsp;
           <Link href={`/authors/${post.author}`} passHref>
             <ChakraLink color="gray.200">{post.author}</ChakraLink>
           </Link>
+          &nbsp;on&nbsp;
           <span>{post.publishedAt}</span>
-          <HStack as="small" width="auto">
+          </Box>
+          <UnorderedList width="auto" fontSize="smaller" listStyleType="none" display="flex" wrap="row" flexDirection={{base:"column", md:"row"}}>
             {post.keywords.map((keyword) => (
-              <Link href={`/keyword/${keyword}`} passHref key={keyword}>
-                <ChakraLink color="gray.200">{`#${keyword}`}</ChakraLink>
-              </Link>
+              <ListItem key={keyword}>
+                <Link href={`/keyword/${keyword}`} passHref key={keyword}>
+                  <ChakraLink color="gray.200" padding="1" >{`#${keyword}`}</ChakraLink>
+                </Link>
+              </ListItem>
             ))}
-          </HStack>
-        </HStack>
+          </UnorderedList>
+        </Stack>
         <Box paddingTop="2">
           <MDXRemote {...mdx} components={components} />
         </Box>
