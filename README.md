@@ -21,3 +21,15 @@ description | string | the description of the blog post
 keywords | string[] | the comma separatd list of keywords relevant to the blog post
 author | string | the author of the blog post
 category | string | one of our post categories, e.g. entry, advanced, etc
+
+#### Shortcodes
+
+There are a few shortcodes you can use to embed content in markdown.
+
+### Tweets
+
+Use the tweet id for the `id` attribute:
+
+```
+<Tweet id="1446237663535714304" />
+```
