@@ -42,9 +42,11 @@ keywords: blog teams
 author: "Laura Kalbag"
 ---
 ```
-5. Save your file to live refresh the local server and preview your post at [http://localhost:3000/](http://localhost:3000/).
-6. Commit and push your Git branch to the eng-blog repository:
-`$ git commit -am "Add new blog post"`
+5. Save your file to live refresh the local server and preview your post at [http://localhost:3000/](http://localhost:3000/). If your changes aren”t visible, you may need to stop and restart the local server to trigger a rebuild:<br/>
+`$ ^C`<br/>
+`$ yarn dev`
+6. Commit and push your Git branch to the eng-blog repository:<br/>
+`$ git commit -am "Add new blog post"`<br/>
 `$ git push origin my-blog-post-branch-name`
 7. [Create a pull request on GitHub](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests) for your Git branch to the eng-blog repository to request that the post is published to the live site.
 
