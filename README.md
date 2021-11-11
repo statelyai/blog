@@ -16,7 +16,7 @@ A [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](h
 `$ npm install -g yarn`
 4. Install [@types/react](https://www.npmjs.com/package/@types/react) if you don’t already have TypeScript for React installed on your machine:<br/>
 `$ yarn add --dev @types/react`
-5. You’re ready to run the engineering blog
+5. You’re ready to run the engineering blog.
 
 ## Run locally
 
@@ -37,12 +37,12 @@ Blog posts are stored inside [content/posts](content/posts).
 ```
 ---
 title: "How do you convince your teammates to use XState"
-description: "Last week our question of the week was how do you convince your teammates to use XState? Here are some suggestions."
+description: "Last week our question of the week was how do you convince your teammates to use XState?"
 keywords: blog teams
 author: "Laura Kalbag"
 ---
 ```
-5. Save your file to live refresh the local server and preview your post at [http://localhost:3000/](http://localhost:3000/). If your changes aren”t visible, you may need to stop and restart the local server to trigger a rebuild:<br/>
+5. Save your file to live refresh the local server and preview your post at [http://localhost:3000/](http://localhost:3000/). If your changes aren’t visible, you may need to stop and restart the local server to trigger a rebuild:<br/>
 `$ ^C`<br/>
 `$ yarn dev`
 6. Commit and push your Git branch to the eng-blog repository:<br/>
