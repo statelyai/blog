@@ -1,8 +1,11 @@
 import React from "react";
+import ReactDOMServer from "react-dom/server";
 import { Post } from "./types";
 import { Feed } from "feed";
 import { blogInfo, authors } from "../content/metadata";
 import fs from "fs";
+import MDX from "@mdx-js/runtime";
+import { MDXProvider } from "@mdx-js/react";
 
 export function createRequiredContext<T>(displayName: string) {
   const context = React.createContext<T | null>(null);
@@ -61,7 +64,7 @@ export const slugify = (str: string) =>
     .replace(/[\s_-]+/g, "-")
     .replace(/^-+|-+$/g, "");
 
-export const generateRSSFeed = (posts: Post[]) => {
+export const generateRSSFeed = async (posts: Post[]) => {
   const feed = new Feed({
     title: blogInfo.title,
     description: blogInfo.description,
@@ -78,19 +81,33 @@ export const generateRSSFeed = (posts: Post[]) => {
     feed.addContributor({ name: author.name, link: author.twitterHandle });
   });
 
-  posts.forEach((post) => {
+  for (const post of posts) {
     const postUrl = `${blogInfo.url}/${post.slug}`;
     feed.addItem({
       title: post.title,
       id: postUrl,
       link: postUrl,
       description: post.description,
-      content: post.content,
+      content: ReactDOMServer.renderToStaticMarkup(
+        <MDXProvider
+          components={{
+            Tweet: ({ id, ...props }: { id: string }) => (
+              <a
+                {...props}
+                href={`twitter.com/anyuser/status/${id}`}
+                rel="noopener noreferrer"
+              ></a>
+            ),
+          }}
+        >
+          <MDX>{post.content}</MDX>
+        </MDXProvider>
+      ),
       author: [{ name: post.author }],
       published: new Date(post.publishedAt),
       date: new Date(),
     });
-  });
+  }
 
   // Write the RSS output to a public file, making it
   // accessible at /rss.xml

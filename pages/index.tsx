@@ -62,7 +62,7 @@ const Home: NextPage<{ posts: Post[] }> = ({ posts }) => {
 
 export const getStaticProps = async () => {
   const posts = await getAllPosts();
-  generateRSSFeed(posts);
+  await generateRSSFeed(posts);
   return { props: { posts } };
 };
 
