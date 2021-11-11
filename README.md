@@ -22,14 +22,33 @@ A [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](h
 
 ## Add a new blog post
 
-Blog posts are stored under [content/posts](content/posts). To add a new post, simply create a new MDX file under that directory.
+Blog posts are stored inside [content/posts](content/posts).
 
-### Frontmatter
+1. Create and checkout a new Git branch for your blog post:<br/>
+`$ git checkout -b my-blog-post-branch-name`
+2. Create an .mdx file inside the [content/posts](content/posts) folder, with the filename format:<br/>
+`YYYY-MM-DD-short-title.mdx`.
+3. Write your blog post in the file using [markdown format](https://www.markdownguide.org/basic-syntax).
+4. Add frontmatter meta information to the top of your blog post in the [yaml format](https://yaml.org). For example:
+```
+---
+title: "How do you convince your teammates to use XState"
+description: "Last week our question of the week was how do you convince your teammates to use XState? Here are some suggestions."
+keywords: [blog, teams]
+author: "Laura Kalbag"
+---
+```
+5. Save your file to live refresh the local server and preview your post at [http://localhost:3000/](http://localhost:3000/).
+6. Commit and push your Git branch to the eng-blog repository:
+`$ git commit -am "Add new blog post"`
+`$ git push origin my-blog-post-branch-name`
+7. [Create a pull request on GitHub](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests) for your Git branch to the eng-blog repository to request that the post is published to the live site.
+
+### Blog post frontmatter options
 
 property | type | description
 -|-|-
-title | string | the title of the blog post
-description | string | the description of the blog post
-keywords | string[] | the comma separatd list of keywords relevant to the blog post
-author | string | the author of the blog post
-category | string | one of our post categories, e.g. entry, advanced, etc
+title | string | post title
+description | string | post description that shows on blog list view
+keywords | string[] | comma-separated list of keywords or tags relevant to the blog post
+author | string | post author
