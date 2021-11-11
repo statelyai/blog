@@ -116,7 +116,6 @@ const createQuestions: (
     newPost.publishedAt = formatDate(
       new Intl.DateTimeFormat().formatToParts(new Date())
     );
-    newPost.slug = slugify(newPost.title);
 
     writePostToDisk(newPost);
   } catch (_) {
