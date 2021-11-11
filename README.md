@@ -2,6 +2,10 @@
 
 A [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+- [Install](#install)
+- [Run locally](#run-locally)
+- [Add a new blog post](#add-a-new-blog-post)
+
 ## Install
 
 1. Clone the engineering blog repository to your machine:<br/>
