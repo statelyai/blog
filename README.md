@@ -38,7 +38,7 @@ Blog posts are stored inside [content/posts](content/posts).
 ---
 title: "How do you convince your teammates to use XState"
 description: "Last week our question of the week was how do you convince your teammates to use XState? Here are some suggestions."
-keywords: [blog, teams]
+keywords: blog teams
 author: "Laura Kalbag"
 ---
 ```
@@ -54,5 +54,5 @@ property | type | description
 -|-|-
 title | string | post title
 description | string | post description that shows on blog list view
-keywords | string[] | comma-separated list of keywords or tags relevant to the blog post
+keywords | string[] | space-separated list of keywords or tags relevant to the blog post
 author | string | post author
