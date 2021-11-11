@@ -28,7 +28,7 @@ export const getAllPosts = async (): Promise<Array<Post>> => {
       id,
       title,
       slug: slugify(title),
-      keywords: keywords.split(" "),
+      keywords,
       excerpt,
       content,
     });

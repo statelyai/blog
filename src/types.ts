@@ -1,7 +1,7 @@
 export interface PostFrontmatter {
   title: string;
   description: string;
-  keywords: string[];
+  keywords: string;
   category: string; // TODO: make this a union
   author: string;
   excerpt: string;
