@@ -60,20 +60,20 @@ const createQuestions: (
   {
     type: "text",
     name: "title",
-    message: "Title of the post",
+    message: "Post title",
     validate: (value) => (!value ? "Title is required" : true),
   },
   {
     type: "text",
     name: "description",
-    message: "Description of the post",
+    message: "Post description",
     validate: (value) => (!value ? "Description is required" : true),
   },
   {
     type: "multiselect",
     name: "keywords",
     message:
-      "Pick from available keywords(Add new keywords in the next question)",
+      "Pick from existing keywords: (You can add new keywords in the next prompt)",
     choices: keywords.map((ch) => ({ title: ch, value: ch })),
     hint: "- Space to select. Return to submit",
     format: (value) => (value.length > 0 ? value.map((w) => w.trim()) : []),
@@ -81,7 +81,7 @@ const createQuestions: (
   {
     type: "text",
     name: "newKeywords",
-    message: "Add new keywords, comma sepatared",
+    message: "Add new keywords, comma separated",
     format: (value) =>
       value.length > 0
         ? makeSetFromArray(value.split(",").map((w) => w.trim()))
@@ -90,7 +90,7 @@ const createQuestions: (
   {
     type: "multiselect",
     name: "author",
-    message: "Pick from available authors (skip this if you're a new author)",
+    message: "Pick from existing authors: (Skip if you're a new author)",
     choices: authors.map((ch) => ({ title: ch, value: ch })),
     max: 1, // Change this to support multiple authors
     hint: "- Space to select. Return to submit",
@@ -98,7 +98,7 @@ const createQuestions: (
   {
     type: (prev) => (prev.length === 0 ? "text" : null), // hide this questions if author is picked from the previous question
     name: "newAuthor",
-    message: "Write your full name, space separated: e.g John Doe",
+    message: "Your full name, space separated: (Example: John Doe)",
     validate: (value) => (!value ? "Author is required" : true),
   },
 ];
