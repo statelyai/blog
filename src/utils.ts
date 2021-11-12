@@ -19,11 +19,15 @@ export function createRequiredContext<T>(displayName: string) {
 }
 
 export const groupPostsByCategory = (posts: Post[]): Record<string, Post[]> => {
+  posts.forEach((p) => {
+    p.category = p.category ?? "";
+  });
   return posts.reduce<Record<string, Post[]>>((group, post) => {
     return {
       ...group,
-      [post.category]: group[post.category]
-        ? group[post.category].concat(post)
+      // at this point, category is an empty string if not present
+      [post.category!]: group[post.category!]
+        ? group[post.category!].concat(post)
         : [post],
     };
   }, {});

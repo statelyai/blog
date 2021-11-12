@@ -3,32 +3,13 @@ import { getAllPosts, POSTS_DIR } from "../src/posts";
 import { Post } from "../src/types";
 import fs from "fs";
 import path from "path";
+import { formatDate, makeFrontmatterFromPost, makeSetFromArray } from "./utils";
+import omit = require("lodash.omit");
 import { slugify } from "../src/utils";
-import matter from "gray-matter";
-
-const makeSetFromArray = <T>(array: T[]) => Array.from(new Set(array));
-const pick = <Obj extends object>(obj: Obj, props: Array<keyof Obj>) => {
-  return props.reduce(
-    (result, prop) => ({ ...result, [prop]: obj[prop] }),
-    {} as Obj
-  );
-};
-
-const formatDate = (date: Intl.DateTimeFormatPart[]): string => {
-  return [
-    date.find((item) => item.type === "year")!.value,
-    date.find((item) => item.type === "month")!.value,
-    date.find((item) => item.type === "day")!.value,
-  ].join("-");
-};
-
-const makeFrontmatterFromPost = (post: Post): string => {
-  return matter.stringify("Here goes your post content", post);
-};
 
 function writePostToDisk(post: Post): void {
   fs.writeFileSync(
-    path.join(POSTS_DIR, `${post.publishedAt}-${post.slug}.mdx`),
+    path.join(POSTS_DIR, `${post.publishedAt}-${slugify(post.title)}.mdx`),
     makeFrontmatterFromPost(post),
     { encoding: "utf8" }
   );
@@ -109,16 +90,18 @@ const createQuestions: (
     const authors = await getAvailableAuthors();
     const answers = await prompts(createQuestions(keywords, authors));
 
-    const newPost = pick(answers as Post, ["title", "description"]);
+    const newPost = answers as Post;
 
     newPost.author = answers.newAuthor || answers.author;
     newPost.keywords = answers.newKeywords.concat(answers.keywords);
+    newPost.excerpt = "";
     newPost.publishedAt = formatDate(
       new Intl.DateTimeFormat().formatToParts(new Date())
     );
 
-    writePostToDisk(newPost);
+    writePostToDisk(omit(newPost, ["newAuthor", "newKeywords"]) as Post);
   } catch (_) {
+    console.error(_);
     process.exitCode = 1;
   }
 })();

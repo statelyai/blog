@@ -2,7 +2,7 @@ import fs from "fs/promises";
 import path from "path";
 import matter from "gray-matter";
 import { Post } from "./types";
-import { slugify, stringHashCode } from "./utils";
+import { slugify } from "./utils";
 
 export const POSTS_DIR = path.join(process.cwd(), "content/posts");
 
@@ -21,19 +21,15 @@ export const getAllPosts = async (): Promise<Array<Post>> => {
       excerpt,
       content,
     } = await getPostFrontMatter(fileName);
-    const id = stringHashCode(title).toString();
     posts.push({
       ...frontMatter,
-      id,
       title,
       slug: slugify(title),
       excerpt,
       content,
-    });
+    } as Post);
   }
 
   // Most recent to the oldest
-  return (posts as Post[]).sort((a, b) =>
-    a.publishedAt < b.publishedAt ? 1 : -1
-  );
+  return posts.sort((a, b) => (a.publishedAt < b.publishedAt ? 1 : -1));
 };
