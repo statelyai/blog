@@ -1,0 +1,26 @@
+diff --git a/node_modules/prompts/lib/elements/multiselect.js b/node_modules/prompts/lib/elements/multiselect.js
+index 99b393f..a3a61b8 100644
+--- a/node_modules/prompts/lib/elements/multiselect.js
++++ b/node_modules/prompts/lib/elements/multiselect.js
+@@ -179,7 +179,7 @@ class MultiselectPrompt extends Prompt {
+   }
+ 
+   renderOption(cursor, v, i, arrowIndicator) {
+-    const prefix = (v.selected ? color.green(figures.radioOn) : figures.radioOff) + ' ' + arrowIndicator + ' ';
++    const prefix = (v.selected ? color.green(figures.tick) : color.gray(figures.tick)) + ' ' + arrowIndicator + ' ';
+     let title, desc;
+ 
+     if (v.disabled) {
+diff --git a/node_modules/prompts/lib/util/figures.js b/node_modules/prompts/lib/util/figures.js
+index cd31b88..b451b0f 100644
+--- a/node_modules/prompts/lib/util/figures.js
++++ b/node_modules/prompts/lib/util/figures.js
+@@ -12,7 +12,7 @@
+   ellipsis: '…',	
+   pointerSmall: '›',	
+   line: '─',	
+-  pointer: '❯'	
++  pointer: '❯',	
+ };	
+ const win = {
+   arrowUp: main.arrowUp,
