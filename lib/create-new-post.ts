@@ -60,13 +60,12 @@ const createQuestions: (
     format: (value) => (value.length > 0 ? value.map((w) => w.trim()) : []),
   },
   {
-    type: "text",
+    type: "list",
     name: "newKeywords",
     message: "Add new keywords, comma separated",
-    format: (value) =>
-      value.length > 0
-        ? makeSetFromArray(value.split(",").map((w) => w.trim()))
-        : "",
+    hint: "- Enter new keywords separated by comma",
+    separator: ",",
+    format: (value) => makeSetFromArray(value),
   },
   {
     type: "multiselect",
