@@ -11,34 +11,59 @@ import { Layout } from "../src/components/Layout";
 import { getAllPosts } from "../src/posts";
 import { Post } from "../src/types";
 import Link from "next/link";
+import { SEO } from "../src/SEO";
+import { useMetadata } from "../src/MetadataContext";
 
 const Home: NextPage<{ posts: Post[] }> = ({ posts }) => {
+  const {
+    default: { title },
+  } = useMetadata();
   return (
-    <Layout posts={posts}>
-      <Box padding={{ base: "3", md: "12" }} display="flex" flexDirection="column" align="center">
-        <Heading as="h1" padding="4" paddingBottom={{ base: "8", md: "12" }} align="left" fontWeight="normal">Stately Engineering Blog</Heading>
-        <List spacing="4" maxW="3xl" align="left">
-          {posts.map((post) => (
-            <ListItem key={post.id} marginTop="0">
+    <>
+      <SEO />
+      <Layout posts={posts}>
+        <Box
+          padding={{ base: "3", md: "12" }}
+          display="flex"
+          flexDirection="column"
+          align="center"
+        >
+          <Heading
+            as="h1"
+            padding="4"
+            paddingBottom={{ base: "8", md: "12" }}
+            textAlign="left"
+            fontWeight="normal"
+          >
+            {title}
+          </Heading>
+          <List spacing="4" maxW="3xl" align="left">
+            {posts.map((post) => (
+              <ListItem key={post.id} marginTop="0">
                 <Link href={post.slug} passHref>
                   <ChakraLink
                     padding="4"
                     _hover={{ bg: "whiteAlpha.100" }}
                     display="block"
                   >
-                    <Heading size="2">
-                      {post.title}{" "}
-                    </Heading>
-                    <HStack as="p" display="block" color="gray.500" size="smaller">
-                      <span>{post.publishedAt}</span><span>by {post.author}</span>
+                    <Heading size="2">{post.title} </Heading>
+                    <HStack
+                      as="p"
+                      display="block"
+                      color="gray.500"
+                      fontSize="smaller"
+                    >
+                      <span>{post.publishedAt}</span>
+                      <span>by {post.author}</span>
                     </HStack>
                   </ChakraLink>
                 </Link>
-            </ListItem>
-          ))}
-        </List>
-      </Box>
-    </Layout>
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+      </Layout>
+    </>
   );
 };
 
