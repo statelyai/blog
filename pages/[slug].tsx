@@ -12,7 +12,7 @@ import {
   Box,
   Heading,
   Text,
-  Stack,
+  Wrap,
   Button,
   UnorderedList,
   ListItem,
@@ -23,6 +23,7 @@ import { useRouter } from "next/router";
 import { Tweet, YouTube } from "mdx-embed";
 import { Seo } from "../src/Seo";
 import { DEFAULT_URL } from "../content/metadata";
+import { Viz } from "../src/components/Viz";
 
 type MDX = ReturnType<typeof serialize>;
 
@@ -49,6 +50,7 @@ const components = {
       <YouTube {...props} youTubeId={id} />
     </Box>
   ),
+  Viz,
 };
 
 const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({
@@ -92,7 +94,7 @@ const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({
           <Heading size="xl" as="h1" fontWeight="medium">
             {post.title}
           </Heading>
-          <Stack
+          <Wrap
             marginTop="5"
             direction={{ base: "column", md: "row" }}
             alignItems={{ base: "left", md: "center" }}
@@ -112,20 +114,28 @@ const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({
               display="flex"
               wrap="row"
               flexDirection={{ base: "column", md: "row" }}
+              gridGap="1"
             >
               {post.keywords.map((keyword) => (
                 <ListItem key={keyword}>
                   <Link href={`/keyword/${keyword}`} passHref key={keyword}>
-                    <ChakraLink
-                      color="gray.200"
-                      padding="1"
-                    >{`#${keyword}`}</ChakraLink>
+                    <ChakraLink color="gray.200">{`#${keyword}`}</ChakraLink>
                   </Link>
                 </ListItem>
               ))}
             </UnorderedList>
-          </Stack>
-          <Box paddingTop="2">
+          </Wrap>
+          <hr
+            style={{
+              display: "block",
+              width: "100%",
+              height: 0,
+              border: "none",
+              borderBottom: "1px dashed var(--chakra-colors-whiteAlpha-400)",
+              marginBlock: "2rem",
+            }}
+          />
+          <Box paddingTop="2" className="blog-post-content">
             <MDXRemote {...mdx} components={components} />
           </Box>
         </Box>
