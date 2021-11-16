@@ -39,12 +39,14 @@ const Home: NextPage<{ posts: Post[] }> = ({ posts }) => {
           </Heading>
           <List spacing="4" maxW="3xl" align="left">
             {posts.map((post) => (
-              <ListItem key={post.id} marginTop="0">
+              <ListItem key={post.slug} marginTop="0">
                 <Link href={post.slug} passHref>
                   <ChakraLink
                     padding="4"
                     _hover={{ bg: "whiteAlpha.100" }}
                     display="block"
+                    color="gray.500"
+                    fontSize="smaller"
                   >
                     <Heading size="2">{post.title} </Heading>
                     <HStack
