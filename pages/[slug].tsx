@@ -57,7 +57,6 @@ const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({
   mdx,
 }) => {
   const router = useRouter();
-  console.log(router);
   return (
     <>
       <SEO
