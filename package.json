@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "postinstall": "patch-package",
     "test:meta": "yarn lt --port 3000",
     "post:create": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' ts-node -T lib/create-new-post.ts",
     "post:edit": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' ts-node -T lib/edit-post.ts"
