@@ -10,38 +10,32 @@ export const makeMetadata: (overrides: MetadataOverrides) => Metadata = ({
   description = DEFAULT_DESCRIPTION,
   url = DEFAULT_URL,
   article,
-}) => {
-  const m = {
+}) => ({
+  title,
+  description,
+  canonical: url,
+  openGraph: {
+    url,
     title,
     description,
-    canonical: url,
-    openGraph: {
-      url,
-      title,
-      description,
-      type: article ? "article" : "website",
-      locale: "en_US",
-      site_name: DEFAULT_TITLE,
-      images: [
-        {
-          url,
-          width: 0,
-          height: 0,
-          alt: title,
-          type: "image/jpeg", // change based on actual OG image type
-        },
-      ],
-      article,
-    },
-    twitter: {
-      handle: "@statelyai",
-      site: "@statelyai",
-      cardType: "summary_large_image",
-      creator: article?.authors?.[0],
-    },
-  };
-
-  console.log(m);
-
-  return m;
-};
+    type: article ? "article" : "website",
+    locale: "en_US",
+    site_name: DEFAULT_TITLE,
+    images: [
+      {
+        url,
+        width: 0,
+        height: 0,
+        alt: title,
+        type: "image/jpeg", // change based on actual OG image type
+      },
+    ],
+    article,
+  },
+  twitter: {
+    handle: "@statelyai",
+    site: "@statelyai",
+    cardType: "summary_large_image",
+    creator: article?.authors?.[0],
+  },
+})
