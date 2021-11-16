@@ -56,6 +56,16 @@ Use `yarn post:edit` to update an existing blog post’s updatedAt frontmatter f
 | publishedAt | date the post was first published             |
 | updatedAt   | date the post was last updated                |
 
-### Testing meta tags and open graph locally
+### Test meta tags and Open Graph locally
 
-Use `yarn test:meta` to spawn an instance of localtunnel listening to the same port on localhost as the nextjs is running, `localhost:3000`. This process will show a url in the terminal that is a temporary deployment of currently running localhost. You can use that to preview the home page or any post page on Twitter or any other application that uses open graph to show a preview of the url.
+1. Run the development server to spawn a local server on port 3000:<br/>
+   `$ yarn dev`
+2. In another terminal tab, run `yarn test:meta` to spawn an instance of localtunnel listening to the same port as the development server:<br/>
+   `$ yarn test:meta`
+3. The localtunnel process will show a URL in the terminal for a temporary deployment of the development server:
+   `your url is: https://exampleurl.com`
+4. Use this URL with the social media platforms (or any other platform using [Open Graph](https://ogp.me)) below to test how they’d preview the home page or any post page meta information:
+
+- [Twitter card validator](https://cards-dev.twitter.com/validator)
+- [LinkedIn post inspector](https://www.linkedin.com/post-inspector/)
+- [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/) (requires Facebook login)
