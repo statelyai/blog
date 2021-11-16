@@ -38,4 +38,4 @@ export const makeMetadata: (overrides: MetadataOverrides) => Metadata = ({
     cardType: "summary_large_image",
     creator: article?.authors?.[0],
   },
-})
+});
