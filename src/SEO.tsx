@@ -1,9 +1,9 @@
 import { NextSeo } from "next-seo";
 import React, { useMemo } from "react";
-import { useMetadata } from "../src/MetadataContext";
+import { useMetadata } from "./MetadataContext";
 import { MetadataOverrides } from "./types";
 
-export const SEO: React.FC<MetadataOverrides> = (props) => {
+export const Seo: React.FC<MetadataOverrides> = (props) => {
   const metadata = useMetadata();
   const overrideMetadata = useMemo(() => metadata.makeMetadata(props), [
     metadata,

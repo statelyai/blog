@@ -21,7 +21,7 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Tweet, YouTube } from "mdx-embed";
-import { SEO } from "../src/SEO";
+import { Seo } from "../src/Seo";
 import { DEFAULT_URL } from "../content/metadata";
 
 type MDX = ReturnType<typeof serialize>;
@@ -59,7 +59,7 @@ const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({
   const router = useRouter();
   return (
     <>
-      <SEO
+      <Seo
         title={post.title}
         description={post.description}
         url={`${[DEFAULT_URL, post.slug].join("/")}`}

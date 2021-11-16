@@ -11,7 +11,7 @@ import { Layout } from "../src/components/Layout";
 import { getAllPosts } from "../src/posts";
 import { Post } from "../src/types";
 import Link from "next/link";
-import { SEO } from "../src/SEO";
+import { Seo } from "../src/Seo";
 import { useMetadata } from "../src/MetadataContext";
 
 const Home: NextPage<{ posts: Post[] }> = ({ posts }) => {
@@ -20,7 +20,7 @@ const Home: NextPage<{ posts: Post[] }> = ({ posts }) => {
   } = useMetadata();
   return (
     <>
-      <SEO />
+      <Seo />
       <Layout posts={posts}>
         <Box
           padding={{ base: "3", md: "12" }}
