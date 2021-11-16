@@ -40,7 +40,8 @@ const Home: NextPage<{ posts: Post[] }> = ({ posts }) => {
           <List spacing="4" maxW="3xl" align="left">
             {posts.map((post) => (
               <ListItem key={post.slug} marginTop="0">
-                <Link href={post.slug} passHref>
+                {/* Formatting href makes server and client rendered hrefs consistent */}
+                <Link href={`/${post.slug}`} passHref>
                   <ChakraLink
                     padding="4"
                     _hover={{ bg: "whiteAlpha.100" }}
