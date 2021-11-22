@@ -17,6 +17,7 @@ import {
   UnorderedList,
   ListItem,
   Link as ChakraLink,
+  Divider,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -125,16 +126,7 @@ const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({
               ))}
             </UnorderedList>
           </Wrap>
-          <hr
-            style={{
-              display: "block",
-              width: "100%",
-              height: 0,
-              border: "none",
-              borderBottom: "1px dashed var(--chakra-colors-whiteAlpha-400)",
-              marginBlock: "2rem",
-            }}
-          />
+          <Divider marginBlock="4" />
           <Box paddingTop="2" className="blog-post-content">
             <MDXRemote {...mdx} components={components} />
           </Box>
