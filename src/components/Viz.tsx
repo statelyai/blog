@@ -1,21 +1,10 @@
 import React, { useMemo } from "react";
+import { EmbedProps } from "../types";
+import { makeEmbedUrl } from "../utils";
 
-type EmbedMode = "viz" | "panels" | "full";
-
-type EmbedPanel = "code" | "state" | "events" | "actors" | "settings";
-
-interface EmbedProps {
-  mode: EmbedMode;
-  panel: EmbedPanel;
-  showOriginalLink: 0 | 1;
-  readOnly: 0 | 1;
-  pan: 0 | 1;
-  zoom: 0 | 1;
-  controls: 0 | 1;
-}
-interface VizProps {
+interface VizProps extends Partial<EmbedProps> {
   id: string;
-  embedProps?: EmbedProps;
+  title: string; // Required for a11y and testing
 }
 
 const defaultEmbedProps: EmbedProps = {
@@ -25,21 +14,26 @@ const defaultEmbedProps: EmbedProps = {
   readOnly: 1,
   pan: 0,
   zoom: 0,
-  controls: 0,
+  controls: 1,
 };
 
-export const Viz: React.FC<VizProps> = ({ id, embedProps = {} }) => {
+export const Viz: React.FC<VizProps> = ({
+  id,
+  title,
+  children,
+  ...embedProps
+}) => {
   const embedUrl = useMemo(() => {
-    const embedPropsWithDefaults = { ...defaultEmbedProps, ...embedProps };
-    const url = new URL(`https://stately.ai/viz/embed/${id}`);
-    Object.keys(embedPropsWithDefaults).forEach((prop) => {
-      url.searchParams.set(prop, embedPropsWithDefaults[prop]);
-    });
-    return url.toString();
+    const embedPropsWithDefaults = {
+      ...defaultEmbedProps,
+      ...embedProps,
+    };
+    return makeEmbedUrl(id, embedPropsWithDefaults);
   }, [id, embedProps]);
 
   return (
     <iframe
+      title={title}
       style={{
         display: "block",
         width: "100%",
