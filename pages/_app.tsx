@@ -28,11 +28,11 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <MetadataProvider
       value={{
-        default: makeMetadata({}),
+        default: makeMetadata(),
         makeMetadata,
       }}
     >
-      <ChakraProvider theme={theme}>
+      <ChakraProvider resetCSS theme={theme}>
         <Component {...pageProps} />
       </ChakraProvider>
     </MetadataProvider>
