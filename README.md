@@ -77,8 +77,16 @@ There are a few shortcodes you can use to embed content in markdown.
 
 ### Tweets
 
-Use the tweet id for the `id` attribute:
+Use the tweet id for the `id` attribute. For example, in `https://twitter.com/statelyai/status/1461727317429043201`, `1461727317429043201` is the ID.
 
 ```
-<Tweet id="1446237663535714304" />
+<Tweet id="1461727317429043201" />
+```
+
+### YouTube
+
+Use the YouTube ID for the `id` attribute. For example in `https://www.youtube.com/watch?v=y6aGu0N8z9Q`, `y6aGu0N8z9Q` is the ID.
+
+```
+<Youtube id="y6aGu0N8z9Q" />
 ```
