@@ -1,5 +1,5 @@
 import React from "react";
-import { Post } from "./types";
+import { EmbedProps, Post } from "./types";
 
 export function createRequiredContext<T>(displayName: string) {
   const context = React.createContext<T | null>(null);
@@ -54,6 +54,7 @@ export const stringHashCode = (str: string): number => {
 
 export const toUrl = (str: string): string => encodeURIComponent(str);
 
+// TODO: replace with package `github-sluggify`
 export const slugify = (str: string) =>
   str
     .toLowerCase()
@@ -61,3 +62,11 @@ export const slugify = (str: string) =>
     .replace(/[^\w\s-]/g, "")
     .replace(/[\s_-]+/g, "-")
     .replace(/^-+|-+$/g, "");
+
+export const makeEmbedUrl = (id: string, embedProps: EmbedProps): string => {
+  const url = new URL(`https://stately.ai/viz/embed/${id}`);
+  Object.entries(embedProps).forEach(([key, value]) => {
+    url.searchParams.set(key, value.toString());
+  });
+  return url.toString();
+};
