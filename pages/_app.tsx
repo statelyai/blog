@@ -7,6 +7,8 @@ import { ChakraProvider } from "@chakra-ui/react";
 import theme from "../src/theme";
 import NProgress from "nprogress";
 import Router from "next/router";
+import { MetadataProvider } from "../src/MetadataContext";
+import { makeMetadata } from "../content/metadata";
 
 /* NProgress */
 NProgress.configure({ showSpinner: false });
@@ -24,9 +26,16 @@ Router.events.on("routeChangeError", () => {
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ChakraProvider theme={theme}>
-      <Component {...pageProps} />
-    </ChakraProvider>
+    <MetadataProvider
+      value={{
+        default: makeMetadata({}),
+        makeMetadata,
+      }}
+    >
+      <ChakraProvider theme={theme}>
+        <Component {...pageProps} />
+      </ChakraProvider>
+    </MetadataProvider>
   );
 }
 export default MyApp;

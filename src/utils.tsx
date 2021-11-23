@@ -1,11 +1,5 @@
 import React from "react";
-import ReactDOMServer from "react-dom/server";
-import { Post } from "./types";
-import { Feed } from "feed";
-import { blogInfo, authors } from "../content/metadata";
-import fs from "fs";
-import MDX from "@mdx-js/runtime";
-import { MDXProvider } from "@mdx-js/react";
+import { EmbedProps, Post } from "./types";
 
 export function createRequiredContext<T>(displayName: string) {
   const context = React.createContext<T | null>(null);
@@ -25,11 +19,15 @@ export function createRequiredContext<T>(displayName: string) {
 }
 
 export const groupPostsByCategory = (posts: Post[]): Record<string, Post[]> => {
+  posts.forEach((p) => {
+    p.category = p.category ?? "";
+  });
   return posts.reduce<Record<string, Post[]>>((group, post) => {
     return {
       ...group,
-      [post.category]: group[post.category]
-        ? group[post.category].concat(post)
+      // at this point, category is an empty string if not present
+      [post.category!]: group[post.category!]
+        ? group[post.category!].concat(post)
         : [post],
     };
   }, {});
@@ -56,6 +54,7 @@ export const stringHashCode = (str: string): number => {
 
 export const toUrl = (str: string): string => encodeURIComponent(str);
 
+// TODO: replace with package `github-sluggify`
 export const slugify = (str: string) =>
   str
     .toLowerCase()
@@ -64,52 +63,10 @@ export const slugify = (str: string) =>
     .replace(/[\s_-]+/g, "-")
     .replace(/^-+|-+$/g, "");
 
-export const generateRSSFeed = async (posts: Post[]) => {
-  const feed = new Feed({
-    title: blogInfo.title,
-    description: blogInfo.description,
-    id: blogInfo.url,
-    link: blogInfo.url,
-    language: "en",
-    feedLinks: {
-      rss2: `${blogInfo.url}/rss.xml`,
-    },
-    copyright: "All rights reserved to Stately.ai",
+export const makeEmbedUrl = (id: string, embedProps: EmbedProps): string => {
+  const url = new URL(`https://stately.ai/viz/embed/${id}`);
+  Object.entries(embedProps).forEach(([key, value]) => {
+    url.searchParams.set(key, value.toString());
   });
-
-  authors.forEach((author) => {
-    feed.addContributor({ name: author.name, link: author.twitterHandle });
-  });
-
-  for (const post of posts) {
-    const postUrl = `${blogInfo.url}/${post.slug}`;
-    feed.addItem({
-      title: post.title,
-      id: postUrl,
-      link: postUrl,
-      description: post.description,
-      content: ReactDOMServer.renderToStaticMarkup(
-        <MDXProvider
-          components={{
-            Tweet: ({ id, ...props }: { id: string }) => (
-              <a
-                {...props}
-                href={`twitter.com/anyuser/status/${id}`}
-                rel="noopener noreferrer"
-              ></a>
-            ),
-          }}
-        >
-          <MDX>{post.content}</MDX>
-        </MDXProvider>
-      ),
-      author: [{ name: post.author }],
-      published: new Date(post.publishedAt),
-      date: new Date(),
-    });
-  }
-
-  // Write the RSS output to a public file, making it
-  // accessible at /rss.xml
-  fs.writeFileSync("public/rss.xml", feed.rss2());
+  return url.toString();
 };

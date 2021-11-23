@@ -2,10 +2,9 @@ import fs from "fs/promises";
 import path from "path";
 import matter from "gray-matter";
 import { Post } from "./types";
-import { v4 } from "uuid";
-import { slugify, stringHashCode } from "./utils";
+import { slugify } from "./utils";
 
-const POSTS_DIR = path.join(process.cwd(), "content/posts");
+export const POSTS_DIR = path.join(process.cwd(), "content/posts");
 
 const getPostFrontMatter = async (fileName: string) => {
   return matter(await fs.readFile(path.join(POSTS_DIR, fileName)));
@@ -18,24 +17,19 @@ export const getAllPosts = async (): Promise<Array<Post>> => {
   );
   for (let fileName of files) {
     const {
-      data: { title, keywords = "", ...frontMatter },
+      data: { title, ...frontMatter },
       excerpt,
       content,
     } = await getPostFrontMatter(fileName);
-    const id = stringHashCode(title).toString();
     posts.push({
       ...frontMatter,
-      id,
       title,
       slug: slugify(title),
-      keywords: keywords.split(" "),
       excerpt,
       content,
-    });
+    } as Post);
   }
 
   // Most recent to the oldest
-  return (posts as Post[]).sort((a, b) =>
-    a.publishedAt < b.publishedAt ? 1 : -1
-  );
+  return posts.sort((a, b) => (a.publishedAt < b.publishedAt ? 1 : -1));
 };

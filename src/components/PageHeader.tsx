@@ -4,6 +4,7 @@ import {
   Stack,
   List,
   Input,
+  Wrap,
   ListItem,
   useOutsideClick,
 } from "@chakra-ui/react";
@@ -72,7 +73,7 @@ export const PageHeader: React.FC<{ posts: Post[] }> = ({ posts }) => {
     >
       <Logo />
       <Box as="nav">
-        <Stack
+        <Wrap
           spacing="4"
           direction={{ base: "column", md: "row" }}
           alignItems={{ base: "left", md: "center" }}
@@ -97,14 +98,14 @@ export const PageHeader: React.FC<{ posts: Post[] }> = ({ posts }) => {
                 top="100%"
                 left="0"
                 width={{ base: "100%", md: "400px" }}
-                padding="3"
+                padding="5"
                 bg="gray.900"
                 border="1px solid"
                 borderColor="whiteAlpha.400"
               >
                 <List alignItems="flex-start">
                   {result.map((p) => (
-                    <ListItem key={p.id} marginInlineStart="0">
+                    <ListItem key={p.slug} marginInlineStart="0">
                       <Link href={p.slug} passHref>
                         <ChakraLink
                           padding="1"
@@ -123,7 +124,7 @@ export const PageHeader: React.FC<{ posts: Post[] }> = ({ posts }) => {
               </Box>
             )}
           </form>
-          <Stack as={List} listStyleType="none" direction="row" wrap="wrap">
+          <Wrap as={List} listStyleType="none" direction="row" wrap="wrap">
             <Box as="li">
               <ChakraLink
                 href="https://stately.ai"
@@ -157,8 +158,8 @@ export const PageHeader: React.FC<{ posts: Post[] }> = ({ posts }) => {
                 Github <ExternalLinkIcon />
               </ChakraLink>
             </Box>
-          </Stack>
-        </Stack>
+          </Wrap>
+        </Wrap>
       </Box>
     </Stack>
   );

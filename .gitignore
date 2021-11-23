@@ -34,3 +34,5 @@ yarn-error.log*
 .vercel
 
 public/rss.xml
+# cli
+lib/*.js
