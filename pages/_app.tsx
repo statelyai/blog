@@ -9,6 +9,7 @@ import NProgress from "nprogress";
 import Router from "next/router";
 import { MetadataProvider } from "../src/MetadataContext";
 import { makeMetadata } from "../content/metadata";
+import NextHead from "next/head";
 
 /* NProgress */
 NProgress.configure({ showSpinner: false });
@@ -33,6 +34,26 @@ function MyApp({ Component, pageProps }: AppProps) {
       }}
     >
       <ChakraProvider resetCSS theme={theme}>
+        <NextHead>
+          <link
+            rel="alternate"
+            type="application/rss+xml"
+            title="Subscribe to our blog feed"
+            href="/feeds/rss.xml"
+          />
+          <link
+            rel="alternate"
+            type="application/atom+xml"
+            title="Subscribe to our blog feed"
+            href="/feeds/atom.xml"
+          />
+          <link
+            rel="alternate"
+            type="application/feed+json"
+            title="Subscribe to our blog feed"
+            href="/feeds/feed.json"
+          />
+        </NextHead>
         <Component {...pageProps} />
       </ChakraProvider>
     </MetadataProvider>
