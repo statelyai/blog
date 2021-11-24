@@ -9,7 +9,7 @@ export const Layout: React.FC<{ posts: Post[] }> = ({ posts, children }) => (
     <Box
       as="main"
       display="flex"
-      flexDir="column"
+      flexDirection="column"
       alignItems={{ base: "left", md: "center" }}
       flex="1"
     >
