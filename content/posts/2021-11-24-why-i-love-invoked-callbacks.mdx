@@ -14,7 +14,7 @@ excerpt: ''
 publishedAt: '2021-05-13'
 ---
 
-XState offers several primitives for representing long-running application processes. These are usually expressed as [services](https://xstate.js.org/docs/guides/communication.html). I've written a bit about services [here](https://dev.to/mpocock1/xstate-should-this-be-an-action-or-a-service-2cp0) - but today I wanted to talk about my favourite way of expressing services: the Invoked Callback.
+XState offers several primitives for representing long-running application processes. These are usually expressed as [services](https://xstate.js.org/docs/guides/communication.html). I’ve written a bit about services [here](https://dev.to/mpocock1/xstate-should-this-be-an-action-or-a-service-2cp0) - but today I wanted to talk about my favourite way of expressing services: the Invoked Callback.
 
 The [Invoked Callback](https://xstate.js.org/docs/guides/communication.html#invoking-callbacks) combines immense flexibility with good readability and a solid Typescript experience. They look like this:
 
@@ -33,7 +33,7 @@ The [Invoked Callback](https://xstate.js.org/docs/guides/communication.html#invo
     });
 ```
 
-Let's break this down. You get access to `context` and `event`, just like promise-based services. But `send` is where things really get interesting. Let's break down what makes `send` useful with an example.
+Let’s break this down. You get access to `context` and `event`, just like promise-based services. But `send` is where things really get interesting. Let’s break down what makes `send` useful with an example.
 
 ## File Uploads
 
@@ -85,13 +85,13 @@ Imagine you need to build a file uploader, and you have a handy function called 
 
 This machine starts in the `idle` state, but on the `START` event begins its invoked service, which uploads the file. It then listens for `PROGRESS_UPDATED` events, and updates the context based on its updates.
 
-The `CANCEL` event will trigger the `uploader.cancel()` function, which gets called when the state is left. React users may recognise this syntax - it's the same as the cleanup function in the [useEffect hook](https://reactjs.org/docs/hooks-reference.html#cleaning-up-an-effect).
+The `CANCEL` event will trigger the `uploader.cancel()` function, which gets called when the state is left. React users may recognise this syntax - it’s the same as the cleanup function in the [useEffect hook](https://reactjs.org/docs/hooks-reference.html#cleaning-up-an-effect).
 
 Note how simple and idiomatic it is to cancel the uploader - just exit the state, and the service gets cleaned up.
 
 ## Event Listeners
 
-The invoked callback's cleanup function makes it very useful for event listeners, for instance `window.addEventListener()`. XState Catalogue's [Tab Focus Machine](https://xstate-catalogue.com/machines/tab-focus) is a perfect example of this - copied here for ease:
+The invoked callback’s cleanup function makes it very useful for event listeners, for instance `window.addEventListener()`. XState Catalogue’s [Tab Focus Machine](https://xstate-catalogue.com/machines/tab-focus) is a perfect example of this - copied here for ease:
 
 ```ts
     createMachine(
@@ -145,7 +145,7 @@ The invoked callback's cleanup function makes it very useful for event listeners
     );
 ```
 
-When in the `userIsOnTab` state, we listen for the window's `blur` event. When that happens, and `REPORT_TAB_BLUR` is fired, we clean up the event listener and head right on over to `userIsNotOnTab`, where we fire up the other service.
+When in the `userIsOnTab` state, we listen for the window’s `blur` event. When that happens, and `REPORT_TAB_BLUR` is fired, we clean up the event listener and head right on over to `userIsNotOnTab`, where we fire up the other service.
 
 ## Websockets
 
@@ -185,4 +185,4 @@ Here, we can connect to the websocket, establish two-way communication, and clea
 
 ## My Love Letter
 
-Invoked callbacks are a concise, flexible method of invoking services in XState. There isn't a case they can't cover - and they're one of my favourite parts of the XState API.
+Invoked callbacks are a concise, flexible method of invoking services in XState. There isn’t a case they can’t cover - and they’re one of my favourite parts of the XState API.
