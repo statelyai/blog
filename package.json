@@ -5,10 +5,12 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "export": "next build && next export",
     "start": "next start",
     "lint": "next lint",
     "postinstall": "patch-package",
     "test:meta": "yarn lt --port 3000",
+    "feed": "ts-node --project tsconfig.tsnode.json -T lib/feed.tsx",
     "post:create": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' ts-node -T lib/create-new-post.ts",
     "post:edit": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' ts-node -T lib/edit-post.ts"
   },
