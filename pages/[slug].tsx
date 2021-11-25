@@ -118,9 +118,7 @@ const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({
             >
               {post.keywords.map((keyword) => (
                 <ListItem key={keyword}>
-                  <Link href={`/keyword/${keyword}`} passHref key={keyword}>
-                    <ChakraLink color="gray.200">{`#${keyword}`}</ChakraLink>
-                  </Link>
+                  {`#${keyword}`}
                 </ListItem>
               ))}
             </UnorderedList>
