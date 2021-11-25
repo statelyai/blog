@@ -10,7 +10,7 @@
     "lint": "next lint",
     "postinstall": "patch-package",
     "test:meta": "yarn lt --port 3000",
-    "feed": "ts-node --project tsconfig.tsnode.json -T lib/feed.tsx",
+    "feed": "parcel build lib/feed.tsx",
     "post:create": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' ts-node -T lib/create-new-post.ts",
     "post:edit": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' ts-node -T lib/edit-post.ts"
   },
@@ -56,6 +56,7 @@
     "eslint-config-next": "11.1.2",
     "import-jsx": "^4.0.0",
     "localtunnel": "^2.0.2",
+    "parcel-bundler": "^1.12.5",
     "patch-package": "^6.4.7",
     "prompts": "^2.4.2",
     "string-strip-html": "^9.1.0",

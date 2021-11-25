@@ -7,7 +7,7 @@ import { makeMetadata } from "../content/metadata";
 import { Post } from "../src/types";
 import theme from "../src/theme";
 import { MDXComponents } from "../src/components/MDXComponents";
-import * as strip from "string-strip-html";
+import { stripHtml } from "string-strip-html";
 import { serializePost } from "../src/serializePost";
 import { getAllPosts } from "../src/posts";
 
@@ -43,7 +43,7 @@ export const generateFeed = async (posts: Post[]): Promise<Feed> => {
         <MDXRemote {...mdx} components={MDXComponents} />
       </ChakraProvider>
     );
-    const cleanHtmlContent = strip.stripHtml(htmlContent, {
+    const cleanHtmlContent = stripHtml(htmlContent, {
       onlyStripTags: ["script", "style"],
       stripTogetherWithTheirContents: ["script", "style"],
     }).result;
