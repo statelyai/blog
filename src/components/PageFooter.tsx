@@ -13,6 +13,7 @@ export const PageFooter: React.FC = () => (
     flexDirection="column"
     alignItems={{ base: "stretch", md: "center" }}
     marginTop="6"
+    marginBottom="6"
     textAlign="center"
   >
     <Box
