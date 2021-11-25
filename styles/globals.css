@@ -61,7 +61,18 @@ h1 {
   margin: 1em 0;
 }
 
-.blog-post-content ul,
+.blog-post-content p {
+  margin: 0.5em 0;
+}
+
+.blog-post-content p img {
+  margin: 1em auto;
+}
+
+.blog-post-content ul {
+  margin-left: 1rem;
+}
+
 .blog-post-content ol {
   margin-left: 1.5rem;
 }
@@ -80,6 +91,12 @@ h1 {
   /* system font stack */
   font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; /* system font stack */
   font-size: 0.9em;
+}
+
+.blog-post-content code {
+  background: var(--chakra-colors-gray-800);
+  border-radius: 0.2em;
+  padding: 0.2em 0.3em;
 }
 
 .blog-post-content img {
