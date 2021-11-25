@@ -51,19 +51,23 @@ h1 {
   font-size: var(--chakra-fontSizes-md);
 }
 
-.blog-content-post blockquote,
-.blog-content-post dl,
-.blog-content-post dd,
-.blog-content-post hr,
-.blog-content-post figure,
-.blog-content-post p,
+.blog-post-content blockquote,
+.blog-post-content dl,
+.blog-post-content dd,
+.blog-post-content hr,
+.blog-post-content figure,
+.blog-post-content p,
 .blog-post-content pre {
   margin: 1em 0;
 }
 
-.blog-content-post ul,
+.blog-post-content ul,
 .blog-post-content ol {
-  margin-left: 1.6rem;
+  margin-left: 1rem;
+}
+
+.blog-post-content li {
+  margin: 0.5em 0;
 }
 
 .blog-post-content blockquote {
