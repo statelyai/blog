@@ -37,24 +37,22 @@ const Home: NextPage<{ posts: Post[] }> = ({ posts }) => {
           >
             {title}
           </Heading>
-          <List spacing="4" maxW="3xl" align="left">
+          <List spacing="4" maxW="3xl" align="left" listStyle="none">
             {posts.map((post) => (
               <ListItem key={post.slug} marginTop="0">
                 {/* Formatting href makes server and client rendered hrefs consistent */}
                 <Link href={`/${post.slug}`} passHref>
                   <ChakraLink
                     padding="4"
-                    _hover={{ bg: "whiteAlpha.100" }}
+                    _hover={{ bg: "gray.800", borderRadius: "0.5em" }}
                     display="block"
                     color="gray.500"
-                    fontSize="smaller"
                   >
-                    <Heading size="2">{post.title} </Heading>
+                    <Heading size="2" fontSize="2xl">{post.title} </Heading>
                     <HStack
                       as="p"
                       display="block"
-                      color="gray.500"
-                      fontSize="smaller"
+                      color="gray.400"
                     >
                       <span>{post.publishedAt}</span>
                       <span>by {post.author}</span>
