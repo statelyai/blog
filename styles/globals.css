@@ -75,8 +75,10 @@ h1 {
   padding-left: 1.4rem;
 }
 
-.blog-post-content code {
-  font-family: var(--chakra-fonts-mono);
+.blog-post-content code,
+.blog-post-content pre {
+  /* workaround for browsers shrinking code text */
+  font-family: monospace, monospace;
 }
 
 .blog-post-content img {
