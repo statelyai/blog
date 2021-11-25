@@ -12,9 +12,9 @@ const theme = extendTheme({
   styles: {
     global: {
       "html, body": {
-        backgroundColor: "gray.900",
+        backgroundColor: "black",
         // make text colour lower contrast to be easier on the eyes
-        color: "gray.200",
+        color: "gray.300",
         fontWeight: "450",
         // slnt is fix for Safari italicising variable fonts by default
         fontVariationSettings: "'wght' 450, 'slnt' 0",
@@ -45,6 +45,7 @@ const theme = extendTheme({
         fontVariationSettings: "'slnt' 10",
       },
       "h1, h2, h3, h4, h5, h6" : {
+        color: "white",
         fontWeight: "500",
         // slnt is fix for Safari italicising variable fonts by default
         fontVariationSettings: "'wght' 500, 'slnt' 0",

@@ -124,7 +124,7 @@ export const PageHeader: React.FC<{ posts: Post[] }> = ({ posts }) => {
                 isExternal
                 display="block"
                 padding="2"
-                color="gray.400"
+                color="gray.300"
               >
                 Stately.ai <ExternalLinkIcon />
               </ChakraLink>
@@ -135,7 +135,7 @@ export const PageHeader: React.FC<{ posts: Post[] }> = ({ posts }) => {
                 isExternal
                 display="block"
                 padding="2"
-                color="gray.400"
+                color="gray.300"
               >
                 Documentation <ExternalLinkIcon />
               </ChakraLink>
@@ -146,7 +146,7 @@ export const PageHeader: React.FC<{ posts: Post[] }> = ({ posts }) => {
                 isExternal
                 display="block"
                 padding="2"
-                color="gray.400"
+                color="gray.300"
               >
                 Github <ExternalLinkIcon />
               </ChakraLink>
