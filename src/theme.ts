@@ -35,9 +35,9 @@ const theme = extendTheme({
         fontSynthesis: "none",
       },
       "strong, b": {
-        fontWeight: "700",
+        fontWeight: "600",
         // slnt is fix for Safari italicising variable fonts by default
-        fontVariationSettings: "'wght' 700, 'slnt' 0",
+        fontVariationSettings: "'wght' 600, 'slnt' 0",
       },
       "em, i" : {
         fontStyle: "italic",
