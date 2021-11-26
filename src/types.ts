@@ -14,6 +14,7 @@ export interface PostFrontmatter {
 export interface Post extends PostFrontmatter {
   slug: string;
   content: string;
+  fileName: string;
 }
 
 export type Metadata = Pick<
