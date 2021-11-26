@@ -2,7 +2,7 @@ import React from "react";
 
 export const Logo: React.FC = () => (
   <a href="https://stately.ai">
-  <svg width="104px" height="29px" viewBox="0 0 104 29" version="1.1">
+  <svg width="143px" height="40px" viewBox="0 0 104 29" version="1.1">
     <title>Stately</title>
     <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
       <g id="Artboard" fill="#FFFFFF" fillRule="nonzero">

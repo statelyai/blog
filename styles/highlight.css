@@ -5,10 +5,11 @@ pre[class*="language-"] {
   word-spacing: normal;
   word-break: normal;
   word-wrap: normal;
-  color: #eee;
-  background: #2f2f2f;
-  font-family: Roboto Mono, monospace;
-  font-size: 1em;
+  color: #E1E2E5;
+  background: #0F0F0F; /* same background as viz */
+  border-radius: 1em;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; /* system font stack */
+  font-size: 0.9em;
   line-height: 1.5em;
 
   -moz-tab-size: 4;
@@ -25,14 +26,14 @@ code[class*="language-"]::-moz-selection,
 pre[class*="language-"]::-moz-selection,
 code[class*="language-"] ::-moz-selection,
 pre[class*="language-"] ::-moz-selection {
-  background: #363636;
+  background: #f26200;
 }
 
 code[class*="language-"]::selection,
 pre[class*="language-"]::selection,
 code[class*="language-"] ::selection,
 pre[class*="language-"] ::selection {
-  background: #363636;
+  background: #f26200;
 }
 
 :not(pre) > code[class*="language-"] {
@@ -44,8 +45,8 @@ pre[class*="language-"] ::selection {
 pre[class*="language-"] {
   overflow: auto;
   position: relative;
-  margin: 0.5em 0;
-  padding: 1.25em 1em;
+  margin: 1em 0;
+  padding: 1.25em;
 }
 
 .language-css > code,
@@ -99,7 +100,7 @@ pre[class*="language-"] {
 }
 
 .token.comment {
-  color: #616161;
+  color: #7D7D7D;
 }
 
 .token.constant {
@@ -111,7 +112,7 @@ pre[class*="language-"] {
 }
 
 .token.doctype {
-  color: #616161;
+  color: #7D7D7D;
 }
 
 .token.entity {
@@ -153,7 +154,7 @@ pre[class*="language-"] {
 }
 
 .token.prolog {
-  color: #616161;
+  color: #7D7D7D;
 }
 
 .token.property {

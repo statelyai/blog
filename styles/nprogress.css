@@ -1,6 +1,6 @@
 #nprogress {
   pointer-events: none;
-  --color: var(--chakra-colors-yellow-400);
+  --color: var(--chakra-colors-primary-400);
 }
 #nprogress .bar {
   background: var(--color);
@@ -9,7 +9,7 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 2px;
+  height: 0.3em;
 }
 #nprogress .peg {
   display: block;
