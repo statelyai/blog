@@ -65,6 +65,7 @@ const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({
         title={post.title}
         description={post.description}
         url={`${[DEFAULT_URL, post.slug].join("/")}`}
+        originalURL={post.originalURL}
         article={{
           authors: [post.author],
           publishedTime: post.publishedAt,
@@ -118,13 +119,18 @@ const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({
               color="gray.400"
             >
               {post.keywords.map((keyword) => (
-                <ListItem key={keyword}>
-                  {`#${keyword}`}
-                </ListItem>
+                <ListItem key={keyword}>{`#${keyword}`}</ListItem>
               ))}
             </UnorderedList>
           </Wrap>
-          <Box paddingTop="2" marginTop="2" className="blog-post-content" borderTopWidth="1px" borderStyle="solid" borderColor="gray.700">
+          <Box
+            paddingTop="2"
+            marginTop="2"
+            className="blog-post-content"
+            borderTopWidth="1px"
+            borderStyle="solid"
+            borderColor="gray.700"
+          >
             <MDXRemote {...mdx} components={components} />
           </Box>
         </Box>
