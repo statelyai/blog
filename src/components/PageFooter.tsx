@@ -25,7 +25,6 @@ export const PageFooter: React.FC = () => (
     >
       <Wrap
         as={List}
-        listStyleType="none"
         direction={{ base: "column", md: "row" }}
         wrap="wrap"
         marginBottom={{ base: "6", md: "12" }}

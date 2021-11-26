@@ -110,7 +110,6 @@ const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({
             <UnorderedList
               width="auto"
               fontSize="smaller"
-              listStyleType="none"
               display="flex"
               wrap="row"
               flexDirection={{ base: "column", md: "row" }}
