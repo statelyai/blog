@@ -115,6 +115,7 @@ const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({
               flexDirection={{ base: "column", md: "row" }}
               gridGap="1"
               color="gray.400"
+              style={{ listStyleType: "none"}}
             >
               {post.keywords.map((keyword) => (
                 <ListItem key={keyword}>
