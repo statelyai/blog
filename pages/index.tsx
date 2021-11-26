@@ -13,6 +13,7 @@ import { Post } from "../src/types";
 import Link from "next/link";
 import { Seo } from "../src/Seo";
 import { useMetadata } from "../src/MetadataContext";
+import { formatDate } from "../src/utils";
 
 const Home: NextPage<{ posts: Post[] }> = ({ posts }) => {
   const {
@@ -37,7 +38,13 @@ const Home: NextPage<{ posts: Post[] }> = ({ posts }) => {
           >
             {title}
           </Heading>
-          <List spacing="4" maxW="3xl" align="left" textAlign="left" style={{ listStyleType: "none"}}>
+          <List
+            spacing="4"
+            maxW="3xl"
+            align="left"
+            textAlign="left"
+            style={{ listStyleType: "none" }}
+          >
             {posts.map((post) => (
               <ListItem key={post.slug} marginTop="0">
                 {/* Formatting href makes server and client rendered hrefs consistent */}
@@ -48,13 +55,11 @@ const Home: NextPage<{ posts: Post[] }> = ({ posts }) => {
                     display="block"
                     color="gray.500"
                   >
-                    <Heading size="2" fontSize="2xl">{post.title} </Heading>
-                    <HStack
-                      as="p"
-                      display="block"
-                      color="gray.400"
-                    >
-                      <span>{post.publishedAt}</span>
+                    <Heading size="2" fontSize="2xl">
+                      {post.title}{" "}
+                    </Heading>
+                    <HStack as="p" display="block" color="gray.400">
+                      <span>{formatDate(post.publishedAt)}</span>
                       <span>by {post.author}</span>
                     </HStack>
                   </ChakraLink>

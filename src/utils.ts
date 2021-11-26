@@ -1,4 +1,5 @@
 import React from "react";
+import dayjs from "dayjs";
 import { EmbedProps, Post } from "./types";
 
 export function createRequiredContext<T>(displayName: string) {
@@ -69,4 +70,8 @@ export const makeEmbedUrl = (id: string, embedProps: EmbedProps): string => {
     url.searchParams.set(key, value.toString());
   });
   return url.toString();
+};
+
+export const formatDate = (dateString: string): string => {
+  return dayjs(dateString).format("MMMM D, YYYY");
 };

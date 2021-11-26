@@ -24,6 +24,7 @@ import { Tweet, YouTube } from "mdx-embed";
 import { Seo } from "../src/Seo";
 import { DEFAULT_URL } from "../content/metadata";
 import { Viz } from "../src/components/Viz";
+import { formatDate } from "../src/utils";
 
 type MDX = ReturnType<typeof serialize>;
 
@@ -105,7 +106,7 @@ const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({
                 <ChakraLink color="gray.400">{post.author}</ChakraLink>
               </Link>
               &nbsp;on&nbsp;
-              <span>{post.publishedAt}</span>
+              <span>{formatDate(post.publishedAt)}</span>
             </Box>
             <UnorderedList
               width="auto"
@@ -115,16 +116,21 @@ const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({
               flexDirection={{ base: "column", md: "row" }}
               gridGap="1"
               color="gray.400"
-              style={{ listStyleType: "none"}}
+              style={{ listStyleType: "none" }}
             >
               {post.keywords.map((keyword) => (
-                <ListItem key={keyword}>
-                  {`#${keyword}`}
-                </ListItem>
+                <ListItem key={keyword}>{`#${keyword}`}</ListItem>
               ))}
             </UnorderedList>
           </Wrap>
-          <Box paddingTop="2" marginTop="2" className="blog-post-content" borderTopWidth="1px" borderStyle="solid" borderColor="gray.700">
+          <Box
+            paddingTop="2"
+            marginTop="2"
+            className="blog-post-content"
+            borderTopWidth="1px"
+            borderStyle="solid"
+            borderColor="gray.700"
+          >
             <MDXRemote {...mdx} components={components} />
           </Box>
         </Box>
