@@ -100,7 +100,8 @@ h1 {
 .blog-post-content code {
   background: var(--chakra-colors-gray-800);
   border-radius: 0.2em;
-  padding: 0.2em 0.3em;
+  display: inline-block;
+  padding: 0 0.3em;
 }
 
 .blog-post-content img {
