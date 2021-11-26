@@ -4,6 +4,9 @@
   font-weight: 450 600;
 }
 
+::-moz-selection { background: #f26200; color: white; }
+::selection { background: #f26200; color: white; }
+
 main {
   /* bump up font size in main area */
   font-size: 1.2em;
