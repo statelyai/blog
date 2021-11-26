@@ -29,6 +29,9 @@ const theme = extendTheme({
       "a:hover, a:active": {
         color: "primary.400",
       },
+      ":focus": {
+        outlineColor: "#61A3FF",
+      },
       // make strong and emphasised text slightly brighter
       "strong, b, em, i": {
         color: "gray.100",
@@ -53,7 +56,7 @@ const theme = extendTheme({
     },
   },
   shadows: {
-    outline: "0 0 0 3px #2E85FF",
+    outline: "0 0 0 3px #61A3FF",
   },
   colors: {
     gray: {
