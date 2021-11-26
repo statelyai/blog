@@ -45,6 +45,7 @@ export const PageFooter: React.FC = () => (
             borderBottomWidth={{ base: "1px", md: "0" }}
             borderStyle="solid"
             borderColor="gray.700"
+            _hover={{ color: "white", textDecoration: "underline" }}
           >
             Privacy policy
           </ChakraLink>
@@ -60,6 +61,7 @@ export const PageFooter: React.FC = () => (
             borderBottomWidth={{ base: "1px", md: "0" }}
             borderStyle="solid"
             borderColor="gray.700"
+            _hover={{ color: "white", textDecoration: "underline" }}
           >
             Documentation
           </ChakraLink>
@@ -75,6 +77,7 @@ export const PageFooter: React.FC = () => (
             borderBottomWidth={{ base: "1px", md: "0" }}
             borderStyle="solid"
             borderColor="gray.700"
+            _hover={{ color: "white", textDecoration: "underline" }}
           >
             Twitter
           </ChakraLink>
@@ -90,6 +93,7 @@ export const PageFooter: React.FC = () => (
             borderBottomWidth={{ base: "1px", md: "0" }}
             borderStyle="solid"
             borderColor="gray.700"
+            _hover={{ color: "white", textDecoration: "underline" }}
           >
             YouTube
           </ChakraLink>
@@ -101,6 +105,7 @@ export const PageFooter: React.FC = () => (
             padding="5"
             paddingBottom={{ base: "5", md: "0" }}
             color="gray.300"
+            _hover={{ color: "white", textDecoration: "underline" }}
           >
             Discord community
           </ChakraLink>

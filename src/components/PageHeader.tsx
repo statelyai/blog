@@ -121,12 +121,12 @@ export const PageHeader: React.FC<{ posts: Post[] }> = ({ posts }) => {
             <Box as="li">
               <ChakraLink
                 href="https://stately.ai"
-                isExternal
                 display="block"
                 padding="2"
                 color="gray.300"
+                _hover={{ color: "white", textDecoration: "underline" }}
               >
-                Stately.ai <ExternalLinkIcon />
+                Stately.ai
               </ChakraLink>
             </Box>
             <Box as="li">
@@ -136,19 +136,20 @@ export const PageHeader: React.FC<{ posts: Post[] }> = ({ posts }) => {
                 display="block"
                 padding="2"
                 color="gray.300"
+                _hover={{ color: "white", textDecoration: "underline" }}
               >
-                Documentation <ExternalLinkIcon />
+                Documentation
               </ChakraLink>
             </Box>
             <Box as="li">
               <ChakraLink
                 href="https://github.com/stately.ai/eng-blog"
-                isExternal
                 display="block"
                 padding="2"
                 color="gray.300"
+                _hover={{ color: "white", textDecoration: "underline" }}
               >
-                Github <ExternalLinkIcon />
+                Github
               </ChakraLink>
             </Box>
           </Wrap>
