@@ -65,7 +65,7 @@ export const PageHeader: React.FC<{ posts: Post[] }> = ({ posts }) => {
   return (
     <Stack
       as="header"
-      py="3"
+      py="4"
       px="6"
       display="flex"
       justifyContent="space-between"
