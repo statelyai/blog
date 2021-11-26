@@ -7,6 +7,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import theme from "../src/theme";
 import NProgress from "nprogress";
 import Router from "next/router";
+import NextHead from "next/head";
 import { MetadataProvider } from "../src/MetadataContext";
 import { makeMetadata } from "../content/metadata";
 
@@ -32,6 +33,12 @@ function MyApp({ Component, pageProps }: AppProps) {
         makeMetadata,
       }}
     >
+      <NextHead>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/manifest.webmanifest" />
+      </NextHead>
       <ChakraProvider theme={theme}>
         <Component {...pageProps} />
       </ChakraProvider>
