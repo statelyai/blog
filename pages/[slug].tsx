@@ -92,6 +92,15 @@ const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({
             &lt; All blog posts
           </Button>
           <Heading size="xl" as="h1" fontWeight="medium">
+            <ChakraLink
+              isExternal
+              href={`https://github.com/statelyai/eng-blog/edit/main/content/posts/${post.fileName}`}
+              fontSize="lg"
+              color="yellow.200"
+              marginRight="2"
+            >
+              Edit
+            </ChakraLink>
             {post.title}
           </Heading>
           <Wrap
@@ -115,16 +124,21 @@ const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({
               flexDirection={{ base: "column", md: "row" }}
               gridGap="1"
               color="gray.400"
-              style={{ listStyleType: "none"}}
+              style={{ listStyleType: "none" }}
             >
               {post.keywords.map((keyword) => (
-                <ListItem key={keyword}>
-                  {`#${keyword}`}
-                </ListItem>
+                <ListItem key={keyword}>{`#${keyword}`}</ListItem>
               ))}
             </UnorderedList>
           </Wrap>
-          <Box paddingTop="2" marginTop="2" className="blog-post-content" borderTopWidth="1px" borderStyle="solid" borderColor="gray.700">
+          <Box
+            paddingTop="2"
+            marginTop="2"
+            className="blog-post-content"
+            borderTopWidth="1px"
+            borderStyle="solid"
+            borderColor="gray.700"
+          >
             <MDXRemote {...mdx} components={components} />
           </Box>
         </Box>
