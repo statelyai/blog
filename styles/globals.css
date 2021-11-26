@@ -73,11 +73,11 @@ h1 {
 }
 
 .blog-post-content ul {
-  margin-left: 1rem;
+  margin-left: 0.25rem;
 }
 
 .blog-post-content ol {
-  margin-left: 1.5rem;
+  margin-left: 1.3rem;
 }
 
 .blog-post-content li {
