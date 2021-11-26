@@ -22,14 +22,16 @@ export const PageFooter: React.FC = () => (
       borderStyle="solid"
       borderColor="gray.700"
       marginTop="6"
+      width="100%"
+      maxW="3xl"
     >
       <Wrap
-        as={List}
         direction={{ base: "column", md: "row" }}
         wrap="wrap"
         marginBottom={{ base: "6", md: "12" }}
         paddingTop={{ base: "6", md: "0" }}
         spacing="0"
+        justify="center"
       >
         <Box
           as="li"
