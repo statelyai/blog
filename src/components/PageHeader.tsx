@@ -85,7 +85,8 @@ export const PageHeader: React.FC<{ posts: Post[] }> = ({ posts }) => {
               type="search"
               rounded="none"
               marginTop={{ base: "3", md: "0" }}
-              _placeholder={{ color: "white" }}
+              _placeholder={{ color: "gray.300" }}
+              borderColor="gray.700"
               value={searchValue}
               onChange={(e) => {
                 setSearchValue(e.target.value);
@@ -98,17 +99,19 @@ export const PageHeader: React.FC<{ posts: Post[] }> = ({ posts }) => {
                 top="100%"
                 left="0"
                 width={{ base: "100%", md: "400px" }}
-                padding="5"
+                padding="2"
                 bg="gray.900"
                 border="1px solid"
-                borderColor="whiteAlpha.400"
+                borderColor="gray.700"
               >
                 <List alignItems="flex-start">
                   {result.map((p) => (
-                    <ListItem key={p.slug} marginInlineStart="0">
+                    <ListItem key={p.slug} marginInlineStart="0" padding="1">
                       <Link href={p.slug} passHref>
-                        <ChakraLink padding="5">
-                          <small>{p.title}</small>
+                        <ChakraLink
+                          _hover={{ color: "white", textDecoration: "underline" }}
+                        >
+                          {p.title}
                         </ChakraLink>
                       </Link>
                     </ListItem>
