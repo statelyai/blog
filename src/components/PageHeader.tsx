@@ -7,6 +7,7 @@ import {
   Wrap,
   ListItem,
   useOutsideClick,
+  FormLabel
 } from "@chakra-ui/react";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { Logo } from "./Logo";
@@ -78,20 +79,26 @@ export const PageHeader: React.FC<{ posts: Post[] }> = ({ posts }) => {
           direction={{ base: "column", md: "row" }}
           alignItems={{ base: "left", md: "center" }}
         >
-          <form style={{ position: "relative" }}>
+          <form style={{ position: "relative" }} id="search">
             <Input
-              placeholder="Search"
+              id="search-input"
               size="md"
               type="search"
               rounded="none"
               marginTop={{ base: "3", md: "0" }}
-              _placeholder={{ color: "gray.300" }}
               borderColor="gray.700"
               value={searchValue}
               onChange={(e) => {
                 setSearchValue(e.target.value);
               }}
             />
+            <FormLabel
+              style={{ position: "absolute", top: "0" }}
+              padding="2"
+              paddingLeft="3"
+              htmlFor="search-input"
+              >Search
+            </FormLabel>
             {result.length > 0 && (
               <Box
                 ref={searchResultsRef}
