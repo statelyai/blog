@@ -1,10 +1,18 @@
 import React from "react";
 import { Box } from "@chakra-ui/react";
 import { PageHeader } from "./PageHeader";
+import { PageFooter } from "./PageFooter";
 import { Post } from "../types";
 
 export const Layout: React.FC<{ posts: Post[] }> = ({ posts, children }) => (
-  <Box display="flex" flexDirection="column" height="100%">
+  <Box
+    display="flex"
+    flexDirection="column"
+    height="100%"
+    maxWidth="1300"
+    marginLeft="auto"
+    marginRight="auto"
+  >
     <PageHeader posts={posts} />
     <Box
       as="main"
@@ -13,8 +21,8 @@ export const Layout: React.FC<{ posts: Post[] }> = ({ posts, children }) => (
       alignItems={{ base: "left", md: "center" }}
       flex="1"
     >
-      {/* <Sidebar posts={posts} /> */}
       {children}
     </Box>
+    <PageFooter />
   </Box>
 );

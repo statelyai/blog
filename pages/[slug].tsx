@@ -11,7 +11,6 @@ import {
   UnorderedList,
   ListItem,
   Link as ChakraLink,
-  Divider,
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -66,12 +65,12 @@ const PostPage: React.FC<{
           <Wrap
             marginTop="5"
             direction={{ base: "column", md: "row" }}
-            alignItems={{ base: "left", md: "center" }}
+            alignItems={{ base: "left", md: "flex-end" }}
           >
-            <Box as="p">
+            <Box as="p" color="gray.400">
               By&nbsp;
               <Link href={`/authors/${post.author}`} passHref>
-                <ChakraLink color="gray.200">{post.author}</ChakraLink>
+                <ChakraLink color="gray.400">{post.author}</ChakraLink>
               </Link>
               &nbsp;on&nbsp;
               <span>{post.publishedAt}</span>
@@ -79,23 +78,26 @@ const PostPage: React.FC<{
             <UnorderedList
               width="auto"
               fontSize="smaller"
-              listStyleType="none"
               display="flex"
               wrap="row"
               flexDirection={{ base: "column", md: "row" }}
               gridGap="1"
+              color="gray.400"
+              style={{ listStyleType: "none" }}
             >
               {post.keywords.map((keyword) => (
-                <ListItem key={keyword}>
-                  <Link href={`/keyword/${keyword}`} passHref key={keyword}>
-                    <ChakraLink color="gray.200">{`#${keyword}`}</ChakraLink>
-                  </Link>
-                </ListItem>
+                <ListItem key={keyword}>{`#${keyword}`}</ListItem>
               ))}
             </UnorderedList>
           </Wrap>
-          <Divider marginBlock="4" />
-          <Box paddingTop="2" className="blog-post-content">
+          <Box
+            paddingTop="2"
+            marginTop="2"
+            className="blog-post-content"
+            borderTopWidth="1px"
+            borderStyle="solid"
+            borderColor="gray.700"
+          >
             <MDXRemote {...mdx} components={MDXComponents} lazy />
           </Box>
         </Box>

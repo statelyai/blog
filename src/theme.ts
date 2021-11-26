@@ -12,9 +12,9 @@ const theme = extendTheme({
   styles: {
     global: {
       "html, body": {
-        backgroundColor: "gray.900",
+        backgroundColor: "black",
         // make text colour lower contrast to be easier on the eyes
-        color: "gray.200",
+        color: "gray.300",
         fontWeight: "450",
         // slnt is fix for Safari italicising variable fonts by default
         fontVariationSettings: "'wght' 450, 'slnt' 0",
@@ -29,15 +29,18 @@ const theme = extendTheme({
       "a:hover, a:active": {
         color: "primary.400",
       },
+      ":focus": {
+        outlineColor: "#61A3FF",
+      },
       // make strong and emphasised text slightly brighter
       "strong, b, em, i": {
         color: "gray.100",
         fontSynthesis: "none",
       },
       "strong, b": {
-        fontWeight: "700",
+        fontWeight: "600",
         // slnt is fix for Safari italicising variable fonts by default
-        fontVariationSettings: "'wght' 700, 'slnt' 0",
+        fontVariationSettings: "'wght' 600, 'slnt' 0",
       },
       "em, i" : {
         fontStyle: "italic",
@@ -45,6 +48,7 @@ const theme = extendTheme({
         fontVariationSettings: "'slnt' 10",
       },
       "h1, h2, h3, h4, h5, h6" : {
+        color: "white",
         fontWeight: "500",
         // slnt is fix for Safari italicising variable fonts by default
         fontVariationSettings: "'wght' 500, 'slnt' 0",
@@ -52,7 +56,7 @@ const theme = extendTheme({
     },
   },
   shadows: {
-    outline: "0 0 0 3px #2E85FF",
+    outline: "0 0 0 3px #61A3FF",
   },
   colors: {
     gray: {

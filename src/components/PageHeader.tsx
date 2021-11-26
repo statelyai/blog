@@ -7,8 +7,8 @@ import {
   Wrap,
   ListItem,
   useOutsideClick,
+  FormLabel,
 } from "@chakra-ui/react";
-import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { Logo } from "./Logo";
 import { Post } from "../types";
 import { RefObject, useEffect, useMemo, useRef, useState } from "react";
@@ -64,7 +64,7 @@ export const PageHeader: React.FC<{ posts: Post[] }> = ({ posts }) => {
   return (
     <Stack
       as="header"
-      py="3"
+      py="4"
       px="6"
       display="flex"
       justifyContent="space-between"
@@ -78,19 +78,27 @@ export const PageHeader: React.FC<{ posts: Post[] }> = ({ posts }) => {
           direction={{ base: "column", md: "row" }}
           alignItems={{ base: "left", md: "center" }}
         >
-          <form style={{ position: "relative" }}>
+          <form style={{ position: "relative" }} id="search">
             <Input
-              placeholder="Search"
+              id="search-input"
               size="md"
               type="search"
               rounded="none"
               marginTop={{ base: "3", md: "0" }}
-              _placeholder={{ color: "white" }}
+              borderColor="gray.700"
               value={searchValue}
               onChange={(e) => {
                 setSearchValue(e.target.value);
               }}
             />
+            <FormLabel
+              style={{ position: "absolute", top: "0" }}
+              padding="2"
+              paddingLeft="3"
+              htmlFor="search-input"
+            >
+              Search
+            </FormLabel>
             {result.length > 0 && (
               <Box
                 ref={searchResultsRef}
@@ -98,24 +106,22 @@ export const PageHeader: React.FC<{ posts: Post[] }> = ({ posts }) => {
                 top="100%"
                 left="0"
                 width={{ base: "100%", md: "400px" }}
-                padding="5"
+                padding="2"
                 bg="gray.900"
                 border="1px solid"
-                borderColor="whiteAlpha.400"
+                borderColor="gray.700"
               >
                 <List alignItems="flex-start">
                   {result.map((p) => (
-                    <ListItem key={p.slug} marginInlineStart="0">
+                    <ListItem key={p.slug} marginInlineStart="0" padding="1">
                       <Link href={p.slug} passHref>
                         <ChakraLink
-                          padding="1"
-                          textOverflow="ellipsis"
-                          maxWidth="100%"
-                          overflowX="hidden"
-                          whiteSpace="nowrap"
-                          display="inline-block"
+                          _hover={{
+                            color: "white",
+                            textDecoration: "underline",
+                          }}
                         >
-                          <small>{p.title}</small>
+                          {p.title}
                         </ChakraLink>
                       </Link>
                     </ListItem>
@@ -127,35 +133,25 @@ export const PageHeader: React.FC<{ posts: Post[] }> = ({ posts }) => {
           <Wrap as={List} listStyleType="none" direction="row" wrap="wrap">
             <Box as="li">
               <ChakraLink
-                href="https://stately.ai"
-                isExternal
-                display="block"
-                padding="2"
-                color="gray.400"
-              >
-                Stately.ai <ExternalLinkIcon />
-              </ChakraLink>
-            </Box>
-            <Box as="li">
-              <ChakraLink
                 href="https://xstate.js.org/docs"
                 isExternal
                 display="block"
                 padding="2"
-                color="gray.400"
+                color="gray.300"
+                _hover={{ color: "white", textDecoration: "underline" }}
               >
-                Documentation <ExternalLinkIcon />
+                Documentation
               </ChakraLink>
             </Box>
             <Box as="li">
               <ChakraLink
                 href="https://github.com/stately.ai/eng-blog"
-                isExternal
                 display="block"
                 padding="2"
-                color="gray.400"
+                color="gray.300"
+                _hover={{ color: "white", textDecoration: "underline" }}
               >
-                Github <ExternalLinkIcon />
+                Github
               </ChakraLink>
             </Box>
           </Wrap>

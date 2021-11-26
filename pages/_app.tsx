@@ -7,9 +7,9 @@ import { ChakraProvider } from "@chakra-ui/react";
 import theme from "../src/theme";
 import NProgress from "nprogress";
 import Router from "next/router";
+import NextHead from "next/head";
 import { MetadataProvider } from "../src/MetadataContext";
 import { makeMetadata } from "../content/metadata";
-import NextHead from "next/head";
 
 /* NProgress */
 NProgress.configure({ showSpinner: false });
@@ -53,6 +53,10 @@ function MyApp({ Component, pageProps }: AppProps) {
             title="Subscribe to our blog feed"
             href="/feeds/feed.json"
           />
+          <link rel="icon" href="/favicon.ico" sizes="any" />
+          <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+          <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+          <link rel="manifest" href="/manifest.webmanifest" />
         </NextHead>
         <Component {...pageProps} />
       </ChakraProvider>
