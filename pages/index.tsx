@@ -37,7 +37,13 @@ const Home: NextPage<{ posts: Post[] }> = ({ posts }) => {
           >
             {title}
           </Heading>
-          <List spacing="4" maxW="3xl" align="left" listStyleType="none">
+          <List
+            spacing="4"
+            maxW="3xl"
+            align="left"
+            textAlign="left"
+            listStyleType="none"
+          >
             {posts.map((post) => (
               <ListItem key={post.slug} marginTop="0">
                 {/* Formatting href makes server and client rendered hrefs consistent */}
