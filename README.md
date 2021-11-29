@@ -48,15 +48,15 @@ Use `yarn post:edit` to update an existing blog post’s updatedAt frontmatter f
 
 ### Blog post frontmatter options
 
-| property    | description                                                      |
-| ----------- | ---------------------------------------------------------------- |
-| title       | post title                                                       |
-| description | post description that shows on blog list view                    |
-| keywords    | keywords or tags relevant to the blog post                       |
-| author      | post author                                                      |
-| publishedAt | date the post was first published                                |
-| updatedAt   | date the post was last updated                                   |
-| originalURL | original URL of the post in case it's copied from somewhere else |
+| property    | description                                                    |
+| ----------- | -------------------------------------------------------------- |
+| title       | post title                                                     |
+| description | post description that shows on blog list view                  |
+| keywords    | keywords or tags relevant to the blog post                     |
+| author      | post author                                                    |
+| publishedAt | date the post was first published                              |
+| updatedAt   | date the post was last updated                                 |
+| originalURL | original post URL if post has been copied from another platform|
 
 ### Test meta tags and Open Graph locally
 
