@@ -9,11 +9,12 @@ export const makeMetadata: (overrides: MetadataOverrides) => Metadata = ({
   title = DEFAULT_TITLE,
   description = DEFAULT_DESCRIPTION,
   url = DEFAULT_URL,
+  originalURL,
   article,
 }) => ({
   title,
   description,
-  canonical: url,
+  canonical: originalURL,
   openGraph: {
     url,
     title,

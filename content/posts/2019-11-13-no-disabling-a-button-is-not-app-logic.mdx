@@ -1,5 +1,5 @@
 ---
-title: 'No, disabling a button is not app logic.'
+title: "No, disabling a button is not app logic."
 description: >-
   Disabling a button is not logic. Rather, it is a sign that logic is fragile
   and bug-prone. Let’s explore this with a simple example: fetching data in a
@@ -12,8 +12,9 @@ keywords:
   - business logic
 author:
   - - David Khourshid
-excerpt: ''
-publishedAt: '2019-11-13'
+excerpt: ""
+publishedAt: "2019-11-13"
+originalURL: "https://dev.to/davidkpiano/no-disabling-a-button-is-not-app-logic-598i"
 ---
 
 I’m going to start this post with an excerpt from the book “Constructing the User Interface with Statecharts”, written by Ian Horrocks in 1999:
@@ -39,30 +40,30 @@ Suppose we have a `DogFetcher` component that has a button that you can click to
 A typical implementation with [React Hooks](https://reactjs.org/docs/hooks-intro.html) might look like this:
 
 ```ts
-    function DogFetcher() {
-      const [isLoading, setIsLoading] = useState(false);
-      const [dog, setDog] = useState(null);
+function DogFetcher() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [dog, setDog] = useState(null);
 
-      return (
-        <div>
-          <figure className="dog">{dog && <img src={dog} alt="doggo" />}</figure>
+  return (
+    <div>
+      <figure className="dog">{dog && <img src={dog} alt="doggo" />}</figure>
 
-          <button
-            onClick={() => {
-              setIsLoading(true);
-              fetch(`https://dog.ceo/api/breeds/image/random`)
-                .then(data => data.json())
-                .then(response => {
-                  setDog(response.message);
-                  setIsLoading(false);
-                });
-            }}
-          >
-            {isLoading ? "Fetching..." : "Fetch dog!"}
-          </button>
-        </div>
-      );
-    }
+      <button
+        onClick={() => {
+          setIsLoading(true);
+          fetch(`https://dog.ceo/api/breeds/image/random`)
+            .then((data) => data.json())
+            .then((response) => {
+              setDog(response.message);
+              setIsLoading(false);
+            });
+        }}
+      >
+        {isLoading ? "Fetching..." : "Fetch dog!"}
+      </button>
+    </div>
+  );
+}
 ```
 
 This works, but there’s one immediate problem: clicking the button more than once (while a dog is loading) will display one dog briefly, and then replace that dog with another dog. That’s not very considerate to the first dog.
@@ -70,20 +71,20 @@ This works, but there’s one immediate problem: clicking the button more than o
 The typical solution to this is to add a `disabled={isLoading}` attribute to the button:
 
 ```ts
-    function DogFetcher() {
-      // ...
+function DogFetcher() {
+  // ...
 
-      <button
-        onClick={() => {
-          // ... excessive amount of ad-hoc logic
-        }}
-        disabled={isLoading}
-      >
-        {isLoading ? "Fetching..." : "Fetch dog!"}
-      </button>
+  <button
+    onClick={() => {
+      // ... excessive amount of ad-hoc logic
+    }}
+    disabled={isLoading}
+  >
+    {isLoading ? "Fetching..." : "Fetch dog!"}
+  </button>;
 
-      // ...
-    }
+  // ...
+}
 ```
 
 This also works; you’re probably satisfied with this solution. Allow me to burst this bubble.
@@ -146,34 +147,34 @@ But there’s a code smell here. Our same fetch logic is implemented in more tha
 Okay, so putting logic in our event handlers is probably not a good idea, but we can’t exactly put our finger on the reason why yet. Let’s move the fetch logic out into a function:
 
 ```ts
-    function DogFetcher() {
-      const [isLoading, setIsLoading] = useState(false);
-      const [dog, setDog] = useState(null);
+function DogFetcher() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [dog, setDog] = useState(null);
 
-      function fetchDog() {
-        if (isLoading) return;
+  function fetchDog() {
+    if (isLoading) return;
 
-        setIsLoading(true);
-        fetch(`https://dog.ceo/api/breeds/image/random`)
-          .then(data => data.json())
-          .then(response => {
-            setDog(response.message);
-            setIsLoading(false);
-          });
-      }
+    setIsLoading(true);
+    fetch(`https://dog.ceo/api/breeds/image/random`)
+      .then((data) => data.json())
+      .then((response) => {
+        setDog(response.message);
+        setIsLoading(false);
+      });
+  }
 
-      return (
-        <div>
-          <figure className="dog" onDoubleClick={fetchDog}>
-            {dog && <img src={dog} alt="doggo" />}
-          </figure>
+  return (
+    <div>
+      <figure className="dog" onDoubleClick={fetchDog}>
+        {dog && <img src={dog} alt="doggo" />}
+      </figure>
 
-          <button onClick={fetchDog}>
-            {isLoading ? "Fetching..." : "Fetch dog!"}
-          </button>
-        </div>
-      );
-    }
+      <button onClick={fetchDog}>
+        {isLoading ? "Fetching..." : "Fetch dog!"}
+      </button>
+    </div>
+  );
+}
 ```
 
 ## Adding features and complexity
@@ -186,51 +187,51 @@ Now let’s see what happens when we want to add basic “features”, such as:
 I hesitate to call these “features” because these types of behaviors should be naturally enabled by the programming patterns used, but let’s try to add them anyhow:
 
 ```ts
-    function DogFetcher() {
-      const [isLoading, setIsLoading] = useState(false);
-      const [error, setError] = useState(null);
-      const [canceled, setCanceled] = useState(false);
-      const [dog, setDog] = useState(null);
+function DogFetcher() {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [canceled, setCanceled] = useState(false);
+  const [dog, setDog] = useState(null);
 
-      function fetchDog() {
-        setCanceled(false);
-        setError(null);
-        setIsLoading(true);
+  function fetchDog() {
+    setCanceled(false);
+    setError(null);
+    setIsLoading(true);
 
-        fetchRandomDog()
-          .then(response => {
-            // This should work... but it doesn't!
-            if (canceled) return;
+    fetchRandomDog()
+      .then((response) => {
+        // This should work... but it doesn't!
+        if (canceled) return;
 
-            setIsLoading(false);
-            setDog(response.message);
-          })
-          .catch(error => {
-            setIsLoading(false);
-            setCanceled(false);
-            setError(error);
-          });
-      }
-
-      function cancel() {
         setIsLoading(false);
-        setCanceled(true);
-      }
+        setDog(response.message);
+      })
+      .catch((error) => {
+        setIsLoading(false);
+        setCanceled(false);
+        setError(error);
+      });
+  }
 
-      return (
-        <div>
-          {error && <span style={{ color: "red" }}>{error}</span>}
-          <figure className="dog" onDoubleClick={fetchDog}>
-            {dog && <img src={dog} alt="doggo" />}
-          </figure>
+  function cancel() {
+    setIsLoading(false);
+    setCanceled(true);
+  }
 
-          <button onClick={fetchDog}>
-            {isLoading ? "Fetching..." : "Fetch dog!"}
-          </button>
-          <button onClick={cancel}>Cancel</button>
-        </div>
-      );
-    }
+  return (
+    <div>
+      {error && <span style={{ color: "red" }}>{error}</span>}
+      <figure className="dog" onDoubleClick={fetchDog}>
+        {dog && <img src={dog} alt="doggo" />}
+      </figure>
+
+      <button onClick={fetchDog}>
+        {isLoading ? "Fetching..." : "Fetch dog!"}
+      </button>
+      <button onClick={cancel}>Cancel</button>
+    </div>
+  );
+}
 ```
 
 This _looks_ like it should work -- all of our Boolean flags are being set to the correct values when things happen. However, **it does not work** because of a hard-to-catch bug: _stale callbacks_. In this case, the `canceled` flag inside the `.then(...)` callback will always be the previous value instead of the latest `canceled` value, so cancelling has no effect until the next time we try to fetch a dog, which isn’t what we want.
@@ -261,40 +262,40 @@ Now let’s define a few events that can happen in the app. Keep in mind: these 
 Great! Now let’s write our reducer:
 
 ```ts
-    function dogReducer(state, event) {
-      switch (event.type) {
-        case "FETCH":
-          return {
-            ...state,
-            status: "loading"
-          };
-        case "RESOLVE":
-          return {
-            ...state,
-            status: "success",
-            dog: event.data
-          };
-        case "REJECT":
-          return {
-            ...state,
-            status: "failure",
-            error: event.error
-          };
-        case "CANCEL":
-          return {
-            ...state,
-            status: "idle"
-          };
-        default:
-          return state;
-      }
-    }
+function dogReducer(state, event) {
+  switch (event.type) {
+    case "FETCH":
+      return {
+        ...state,
+        status: "loading",
+      };
+    case "RESOLVE":
+      return {
+        ...state,
+        status: "success",
+        dog: event.data,
+      };
+    case "REJECT":
+      return {
+        ...state,
+        status: "failure",
+        error: event.error,
+      };
+    case "CANCEL":
+      return {
+        ...state,
+        status: "idle",
+      };
+    default:
+      return state;
+  }
+}
 
-    const initialState = {
-      status: "idle",
-      dog: null,
-      error: null
-    };
+const initialState = {
+  status: "idle",
+  dog: null,
+  error: null,
+};
 ```
 
 Here’s the beautiful thing about this reducer. It is _completely framework-agnostic_ - we can take this and use it in any framework, or no framework at all. And that also makes it much easier to test.
@@ -302,58 +303,59 @@ Here’s the beautiful thing about this reducer. It is _completely framework-agn
 But also, implementing this in a framework becomes _reduced_ (pun intended) to _just dispatching events_. No more logic in event handlers:
 
 ```ts
-    function DogFetcher() {
-      const [state, dispatch] = useReducer(dogReducer, initialState);
-      const { error, dog, status } = state;
+function DogFetcher() {
+  const [state, dispatch] = useReducer(dogReducer, initialState);
+  const { error, dog, status } = state;
 
-      useEffect(() => {
-        // ... fetchDog?
-      }, [state.status]);
+  useEffect(() => {
+    // ... fetchDog?
+  }, [state.status]);
 
-      return (
-        <div>
-          {error && <span style={{ color: "red" }}>{error}</span>}
-          <figure className="dog" onDoubleClick={() => dispatch({ type: "FETCH" })}>
-            {dog && <img src={dog} alt="doggo" />}
-          </figure>
+  return (
+    <div>
+      {error && <span style={{ color: "red" }}>{error}</span>}
+      <figure className="dog" onDoubleClick={() => dispatch({ type: "FETCH" })}>
+        {dog && <img src={dog} alt="doggo" />}
+      </figure>
 
-          <button onClick={() => dispatch({ type: "FETCH" })}>
-            {status === "loading" ? "Fetching..." : "Fetch dog!"}
-          </button>
-          <button onClick={() => dispatch({ type: "CANCEL" })}>Cancel</button>
-        </div>
-      );
-    }
+      <button onClick={() => dispatch({ type: "FETCH" })}>
+        {status === "loading" ? "Fetching..." : "Fetch dog!"}
+      </button>
+      <button onClick={() => dispatch({ type: "CANCEL" })}>Cancel</button>
+    </div>
+  );
+}
 ```
 
 However, the question remains: how do we execute the side-effect of actually fetching the dog? Well, since the `useEffect` hook is meant for synchronizing effects with state, we can synchronize the `fetchDog()` effect with `status === 'loading'`, since `'loading'` means that that side-effect is being executed anyway:
 
 ```ts
-    // ...
-      useEffect(() => {
-        if (state.status === "loading") {
-          let canceled = false;
+// ...
+useEffect(() => {
+  if (state.status === "loading") {
+    let canceled = false;
 
-          fetchRandomDog()
-            .then(data => {
-              if (canceled) return;
-              dispatch({ type: "RESOLVE", data });
-            })
-            .catch(error => {
-              if (canceled) return;
-              dispatch({ type: "REJECT", error });
-            });
+    fetchRandomDog()
+      .then((data) => {
+        if (canceled) return;
+        dispatch({ type: "RESOLVE", data });
+      })
+      .catch((error) => {
+        if (canceled) return;
+        dispatch({ type: "REJECT", error });
+      });
 
-          return () => {
-            canceled = true;
-          };
-        }
-      }, [state.status]);
-    // ...
+    return () => {
+      canceled = true;
+    };
+  }
+}, [state.status]);
+// ...
 ```
 
 ## The fabled "disabled" attribute
------------------------------------------------------------------
+
+---
 
 The logic above works great. We’re able to:
 
@@ -413,44 +415,44 @@ In this case, we're going to use a state machine to manage and orchestrate state
 I'm going to use [XState](https://xstate.js.org/docs) and [`@xstate/react`](https://xstate.js.org/docs/packages/xstate-react/) to create the machine:
 
 ```ts
-    import { Machine, assign } from "xstate";
-    import { useMachine } from "@xstate/react";
+import { Machine, assign } from "xstate";
+import { useMachine } from "@xstate/react";
 
-    // ...
+// ...
 
-    const dogFetcherMachine = Machine({
-      id: "dog fetcher",
-      initial: "idle",
-      context: {
-        dog: null,
-        error: null
+const dogFetcherMachine = Machine({
+  id: "dog fetcher",
+  initial: "idle",
+  context: {
+    dog: null,
+    error: null,
+  },
+  states: {
+    idle: {
+      on: { FETCH: "loading" },
+    },
+    loading: {
+      invoke: {
+        src: () => fetchRandomDog(),
+        onDone: {
+          target: "success",
+          actions: assign({ dog: (_, event) => event.data.message }),
+        },
+        onError: {
+          target: "failure",
+          actions: assign({ error: (_, event) => event.data }),
+        },
       },
-      states: {
-        idle: {
-          on: { FETCH: "loading" }
-        },
-        loading: {
-          invoke: {
-            src: () => fetchRandomDog(),
-            onDone: {
-              target: "success",
-              actions: assign({ dog: (_, event) => event.data.message })
-            },
-            onError: {
-              target: "failure",
-              actions: assign({ error: (_, event) => event.data })
-            }
-          },
-          on: { CANCEL: "idle" }
-        },
-        success: {
-          on: { FETCH: "loading" }
-        },
-        failure: {
-          on: { FETCH: "loading" }
-        }
-      }
-    });
+      on: { CANCEL: "idle" },
+    },
+    success: {
+      on: { FETCH: "loading" },
+    },
+    failure: {
+      on: { FETCH: "loading" },
+    },
+  },
+});
 ```
 
 Notice how the machine looks like our previous reducer, with a couple of differences:
@@ -470,27 +472,27 @@ Furthermore, I can copy-paste this exact machine and [visualize it in XState Viz
 So what does our component code look like now? Take a look:
 
 ```ts
-    function DogFetcher() {
-      const [current, send] = useMachine(dogFetcherMachine);
-      const { error, dog } = current.context;
+function DogFetcher() {
+  const [current, send] = useMachine(dogFetcherMachine);
+  const { error, dog } = current.context;
 
-      return (
-        <div>
-          {error && <span style={{ color: "red" }}>{error}</span>}
-          <figure className="dog" onDoubleClick={() => send("FETCH")}>
-            {dog && <img src={dog} alt="doggo" />}
-          </figure>
+  return (
+    <div>
+      {error && <span style={{ color: "red" }}>{error}</span>}
+      <figure className="dog" onDoubleClick={() => send("FETCH")}>
+        {dog && <img src={dog} alt="doggo" />}
+      </figure>
 
-          <button onClick={() => send("FETCH")}>
-            {current.matches("loading") && "Fetching..."}
-            {current.matches("success") && "Fetch another dog!"}
-            {current.matches("idle") && "Fetch dog"}
-            {current.matches("failure") && "Try again"}
-          </button>
-          <button onClick={() => send("CANCEL")}>Cancel</button>
-        </div>
-      );
-    }
+      <button onClick={() => send("FETCH")}>
+        {current.matches("loading") && "Fetching..."}
+        {current.matches("success") && "Fetch another dog!"}
+        {current.matches("idle") && "Fetch dog"}
+        {current.matches("failure") && "Try again"}
+      </button>
+      <button onClick={() => send("CANCEL")}>Cancel</button>
+    </div>
+  );
+}
 ```
 
 Here’s the difference between using a state machine and a reducer:
@@ -518,29 +520,27 @@ So when you’re creating fetching logic (or any other kind of complex logic) in
 You do not need a state machine library (like XState) to do this. In fact, you might not even need `useReducer` when you’re first adopting these principles. Even something as simple as having a state variable representing a finite state can already clean up your logic plenty:
 
 ```ts
-    function DogFetcher() {
-      // 'idle' or 'loading' or 'success' or 'error'
-      const [status, setStatus] = useState('idle');
-    }
+function DogFetcher() {
+  // 'idle' or 'loading' or 'success' or 'error'
+  const [status, setStatus] = useState("idle");
+}
 ```
 
 And just like that, you’ve eliminated `isLoading`, `isError`, `isSuccess`, `startedLoading`, and whatever Boolean flags you were going to create. And if you really start to miss that `isLoading` flag (for whatever reason), you can still have it, but ONLY if it’s derived from your organized, finite states. The `isLoading` variable should NEVER be a primary source of state:
 
 ```ts
-    function DogFetcher() {
-      // 'idle' or 'loading' or 'success' or 'error'
-      const [status, setStatus] = useState('idle');
+function DogFetcher() {
+  // 'idle' or 'loading' or 'success' or 'error'
+  const [status, setStatus] = useState("idle");
 
-      const isLoading = status === 'loading';
+  const isLoading = status === "loading";
 
-      return (
-        // ...
-        <button disabled={isLoading}>
-          {/* ... */}
-        </button>
-        // ...
-      );
-    }
+  return (
+    // ...
+    <button disabled={isLoading}>{/* ... */}</button>
+    // ...
+  );
+}
 ```
 
 And we’ve come full circle. Thanks for reading.
