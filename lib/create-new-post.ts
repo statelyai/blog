@@ -85,7 +85,7 @@ const createQuestions: (
     type: "text",
     name: "originalURL",
     message: "Original URL",
-    hint: "Only if post is published somewhere else before",
+    hint: "Original post URL if post has been copied from another platform",
   },
 ];
 
