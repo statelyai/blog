@@ -16,7 +16,12 @@ import { serializePost } from "./serializePost";
     - Best time to update the feed
 */
 export const generateFeed = async (posts: Post[]): Promise<Feed> => {
-  const { title, canonical: url, description, authors } = makeMetadata();
+  const {
+    title,
+    openGraph: { url },
+    description,
+    authors,
+  } = makeMetadata();
   //   Base feed
   const feed = new Feed({
     title,
