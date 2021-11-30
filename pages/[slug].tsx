@@ -12,11 +12,11 @@ import {
   ListItem,
   Link as ChakraLink,
 } from "@chakra-ui/react";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { MDXComponents } from "../src/components/MDXComponents";
 import { Seo } from "../src/Seo";
 import { DEFAULT_URL } from "../content/metadata";
+import { formatDate } from "../src/utils";
 import { ArrowLeftIcon } from "@chakra-ui/icons";
 import { serializePost } from "../src/serializePost";
 
@@ -81,7 +81,7 @@ const PostPage: React.FC<{
               By&nbsp;
               <span>{post.author}</span>
               &nbsp;on&nbsp;
-              <span>{post.publishedAt}</span>
+              <span>{formatDate(post.publishedAt)}</span>
             </Box>
             <UnorderedList
               width="auto"
