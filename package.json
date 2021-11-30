@@ -9,6 +9,8 @@
     "lint": "next lint",
     "postinstall": "patch-package",
     "test:meta": "yarn lt --port 3000",
+    "export": "next build && next export",
+    "export:preview": "yarn http-server out",
     "post:create": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' ts-node -T lib/create-new-post.ts",
     "post:edit": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' ts-node -T lib/edit-post.ts"
   },
@@ -53,6 +55,7 @@
     "@types/uuid": "^8.3.1",
     "eslint": "7.32.0",
     "eslint-config-next": "11.1.2",
+    "http-server": "^14.0.0",
     "import-jsx": "^4.0.0",
     "localtunnel": "^2.0.2",
     "patch-package": "^6.4.7",
