@@ -37,7 +37,7 @@ const PostPage: React.FC<{
           authors: [post.author],
           publishedTime: post.publishedAt,
           modifiedTime: post.updatedAt,
-          tags: post.keywords,
+          tags: post.tags,
         }}
       />
       <Layout posts={posts}>
@@ -93,7 +93,7 @@ const PostPage: React.FC<{
               color="gray.400"
               style={{ listStyleType: "none" }}
             >
-              {post.keywords.map((keyword) => (
+              {post.tags.map((keyword) => (
                 <ListItem key={keyword}>{`#${keyword}`}</ListItem>
               ))}
             </UnorderedList>
