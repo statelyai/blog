@@ -93,6 +93,15 @@ const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({
             &lt; All blog posts
           </Button>
           <Heading size="xl" as="h1" fontWeight="medium">
+            <ChakraLink
+              isExternal
+              href={`https://github.com/statelyai/eng-blog/edit/main/content/posts/${post.fileName}`}
+              fontSize="lg"
+              color="yellow.200"
+              marginRight="2"
+            >
+              Edit
+            </ChakraLink>
             {post.title}
           </Heading>
           <Wrap
@@ -116,7 +125,7 @@ const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({
               flexDirection={{ base: "column", md: "row" }}
               gridGap="1"
               color="gray.400"
-              style={{ listStyleType: "none"}}
+              style={{ listStyleType: "none" }}
             >
               {post.keywords.map((keyword) => (
                 <ListItem key={keyword}>{`#${keyword}`}</ListItem>
