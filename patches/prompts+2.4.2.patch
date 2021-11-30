@@ -1,26 +1,18 @@
 diff --git a/node_modules/prompts/lib/elements/multiselect.js b/node_modules/prompts/lib/elements/multiselect.js
-index 99b393f..35b0c2f 100644
+index 99b393f..172f8c5 100644
 --- a/node_modules/prompts/lib/elements/multiselect.js
 +++ b/node_modules/prompts/lib/elements/multiselect.js
-@@ -4,6 +4,7 @@ const color = require('kleur');
- const { cursor } = require('sisteransi');
- const Prompt = require('./prompt');
- const { clear, figures, style, wrap, entriesToDisplay } = require('../util');
-+const {render, Box, Text} = require('ink')
- 
- /**
-  * MultiselectPrompt Base Element
-@@ -179,7 +180,7 @@ class MultiselectPrompt extends Prompt {
+@@ -179,7 +179,7 @@ class MultiselectPrompt extends Prompt {
    }
  
    renderOption(cursor, v, i, arrowIndicator) {
 -    const prefix = (v.selected ? color.green(figures.radioOn) : figures.radioOff) + ' ' + arrowIndicator + ' ';
-+    const prefix = (v.selected ? color.green(figures.checkboxOn) : color.gray(figures.checkboxOff)) + ' ' + arrowIndicator + ' ';
++    const prefix = (v.selected ? color.green(figures.checkboxOn) : figures.checkboxOff) + ' ' + arrowIndicator + ' ';
      let title, desc;
  
      if (v.disabled) {
 diff --git a/node_modules/prompts/lib/util/figures.js b/node_modules/prompts/lib/util/figures.js
-index cd31b88..980c694 100644
+index cd31b88..3ad2083 100644
 --- a/node_modules/prompts/lib/util/figures.js
 +++ b/node_modules/prompts/lib/util/figures.js
 @@ -12,7 +12,9 @@
@@ -30,7 +22,19 @@ index cd31b88..980c694 100644
 -  pointer: '❯'	
 +  pointer: '❯',
 +  checkboxOn: '[✔]',
-+  checkboxOff: '[ ]'
++ checkboxOff: '[ ]'
  };	
  const win = {
    arrowUp: main.arrowUp,
+@@ -26,7 +28,10 @@ const win = {
+   ellipsis: '...',	
+   pointerSmall: '»',	
+   line: '─',	
+-  pointer: '>'	
++  pointer: '>',
++ checkboxOn: '[✔]',
++ checkboxOff: '[ ]'
++
+ };	
+ const figures = process.platform === 'win32' ? win : main;	
+ 

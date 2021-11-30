@@ -43,7 +43,7 @@ const Home: NextPage<{ posts: Post[] }> = ({ posts }) => {
             maxW="3xl"
             align="left"
             textAlign="left"
-            style={{ listStyleType: "none" }}
+            listStyleType="none"
           >
             {posts.map((post) => (
               <ListItem key={post.slug} marginTop="0">
