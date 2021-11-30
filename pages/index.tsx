@@ -7,6 +7,7 @@ import {
   Link as ChakraLink,
 } from "@chakra-ui/react";
 import type { NextPage } from "next";
+import fs from "fs";
 import { Layout } from "../src/components/Layout";
 import { getAllPosts } from "../src/posts";
 import { Post } from "../src/types";
@@ -14,6 +15,7 @@ import Link from "next/link";
 import { Seo } from "../src/Seo";
 import { useMetadata } from "../src/MetadataContext";
 import { formatDate } from "../src/utils";
+import { generateFeed } from "../src/feed";
 
 const Home: NextPage<{ posts: Post[] }> = ({ posts }) => {
   const {
@@ -75,6 +77,14 @@ const Home: NextPage<{ posts: Post[] }> = ({ posts }) => {
 
 export const getStaticProps = async () => {
   const posts = await getAllPosts();
+
+  const feed = await generateFeed(posts);
+
+  fs.mkdirSync("public/feeds/", { recursive: true });
+  fs.writeFileSync("public/feeds/rss.xml", feed.rss2());
+  fs.writeFileSync("public/feeds/feed.json", feed.json1());
+  fs.writeFileSync("public/feeds/atom.xml", feed.atom1());
+
   return { props: { posts } };
 };
 

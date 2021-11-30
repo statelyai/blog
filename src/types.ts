@@ -15,12 +15,13 @@ export interface PostFrontmatter {
 export interface Post extends PostFrontmatter {
   slug: string;
   content: string;
+  fileName: string;
 }
 
 export type Metadata = Pick<
   NextSeoProps,
   "title" | "description" | "canonical" | "openGraph" | "twitter"
->;
+> & { authors: Readonly<Array<{ name: string; twitterHandle: string }>> };
 
 type OpenGraphArticle = NonNullable<
   NonNullable<NextSeoProps["openGraph"]>["article"]

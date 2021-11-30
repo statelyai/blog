@@ -1,8 +1,8 @@
-import fs from "fs/promises";
-import path from "path";
 import matter from "gray-matter";
 import { Post } from "./types";
 import { slugify } from "./utils";
+import path from "path";
+import fs from "fs/promises";
 
 export const POSTS_DIR = path.join(process.cwd(), "content/posts");
 
@@ -27,6 +27,7 @@ export const getAllPosts = async (): Promise<Array<Post>> => {
       slug: slugify(title),
       excerpt,
       content,
+      fileName,
     } as Post);
   }
 
