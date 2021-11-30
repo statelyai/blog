@@ -81,6 +81,12 @@ const createQuestions: (
     message: "Your full name, space separated: (Example: John Doe)",
     validate: (value) => (!value ? "Author is required" : true),
   },
+  {
+    type: "text",
+    name: "originalURL",
+    message: "Original URL",
+    hint: "Original post URL if post has been copied from another platform",
+  },
 ];
 
 (async function main() {

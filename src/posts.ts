@@ -27,6 +27,7 @@ export const getAllPosts = async (): Promise<Array<Post>> => {
       slug: slugify(title),
       excerpt,
       content,
+      fileName,
     } as Post);
   }
 

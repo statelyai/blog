@@ -18,12 +18,13 @@ export const makeMetadata = ({
   title = DEFAULT_TITLE,
   description = DEFAULT_DESCRIPTION,
   url = DEFAULT_URL,
+  originalURL,
   article,
 }: MetadataOverrides | undefined = {}) => ({
   title,
   description,
-  canonical: url,
   authors: AUTHORS,
+  canonical: originalURL,
   openGraph: {
     url,
     title,

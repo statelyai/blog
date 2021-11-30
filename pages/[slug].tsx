@@ -32,6 +32,7 @@ const PostPage: React.FC<{
         title={post.title}
         description={post.description}
         url={`${[DEFAULT_URL, post.slug].join("/")}`}
+        originalURL={post.originalURL}
         article={{
           authors: [post.author],
           publishedTime: post.publishedAt,
@@ -60,6 +61,15 @@ const PostPage: React.FC<{
             All blog posts
           </Button>
           <Heading size="xl" as="h1" fontWeight="medium">
+            <ChakraLink
+              isExternal
+              href={`https://github.com/statelyai/eng-blog/edit/main/content/posts/${post.fileName}`}
+              fontSize="lg"
+              color="yellow.200"
+              marginRight="2"
+            >
+              Edit
+            </ChakraLink>
             {post.title}
           </Heading>
           <Wrap

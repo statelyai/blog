@@ -113,7 +113,7 @@ export const PageHeader: React.FC<{ posts: Post[] }> = ({ posts }) => {
               >
                 <List alignItems="flex-start">
                   {result.map((p) => (
-                    <ListItem key={p.slug} marginInlineStart="0" padding="1">
+                    <ListItem key={p.slug} marginInlineStart="0" padding="2" lineHeight="1.1">
                       <Link href={p.slug} passHref>
                         <ChakraLink
                           _hover={{

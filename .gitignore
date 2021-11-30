@@ -38,3 +38,4 @@ lib/*.js
 
 # feed
 public/feeds
+.yarn
