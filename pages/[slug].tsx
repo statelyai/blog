@@ -79,9 +79,7 @@ const PostPage: React.FC<{
           >
             <Box as="p" color="gray.400">
               By&nbsp;
-              <Link href={`/authors/${post.author}`} passHref>
-                <ChakraLink color="gray.400">{post.author}</ChakraLink>
-              </Link>
+              <span>{post.author}</span>
               &nbsp;on&nbsp;
               <span>{post.publishedAt}</span>
             </Box>
