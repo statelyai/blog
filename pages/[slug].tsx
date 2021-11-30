@@ -1,9 +1,4 @@
-import { serialize } from "next-mdx-remote/serialize";
-import rehypeExternalLinks from "rehype-external-links";
-import rehypeSlug from "rehype-slug";
-import rehypeAutolinkHeadings from "rehype-autolink-headings";
-import remarkPrism from "remark-prism";
-import { MDXRemote } from "next-mdx-remote";
+import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import { Post } from "../src/types";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { getAllPosts } from "../src/posts";
@@ -11,7 +6,6 @@ import { Layout } from "../src/components/Layout";
 import {
   Box,
   Heading,
-  Text,
   Wrap,
   Button,
   UnorderedList,
@@ -20,44 +14,17 @@ import {
 } from "@chakra-ui/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Tweet, YouTube } from "mdx-embed";
+import { MDXComponents } from "../src/components/MDXComponents";
 import { Seo } from "../src/Seo";
 import { DEFAULT_URL } from "../content/metadata";
-import { Viz } from "../src/components/Viz";
+import { ArrowLeftIcon } from "@chakra-ui/icons";
+import { serializePost } from "../src/serializePost";
 
-type MDX = ReturnType<typeof serialize>;
-
-const components = {
-  p: (props) => <Text {...props} as="p" />,
-  h1: (props) => <Heading {...props} as="h1" />,
-  h2: (props) => <Heading {...props} as="h2" />,
-  h3: (props) => <Heading {...props} as="h3" />,
-  h4: (props) => <Heading {...props} as="h4" />,
-  h5: (props) => <Heading {...props} as="h5" />,
-  h6: (props) => <Heading {...props} as="h6" />,
-  ul: (props) => <ul {...props} style={{ paddingLeft: "1rem" }} />,
-  Tweet: ({ id, ...props }) => (
-    <Tweet
-      {...props}
-      hideConversation
-      tweetLink={`anyuser/status/${id}`}
-      theme="dark"
-      align="center"
-    />
-  ),
-  Youtube: ({ id, ...props }) => (
-    <Box marginY="5">
-      <YouTube {...props} youTubeId={id} />
-    </Box>
-  ),
-  Viz,
-};
-
-const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({
-  posts,
-  post,
-  mdx,
-}) => {
+const PostPage: React.FC<{
+  posts: Post[];
+  post: Post;
+  mdx: MDXRemoteSerializeResult;
+}> = ({ posts, post, mdx }) => {
   const router = useRouter();
   return (
     <>
@@ -89,8 +56,9 @@ const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({
             marginBottom="8"
             cursor="pointer"
             textDecoration="none"
+            leftIcon={<ArrowLeftIcon />}
           >
-            &lt; All blog posts
+            All blog posts
           </Button>
           <Heading size="xl" as="h1" fontWeight="medium">
             <ChakraLink
@@ -111,9 +79,7 @@ const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({
           >
             <Box as="p" color="gray.400">
               By&nbsp;
-              <Link href={`/authors/${post.author}`} passHref>
-                <ChakraLink color="gray.400">{post.author}</ChakraLink>
-              </Link>
+              <span>{post.author}</span>
               &nbsp;on&nbsp;
               <span>{post.publishedAt}</span>
             </Box>
@@ -140,7 +106,7 @@ const PostPage: React.FC<{ posts: Post[]; post: Post; mdx: any }> = ({
             borderStyle="solid"
             borderColor="gray.700"
           >
-            <MDXRemote {...mdx} components={components} />
+            <MDXRemote {...mdx} components={MDXComponents} lazy />
           </Box>
         </Box>
       </Layout>
@@ -161,41 +127,6 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
   const posts = await getAllPosts();
   const post = posts.find((post) => post.slug === ctx.params.slug);
 
-  function serializePost(post: Post): Promise<MDX | null> {
-    return new Promise((resolve) => {
-      try {
-        resolve(
-          serialize(post.content, {
-            mdxOptions: {
-              remarkPlugins: [[remarkPrism as any]],
-              rehypePlugins: [
-                rehypeSlug,
-                [
-                  rehypeAutolinkHeadings,
-                  {
-                    behavior: "wrap",
-                    properties: {
-                      className: "anchor",
-                    },
-                  },
-                ],
-                [
-                  rehypeExternalLinks,
-                  {
-                    targte: "_blank",
-                    rel: ["nofollow", "noreferrer", "noopener"],
-                  },
-                ],
-              ],
-            },
-          })
-        );
-      } catch (err) {
-        console.log("Post can not be serialized: " + post.title);
-        resolve(null);
-      }
-    });
-  }
   return {
     props: {
       posts,

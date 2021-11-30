@@ -7,9 +7,8 @@ import {
   Wrap,
   ListItem,
   useOutsideClick,
-  FormLabel
+  FormLabel,
 } from "@chakra-ui/react";
-import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { Logo } from "./Logo";
 import { Post } from "../types";
 import { RefObject, useEffect, useMemo, useRef, useState } from "react";
@@ -97,7 +96,8 @@ export const PageHeader: React.FC<{ posts: Post[] }> = ({ posts }) => {
               padding="2"
               paddingLeft="3"
               htmlFor="search-input"
-              >Search
+            >
+              Search
             </FormLabel>
             {result.length > 0 && (
               <Box
@@ -116,7 +116,10 @@ export const PageHeader: React.FC<{ posts: Post[] }> = ({ posts }) => {
                     <ListItem key={p.slug} marginInlineStart="0" padding="2" lineHeight="1.1">
                       <Link href={p.slug} passHref>
                         <ChakraLink
-                          _hover={{ color: "white", textDecoration: "underline" }}
+                          _hover={{
+                            color: "white",
+                            textDecoration: "underline",
+                          }}
                         >
                           {p.title}
                         </ChakraLink>
