@@ -57,6 +57,11 @@ function MyApp({ Component, pageProps }: AppProps) {
           <link rel="icon" href="/icon.svg" type="image/svg+xml" />
           <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
           <link rel="manifest" href="/manifest.webmanifest" />
+          <script
+            defer
+            data-domain="stately.ai"
+            src="https://plausible.io/js/plausible.js"
+          ></script>
         </NextHead>
         <Component {...pageProps} />
       </ChakraProvider>
