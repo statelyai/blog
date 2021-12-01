@@ -18,9 +18,6 @@ import { formatDate } from "../src/utils";
 import { generateFeed } from "../src/feed";
 
 const Home: NextPage<{ posts: Post[] }> = ({ posts }) => {
-  const {
-    default: { title },
-  } = useMetadata();
   return (
     <>
       <Seo />
@@ -38,7 +35,7 @@ const Home: NextPage<{ posts: Post[] }> = ({ posts }) => {
             textAlign="left"
             fontWeight="normal"
           >
-            {title}
+            Engineering Blog
           </Heading>
           <List
             spacing="4"
