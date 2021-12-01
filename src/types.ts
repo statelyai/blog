@@ -3,7 +3,7 @@ import { NextSeoProps } from "next-seo";
 export interface PostFrontmatter {
   title: string;
   description: string;
-  keywords: string[];
+  tags: string[];
   category?: string; // TODO: make this a union
   author: string;
   excerpt: string;

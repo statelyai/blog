@@ -1,17 +1,17 @@
 ---
-title: 'State machines: How to stop making Horcruxes in your code'
+title: "State machines: How to stop making Horcruxes in your code"
 description: >-
   There are several ways of mitigating horcruxes. But visualisations can prevent
   bugs, so why not go further?
-keywords:
+tags:
   - business logic
   - xstate
   - statechart
   - useReducer
 author:
   - - Matt Pocock
-excerpt: ''
-publishedAt: '2020-07-27'
+excerpt: ""
+publishedAt: "2020-07-27"
 originalURL: "https://dev.to/mpocock1/state-machines-how-to-stop-making-horcruxes-in-your-code-gl5"
 ---
 
@@ -26,30 +26,28 @@ For an app to remain maintainable, its soul must remain intact. For many apps, l
 For instance, some logic for a modal might be expressed like this:
 
 ```ts
-    const modalReducer = (state = { isOpen: false }, action) => {
-      switch (action.type) {
-        case 'CLOSE':
-          return {
-            isOpen: false,
-          };
-        case 'OPEN':
-          return {
-            isOpen: true,
-          };
-        default:
-          return state;
-      }
-    };
+const modalReducer = (state = { isOpen: false }, action) => {
+  switch (action.type) {
+    case "CLOSE":
+      return {
+        isOpen: false,
+      };
+    case "OPEN":
+      return {
+        isOpen: true,
+      };
+    default:
+      return state;
+  }
+};
 ```
 
 This is the reducer pattern, popularised by libraries like [Redux](https://redux.js.org/introduction/getting-started). In [React](https://reactjs.org/), we'd use this reducer in a `useReducer` hook:
 
 ```ts
-    const [state, dispatch] = useReducer(modalReducer);
+const [state, dispatch] = useReducer(modalReducer);
 
-    <button onClick={() => dispatch({ type: 'OPEN' })}>
-      Open Modal
-    </button>
+<button onClick={() => dispatch({ type: "OPEN" })}>Open Modal</button>;
 ```
 
 If you want to know what happens when you dispatch the `OPEN` action, you only need look in one place: the `modalReducer`. This part of your app is easy to keep bug-free, because all the logic for how it works is contained in one place.
@@ -108,6 +106,7 @@ At an early stage of the process, I was even able to ask the client about comple
 Any time someone needs to see how the viewing page works, they can fire up the visualiser. Their usual first reaction is one of terror. State machines don't create complexity, they reveal it. But by clicking through the machine, they can concretely see how the app works, and feel comfortable making changes.
 
 ## Make a bet on XState
----------------------------------------------
+
+---
 
 If you’re having trouble deciphering the logic of a legacy app, try visualising it in XState. Try working through a problem with a fellow dev. At [Yozobi](http://yozobi.com/), we’re making a bet that state machines are going to change web development. If you want to learn more about them, follow me and we can try to heal our Horcruxes together.
