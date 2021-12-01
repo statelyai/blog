@@ -8,8 +8,7 @@ tags:
   - statecharts
   - xstate
   - state machine
-author:
-  - David Khourshid
+author: David Khourshid
 excerpt: ""
 publishedAt: "2021-01-20"
 originalURL: "https://dev.to/davidkpiano/you-don-t-need-a-library-for-state-machines-k7h"
@@ -187,11 +186,8 @@ This is much more succinct than the nested `switch` statements! From here, deter
 // ...
 function transition(state, event) {
   const nextStateNode = // lookup next finite state based on event type
-  // lookup configuration for current finite state
-  machine.states[state.status].on?.[
-    event.type
-  ] ?? // if not handled, stay on current state
-  { target: state.status };
+    // lookup configuration for current finite state
+    machine.states[state.status].on?.[event.type] ?? { target: state.status }; // if not handled, stay on current state
 
   return {
     ...state,
