@@ -3,7 +3,7 @@ name: CI/CD
 on: [push]
 
 jobs:
-  Verifying Project:
+  verifying-project:
     runs-on: ubuntu-latest
 
     steps:
