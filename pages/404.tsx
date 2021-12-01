@@ -1,13 +1,15 @@
 import { NextPage } from "next";
 import React from "react";
+import { Post } from "../src/types";
 import {
   Box,
-  Heading
+  Heading,
+  Link as ChakraLink
 } from "@chakra-ui/react";
 import { PageHeader } from "../src/components/PageHeader";
 import { PageFooter } from "../src/components/PageFooter";
 
-const NotFound: NextPage = () => (
+const NotFound: NextPage<{ posts: Post[] }> = ({ posts }) => (
   <Box
     display="flex"
     flexDirection="column"
@@ -16,7 +18,7 @@ const NotFound: NextPage = () => (
     marginLeft="auto"
     marginRight="auto"
   >
-    <PageHeader />
+    <PageHeader posts={posts} />
     <Box
       as="main"
       display="flex"
@@ -36,11 +38,11 @@ const NotFound: NextPage = () => (
         Page not found
       </Heading>
       <Box
+        as="p"
         textAlign="left"
         padding="6"
       >
-        <p>Sorry we can’t find that page.</p>
-        <p><a href="/">Return to all blog posts</a> or use <a href="#search">the search box above</a>.</p>
+        Sorry we can’t find that page. <ChakraLink href="/" color="primary.300" textDecoration="underline">Return to all blog posts</ChakraLink> or use <ChakraLink color="primary.300" textDecoration="underline" href="#search">the search box above</ChakraLink>.
       </Box>
     </Box>
     <PageFooter />
