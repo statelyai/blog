@@ -42,7 +42,7 @@ const NotFound: NextPage<{ posts: Post[] }> = ({ posts }) => (
         textAlign="left"
         padding="6"
       >
-        Sorry we can’t find that page. <ChakraLink href="/" color="primary.300" textDecoration="underline">Return to all blog posts</ChakraLink> or use <ChakraLink color="primary.300" textDecoration="underline" href="#search">the search box above</ChakraLink>.
+        Sorry we can’t find that page. <ChakraLink href="/" color="primary.300" textDecoration="underline">Return to all blog posts</ChakraLink> or use the search box above.
       </Box>
     </Box>
     <PageFooter />
