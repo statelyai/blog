@@ -5,4 +5,5 @@ module.exports = {
     domains: ["stately.ai"],
   },
   unstable_runtimeJS: false,
+  basePath: "/blog",
 };
