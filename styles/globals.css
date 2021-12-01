@@ -4,8 +4,14 @@
   font-weight: 450 600;
 }
 
-::-moz-selection { background: #f26200; color: white; }
-::selection { background: #f26200; color: white; }
+::-moz-selection {
+  background: #f26200;
+  color: white;
+}
+::selection {
+  background: #f26200;
+  color: white;
+}
 
 main {
   /* bump up font size in main area */
@@ -85,7 +91,7 @@ h1 {
 }
 
 .blog-post-content blockquote {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
   border-left: 0.2em solid var(--chakra-colors-gray-500);
   padding: 0.25em 1rem 0.25em 1.4rem;
 }
@@ -93,7 +99,8 @@ h1 {
 .blog-post-content code,
 .blog-post-content pre {
   /* system font stack */
-  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; /* system font stack */
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier,
+    monospace; /* system font stack */
   font-size: 0.9em;
 }
 
@@ -108,12 +115,13 @@ h1 {
   margin: 0 auto;
 }
 
-#search input#search-input:focus + label[for=search-input],
-#search:focus-within label[for=search-input] {
+#search input#search-input:focus + label[for="search-input"],
+#search:focus-within label[for="search-input"] {
   /* visually hide label */
   position: absolute !important;
-  clip: rect(1px, 1px, 1px, 1px) !important; padding:0 !important;
-  border:0 !important;
+  clip: rect(1px, 1px, 1px, 1px) !important;
+  padding: 0 !important;
+  border: 0 !important;
   height: 1px !important;
   width: 1px !important;
   overflow: hidden !important;

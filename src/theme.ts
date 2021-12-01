@@ -19,7 +19,7 @@ const theme = extendTheme({
         // slnt is fix for Safari italicising variable fonts by default
         fontVariationSettings: "'wght' 450, 'slnt' 0",
       },
-      "a": {
+      a: {
         color: "primary.300",
         textDecoration: "underline",
         textUnderlineOffset: "0.1em",
@@ -42,17 +42,17 @@ const theme = extendTheme({
         // slnt is fix for Safari italicising variable fonts by default
         fontVariationSettings: "'wght' 600, 'slnt' 0",
       },
-      "em, i" : {
+      "em, i": {
         fontStyle: "italic",
         fontSynthesis: "none",
         fontVariationSettings: "'slnt' 10",
       },
-      "h1, h2, h3, h4, h5, h6" : {
+      "h1, h2, h3, h4, h5, h6": {
         color: "white",
         fontWeight: "500",
         // slnt is fix for Safari italicising variable fonts by default
         fontVariationSettings: "'wght' 500, 'slnt' 0",
-      }
+      },
     },
   },
   shadows: {
