@@ -95,6 +95,7 @@ export const PageHeader: React.FC<{ posts: Post[] }> = ({ posts }) => {
               style={{ position: "absolute", top: "0" }}
               padding="2"
               paddingLeft="3"
+              marginTop={{ base: "3", md: "0" }}
               htmlFor="search-input"
             >
               Search
