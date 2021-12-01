@@ -12,12 +12,15 @@ import {
   ListItem,
   Link as ChakraLink,
 } from "@chakra-ui/react";
+import {
+  ArrowLeftIcon,
+  EditIcon
+} from "@chakra-ui/icons";
 import { useRouter } from "next/router";
 import { MDXComponents } from "../src/components/MDXComponents";
 import { Seo } from "../src/Seo";
 import { DEFAULT_URL } from "../content/metadata";
 import { formatDate } from "../src/utils";
-import { ArrowLeftIcon } from "@chakra-ui/icons";
 import { serializePost } from "../src/serializePost";
 
 const PostPage: React.FC<{
@@ -61,15 +64,6 @@ const PostPage: React.FC<{
             All blog posts
           </Button>
           <Heading size="xl" as="h1" fontWeight="medium">
-            <ChakraLink
-              isExternal
-              href={`https://github.com/statelyai/eng-blog/edit/main/content/posts/${post.fileName}`}
-              fontSize="lg"
-              color="yellow.200"
-              marginRight="2"
-            >
-              Edit
-            </ChakraLink>
             {post.title}
           </Heading>
           <Wrap
@@ -81,7 +75,19 @@ const PostPage: React.FC<{
               By&nbsp;
               <span>{post.author}</span>
               &nbsp;on&nbsp;
-              <span>{formatDate(post.publishedAt)}</span>
+              <span>{formatDate(post.publishedAt)}</span>.&nbsp;
+              <ChakraLink
+                isExternal
+                href={`https://github.com/statelyai/eng-blog/edit/main/content/posts/${post.fileName}`}
+                fontSize="md"
+                color="gray.200"
+                _hover={{ color: "white", textDecoration: "underline" }}
+                marginTop={{ base: "2", md: "0" }}
+                marginLeft={{ base: "0", md: "2" }}
+                display={{ base: "block", md: "inline" }}
+              >
+                <EditIcon w={4} h={4} role="presentation" marginTop="-0.2em"/> Edit this page on GitHub
+              </ChakraLink>
             </Box>
             <UnorderedList
               width="auto"
