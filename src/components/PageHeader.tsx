@@ -120,7 +120,7 @@ export const PageHeader: React.FC<{ posts: Post[] }> = ({ posts }) => {
                       padding="2"
                       lineHeight="1.1"
                     >
-                      <Link href={p.slug} passHref>
+                      <Link href={`/${p.slug}`} passHref>
                         <ChakraLink
                           _hover={{
                             color: "white",
