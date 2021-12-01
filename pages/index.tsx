@@ -31,9 +31,11 @@ const Home: NextPage<{ posts: Post[] }> = ({ posts }) => {
           <Heading
             as="h1"
             padding="4"
-            paddingBottom={{ base: "8", md: "12" }}
+            marginTop={{ base: "0", md: "10" }}
+            marginBottom={{ base: "6", md: "12" }}
             textAlign="left"
             fontWeight="normal"
+            fontSize={{ base: "4xl", md: "5xl" }}
           >
             Engineering Blog
           </Heading>
