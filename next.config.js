@@ -6,4 +6,13 @@ module.exports = {
   },
   unstable_runtimeJS: false,
   basePath: "/blog",
+  async rewrites() {
+    return [
+      {
+        source: `/`,
+        destination: `https://landing-page-prod.stately.ai`,
+        basePath: false,
+      },
+    ];
+  },
 };
