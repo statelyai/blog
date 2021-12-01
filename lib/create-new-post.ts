@@ -17,14 +17,14 @@ function writePostToDisk(post: Post): void {
 
 const posts = getAllPosts();
 
-const getAvailableKeywords = () =>
+const getAvailableTags = () =>
   posts
     .then((posts) => {
-      return posts.map((p) => p.keywords);
+      return posts.map((p) => p.tags);
     })
-    .then((keywords) => {
-      // keywords is a 2d array
-      return makeSetFromArray(keywords.flat());
+    .then((tags) => {
+      // tags is a 2d array
+      return makeSetFromArray(tags.flat());
     });
 
 const getAvailableAuthors = () =>
@@ -35,9 +35,9 @@ const getAvailableAuthors = () =>
     .then((authors) => makeSetFromArray(authors));
 
 const createQuestions: (
-  keywords: Post["keywords"],
+  tags: Post["tags"],
   authors: Post["author"][]
-) => prompts.PromptObject[] = (keywords, authors) => [
+) => prompts.PromptObject[] = (tags, authors) => [
   {
     type: "text",
     name: "title",
@@ -52,18 +52,18 @@ const createQuestions: (
   },
   {
     type: "multiselect",
-    name: "keywords",
+    name: "tags",
     message:
-      "Pick from existing keywords: (You can add new keywords in the next prompt)",
-    choices: keywords.map((ch) => ({ title: ch, value: ch })),
+      "Pick from existing tags: (You can add new tags in the next prompt)",
+    choices: tags.map((ch) => ({ title: ch, value: ch })),
     hint: "- Space to select. Return to submit",
     format: (value) => (value.length > 0 ? value.map((w) => w.trim()) : []),
   },
   {
     type: "list",
-    name: "newKeywords",
-    message: "Add new keywords, comma separated",
-    hint: "- Enter new keywords separated by comma",
+    name: "newTags",
+    message: "Add new tags, comma separated",
+    hint: "- Enter new tags separated by comma",
     separator: ",",
     format: (value) => makeSetFromArray(value),
   },
@@ -91,20 +91,20 @@ const createQuestions: (
 
 (async function main() {
   try {
-    const keywords = await getAvailableKeywords();
+    const tags = await getAvailableTags();
     const authors = await getAvailableAuthors();
-    const answers = await prompts(createQuestions(keywords, authors));
+    const answers = await prompts(createQuestions(tags, authors));
 
     const newPost = answers as Post;
 
     newPost.author = answers.newAuthor || answers.author;
-    newPost.keywords = answers.newKeywords.concat(answers.keywords);
+    newPost.tags = answers.newTags.concat(answers.tags);
     newPost.excerpt = "";
     newPost.publishedAt = formatDate(
       new Intl.DateTimeFormat().formatToParts(new Date())
     );
 
-    writePostToDisk(omit(newPost, ["newAuthor", "newKeywords"]) as Post);
+    writePostToDisk(omit(newPost, ["newAuthor", "newTags"]) as Post);
   } catch (_) {
     console.error(_);
     process.exitCode = 1;

@@ -3,15 +3,15 @@ title: You don’t need a library for state machines
 description: >-
   Do you need a library to create and interpret state machines in your programs?
   No. But there are more things to consider.
-keywords:
+tags:
   - finite state machine
   - statecharts
   - xstate
   - state machine
 author:
   - David Khourshid
-excerpt: ''
-publishedAt: '2021-01-20'
+excerpt: ""
+publishedAt: "2021-01-20"
 originalURL: "https://dev.to/davidkpiano/you-don-t-need-a-library-for-state-machines-k7h"
 ---
 
@@ -60,14 +60,14 @@ The transitions are what tie everything together. Transitions are represented by
 In JavaScript, we can represent this as a _reducer_, which is a function that reduces values (events) to a single accumulated value (state):
 
 ```js
-    function transition(state, event) {
-      // state machine goes here, which
-      // determines the next state based on the
-      // current state + received event
-      // ...
+function transition(state, event) {
+  // state machine goes here, which
+  // determines the next state based on the
+  // current state + received event
+  // ...
 
-      return nextState;
-    }
+  return nextState;
+}
 ```
 
 Now, let’s draw the rest of the owl implement the rest of the state machine!
@@ -94,18 +94,18 @@ Typically, when we’re determining _behavior_ ("what happens next"), we tend to
 In contrast, state machines group behavior by **finite state** and narrow down what happens next based on the event received:
 
 ```js
-    // ✅ Finite-state-first approach
-    switch (state.status) {
-      case 'loading':
-        // narrow based on event
-        switch (event.type) {
-          case 'DATA_RECEIVED':
-            // do something, and possibly
-            // change the finite state
-          // ...
-        }
+// ✅ Finite-state-first approach
+switch (state.status) {
+  case "loading":
+    // narrow based on event
+    switch (event.type) {
+      case "DATA_RECEIVED":
+      // do something, and possibly
+      // change the finite state
       // ...
     }
+  // ...
+}
 ```
 
 As the author of the code, the event-first (bottom-up) approach might seem fine to you; after all, if it works, it works. One of the main advantages of taking a ”finite-state-first” (top-down) approach and using state machines is that the logic is not only more clear (since it’s grouped by finite state), it’s more robust: you can ensure that an event won’t be improperly handled in a state that it shouldn’t be handled in. In other words, you prevent _impossible states_ and _impossible transitions_ without having to litter your code with `if`\-statements and excessive defensive programming.
@@ -162,69 +162,67 @@ Using nested `switch` statements may feel verbose, and while using functions to 
 A simple, built-in way to represent such a configuration is an object. We can create an object structure where each ”state node” represents a finite state with transitions for each event accepted by the state:
 
 ```js
-    const machine = {
-      initial: 'loading',
-      states: {
-        // A finite "state node"
-        loading: {
-          on: {
-            // event types
-            DATA_RECEIVED: {
-              target: 'success',
-              // actions: [...]
-            }
-          }
+const machine = {
+  initial: "loading",
+  states: {
+    // A finite "state node"
+    loading: {
+      on: {
+        // event types
+        DATA_RECEIVED: {
+          target: "success",
+          // actions: [...]
         },
-        // ...
-      }
-    };
+      },
+    },
     // ...
+  },
+};
+// ...
 ```
 
 This is much more succinct than the nested `switch` statements! From here, determining the next state based on the current finite state and received event is two key lookups (the finite state and the event type):
 
 ```js
-    // ...
-    function transition(state, event) {
-      const nextStateNode = machine
-        // lookup configuration for current finite state
-        .states[state.status]
-        // lookup next finite state based on event type
-        .on?.[event.type]
-        // if not handled, stay on current state
-        ?? { target: state.status };
+// ...
+function transition(state, event) {
+  const nextStateNode = // lookup next finite state based on event type
+  // lookup configuration for current finite state
+  machine.states[state.status].on?.[
+    event.type
+  ] ?? // if not handled, stay on current state
+  { target: state.status };
 
-      return {
-        ...state,
-        status: nextStateNode.target
-      }
-    }
+  return {
+    ...state,
+    status: nextStateNode.target,
+  };
+}
 
-    transition({ status: 'loading' }, { type: 'DATA_RECEIVED' });
-    // => { status: 'success', ... }
-
+transition({ status: "loading" }, { type: "DATA_RECEIVED" });
+// => { status: 'success', ... }
 ```
 
 You might be wondering why I didn’t use an even simpler object here, which you definitely can do:
 
 ```js
-    const transitions = {
-      loading: {
-        DATA_RECEIVED: 'success'
-      },
-      success: {/* ... */}
-    };
+const transitions = {
+  loading: {
+    DATA_RECEIVED: "success",
+  },
+  success: {
+    /* ... */
+  },
+};
 
-    function transition(state, event) {
-      const nextStateTarget = transitions[state.status][event.type]
-        ?? state.status;
+function transition(state, event) {
+  const nextStateTarget = transitions[state.status][event.type] ?? state.status;
 
-      return {
-        ...state,
-        status: nextStateTarget
-      };
-    }
-
+  return {
+    ...state,
+    status: nextStateTarget,
+  };
+}
 ```
 
 In fact, I would encourage the above implementation as sort of a “transition table lookup”; it works, and it’s simple enough. However, state machines deal with more than just the next finite state; if we want to encode **actions** (state machine terminology for effects), we need a place to put them, so a little bit more structure is necessary.
@@ -232,47 +230,44 @@ In fact, I would encourage the above implementation as sort of a “transition t
 For instance, if our `DATA_RECEIVED` event returns data that we want to save in our overall state, it might be convenient to place that “assign to state” action directly in the machine:
 
 ```js
-    const machine = {
-      initial: 'loading',
-      states: {
-        loading: {
-          on: {
-            // event types
-            DATA_RECEIVED: {
-              target: 'success',
-              // represents what "effects" should happen
-              // as a result of taking this transition
-              actions: [
-                { type: 'saveData' }
-              ]
-            }
-          }
+const machine = {
+  initial: "loading",
+  states: {
+    loading: {
+      on: {
+        // event types
+        DATA_RECEIVED: {
+          target: "success",
+          // represents what "effects" should happen
+          // as a result of taking this transition
+          actions: [{ type: "saveData" }],
         },
-        // ...
-      }
-    };
+      },
+    },
+    // ...
+  },
+};
 
-    function transition(state, event) {
-      const nextStateNode = machine
-        .states[state.status]
-        .on?.[event.type]
-        ?? { target: state.status };
+function transition(state, event) {
+  const nextStateNode = machine.states[state.status].on?.[event.type] ?? {
+    target: state.status,
+  };
 
-      const nextState = {
-        ...state,
-        status: nextStateNode.target
-      };
+  const nextState = {
+    ...state,
+    status: nextStateNode.target,
+  };
 
-      // go through the actions to determine
-      // what should be done
-      nextStateNode.actions?.forEach(action => {
-        if (action.type === 'saveData') {
-          nextState.data = event.data;
-        }
-      });
-
-      return nextState;
+  // go through the actions to determine
+  // what should be done
+  nextStateNode.actions?.forEach((action) => {
+    if (action.type === "saveData") {
+      nextState.data = event.data;
     }
+  });
+
+  return nextState;
+}
 ```
 
 The implementation above is very small, accomplishes everything we want from a state machine (for this use-case, at least), and as a bonus, you can copy-paste the `machine` object code directly into the [XState Visualizer](https://xstate.js.org/viz), even though it's not using XState, or any libraries, at all! (Tip: wrap the object in `Machine({ ... })` to get it working).

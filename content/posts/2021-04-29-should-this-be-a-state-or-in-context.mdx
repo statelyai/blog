@@ -1,14 +1,14 @@
 ---
-title: 'Should this be a state, or in context?'
+title: "Should this be a state, or in context?"
 description: How to decide when to use state or context.
-keywords:
+tags:
   - context
   - state machines
   - xstate
   - state
 author: Matt Pocock
-excerpt: ''
-publishedAt: '2021-04-29'
+excerpt: ""
+publishedAt: "2021-04-29"
 originalURL: "https://dev.to/mpocock1/state-machines-should-this-be-a-state-or-in-context-1d7e"
 ---
 
@@ -17,22 +17,22 @@ State machines offer several API’s for expressing state. Like other tools, you
 This is handy for values which change over time and you need to keep updated, like the value of a form input:
 
 ```ts
-    import { createMachine, assign } from 'xstate';
+import { createMachine, assign } from "xstate";
 
-    const machine = createMachine({
-      context: {
-        name: '',
-      },
-      on: {
-        CHANGE_NAME: {
-          actions: assign((context, event) => {
-            return {
-              name: event.value,
-            };
-          }),
-        },
-      },
-    });
+const machine = createMachine({
+  context: {
+    name: "",
+  },
+  on: {
+    CHANGE_NAME: {
+      actions: assign((context, event) => {
+        return {
+          name: event.value,
+        };
+      }),
+    },
+  },
+});
 ```
 
 Every time the `CHANGE_NAME` event is sent to the machine, we'll update the value in `context`. We can then use that value to display the value in our UI or send it to an API.
@@ -40,21 +40,21 @@ Every time the `CHANGE_NAME` event is sent to the machine, we'll update the valu
 XState also gives you another way of expressing state - through finite states. Let's imagine a modal:
 
 ```ts
-    const machine = createMachine({
-      initial: 'closed',
-      states: {
-        closed: {
-          on: {
-            OPEN: 'open',
-          },
-        },
-        open: {
-          on: {
-            CLOSE: 'close',
-          },
-        },
+const machine = createMachine({
+  initial: "closed",
+  states: {
+    closed: {
+      on: {
+        OPEN: "open",
       },
-    });
+    },
+    open: {
+      on: {
+        CLOSE: "close",
+      },
+    },
+  },
+});
 ```
 
 Here, the modal's state is expressed through the `states: {}` attribute, which also defines which events can be received during each state. You can only `CLOSE` the modal when it's `open`, and vice versa.
@@ -64,19 +64,19 @@ Here, the modal's state is expressed through the `states: {}` attribute, which a
 The choice between using `context` and `states` isn't always clear. For instance, the modal machine above could be expressed using `context`:
 
 ```ts
-    const machine = createMachine({
-      context: {
-        isOpen: false,
-      },
-      on: {
-        OPEN: {
-          actions: assign({ isOpen: true }),
-        },
-        CLOSE: {
-          actions: assign({ isOpen: false }),
-        },
-      },
-    });
+const machine = createMachine({
+  context: {
+    isOpen: false,
+  },
+  on: {
+    OPEN: {
+      actions: assign({ isOpen: true }),
+    },
+    CLOSE: {
+      actions: assign({ isOpen: false }),
+    },
+  },
+});
 ```
 
 This gives you exactly the same functionality as the states-based one above - you can track when the modal is open and closed, and send the same events.
@@ -86,31 +86,31 @@ The reason this can be expressed using both `states` and `context` is because _a
 To show you what I mean, let’s imagine a form input inside a modal. We only want to allow changes to the form input while the modal is open.
 
 ```ts
-    const machine = createMachine({
-      initial: 'closed',
-      context: {
-        name: '',
+const machine = createMachine({
+  initial: "closed",
+  context: {
+    name: "",
+  },
+  states: {
+    closed: {
+      on: {
+        OPEN: "open",
       },
-      states: {
-        closed: {
-          on: {
-            OPEN: 'open',
-          },
-        },
-        open: {
-          on: {
-            CLOSE: 'close',
-            CHANGE_NAME: {
-              actions: assign((context, event) => {
-                return {
-                  name: event.value,
-                };
-              }),
-            },
-          },
+    },
+    open: {
+      on: {
+        CLOSE: "close",
+        CHANGE_NAME: {
+          actions: assign((context, event) => {
+            return {
+              name: event.value,
+            };
+          }),
         },
       },
-    });
+    },
+  },
+});
 ```
 
 When the modal is in the `closed` state, the `CHANGE_NAME` event will not change the value in `context`. State machines are great at this - only allowing the things you want to happen to happen. Some other examples might be:
@@ -123,26 +123,26 @@ When the modal is in the `closed` state, the `CHANGE_NAME` event will not change
 You might be wondering - but, I _can_ express the above in `context`!
 
 ```ts
-    const machine = createMachine({
-      context: {
-        name: '',
-        isOpen: false,
-      },
-      on: {
-        OPEN: { actions: assign({ isOpen: true }) },
-        CLOSE: { actions: assign({ isOpen: false }) },
-        CHANGE_NAME: {
-          actions: assign((context, event) => {
-            // This acts as the guard to prevent editing
-            // the name while it's open
-            if (!context.isOpen) return {};
-            return {
-              name: event.value,
-            };
-          }),
-        },
-      },
-    });
+const machine = createMachine({
+  context: {
+    name: "",
+    isOpen: false,
+  },
+  on: {
+    OPEN: { actions: assign({ isOpen: true }) },
+    CLOSE: { actions: assign({ isOpen: false }) },
+    CHANGE_NAME: {
+      actions: assign((context, event) => {
+        // This acts as the guard to prevent editing
+        // the name while it's open
+        if (!context.isOpen) return {};
+        return {
+          name: event.value,
+        };
+      }),
+    },
+  },
+});
 ```
 
 I think this is incorrect for two reasons. First, as requirements grow, so will the complexity of your logic. Let’s imagine that the modal can now be either `closing` (i.e. animating out) or `closed`. We’ll soon see an explosion of booleans, as I discussed in [this article on useState/useReducer](https://dev.to/mpocock1/usestate-vs-usereducer-vs-xstate-part-1-modals-569e).
