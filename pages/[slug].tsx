@@ -13,7 +13,7 @@ import {
   Link as ChakraLink,
 } from "@chakra-ui/react";
 import {
-  ArrowLeftIcon,
+  ArrowBackIcon,
   EditIcon
 } from "@chakra-ui/icons";
 import { useRouter } from "next/router";
@@ -59,7 +59,7 @@ const PostPage: React.FC<{
             marginBottom="8"
             cursor="pointer"
             textDecoration="none"
-            leftIcon={<ArrowLeftIcon />}
+            leftIcon={<ArrowBackIcon />}
           >
             All blog posts
           </Button>
