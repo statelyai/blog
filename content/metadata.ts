@@ -34,11 +34,11 @@ export const makeMetadata = ({
     site_name: DEFAULT_TITLE,
     images: [
       {
-        url,
+        url: "https://stately.ai/blog/og-image.png", // needs to be absolute URL
         width: 0,
         height: 0,
         alt: title,
-        type: "image/jpeg", // change based on actual OG image type
+        type: "image/png", // change based on actual OG image type
       },
     ],
     article,
