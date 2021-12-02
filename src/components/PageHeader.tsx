@@ -24,14 +24,15 @@ const useSearch = (
   setSearchValue(newValue: string): void;
 } => {
   const searcherRef = useRef(
-    new FuzzySearch(posts, ["title", "description", "keywords"], {
+    new FuzzySearch(posts, ["title", "description", "tags"], {
       caseSensitive: false,
     })
   );
   const [q, setQ] = useState("");
-  const foundPosts = useMemo(() => (q ? searcherRef.current.search(q) : []), [
-    q,
-  ]);
+  const foundPosts = useMemo(
+    () => (q ? searcherRef.current.search(q) : []),
+    [q]
+  );
   useOutsideClick({
     ref: containerRef,
     handler: () => {
@@ -114,8 +115,13 @@ export const PageHeader: React.FC<{ posts: Post[] }> = ({ posts }) => {
               >
                 <List alignItems="flex-start">
                   {result.map((p) => (
-                    <ListItem key={p.slug} marginInlineStart="0" padding="2" lineHeight="1.1">
-                      <Link href={p.slug} passHref>
+                    <ListItem
+                      key={p.slug}
+                      marginInlineStart="0"
+                      padding="2"
+                      lineHeight="1.1"
+                    >
+                      <Link href={`/${p.slug}`} passHref>
                         <ChakraLink
                           _hover={{
                             color: "white",
