@@ -5,10 +5,11 @@ pre[class*="language-"] {
   word-spacing: normal;
   word-break: normal;
   word-wrap: normal;
-  color: #E1E2E5;
-  background: #0F0F0F; /* same background as viz */
+  color: #e1e2e5;
+  background: #0f0f0f; /* same background as viz */
   border-radius: 1em;
-  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; /* system font stack */
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier,
+    monospace; /* system font stack */
   font-size: 0.9em;
   line-height: 1.5em;
 
@@ -100,7 +101,7 @@ pre[class*="language-"] {
 }
 
 .token.comment {
-  color: #7D7D7D;
+  color: #7d7d7d;
 }
 
 .token.constant {
@@ -112,7 +113,7 @@ pre[class*="language-"] {
 }
 
 .token.doctype {
-  color: #7D7D7D;
+  color: #7d7d7d;
 }
 
 .token.entity {
@@ -154,7 +155,7 @@ pre[class*="language-"] {
 }
 
 .token.prolog {
-  color: #7D7D7D;
+  color: #7d7d7d;
 }
 
 .token.property {
