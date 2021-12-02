@@ -106,7 +106,7 @@ const PostPage: React.FC<{
             borderStyle="solid"
             borderColor="gray.700"
           >
-            <MDXRemote {...mdx} components={MDXComponents} lazy />
+            <MDXRemote {...mdx} components={MDXComponents} />
           </Box>
         </Box>
       </Layout>
