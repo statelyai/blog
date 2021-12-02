@@ -66,10 +66,14 @@ const PostPage: React.FC<{
           <Heading size="xl" as="h1" fontWeight="medium">
             {post.title}
           </Heading>
-          <Wrap
+          <Box
             marginTop="5"
             direction={{ base: "column", md: "row" }}
             alignItems={{ base: "left", md: "flex-end" }}
+            display="flex"
+            wrap="row"
+            flexWrap="wrap"
+            flexDirection={{ base: "column", md: "row" }}
           >
             <Box as="p" color="gray.400">
               By&nbsp;
@@ -84,9 +88,17 @@ const PostPage: React.FC<{
                 _hover={{ color: "white", textDecoration: "underline" }}
                 marginTop={{ base: "1", md: "0" }}
                 marginLeft={{ base: "0", md: "2" }}
+                marginRight="2"
                 display={{ base: "block", md: "inline" }}
               >
-                <EditIcon w={4} h={4} role="presentation" marginTop="-0.2em"/> Edit this page on GitHub
+                <EditIcon
+                  w={4}
+                  h={4}
+                  role="presentation"
+                  marginTop="-0.2em"
+                  marginRight="1"
+                />
+                Edit this page on GitHub
               </ChakraLink>
             </Box>
             <UnorderedList
@@ -96,9 +108,9 @@ const PostPage: React.FC<{
               wrap="row"
               flexDirection="row"
               flexWrap="wrap"
-              margin="0"
+              marginLeft="0"
+              marginTop={{ base: "1", md: "0" }}
               gridGap="1"
-              paddingTop="1"
               color="gray.400"
               style={{ listStyleType: "none" }}
             >
@@ -109,7 +121,7 @@ const PostPage: React.FC<{
                 >{`#${keyword}`}</ListItem>
               ))}
             </UnorderedList>
-          </Wrap>
+          </Box>
           <Box
             paddingTop="2"
             marginTop="3"
