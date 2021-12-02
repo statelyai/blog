@@ -1,0 +1,25 @@
+name: CI/CD
+
+on: [push]
+
+jobs:
+  verifying-project:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Use Node.js
+        uses: actions/setup-node@v2.2.0
+
+      - name: Install
+        run: yarn install
+
+      - name: Lint
+        run: yarn lint && yarn tsc
+
+      - name: Build
+        run: yarn next build
+        env:
+          CI: "false"
