@@ -82,7 +82,7 @@ const PostPage: React.FC<{
                 fontSize="md"
                 color="gray.200"
                 _hover={{ color: "white", textDecoration: "underline" }}
-                marginTop={{ base: "2", md: "0" }}
+                marginTop={{ base: "1", md: "0" }}
                 marginLeft={{ base: "0", md: "2" }}
                 display={{ base: "block", md: "inline" }}
               >
@@ -94,19 +94,25 @@ const PostPage: React.FC<{
               fontSize="smaller"
               display="flex"
               wrap="row"
-              flexDirection={{ base: "column", md: "row" }}
+              flexDirection="row"
+              flexWrap="wrap"
+              margin="0"
               gridGap="1"
+              paddingTop="1"
               color="gray.400"
               style={{ listStyleType: "none" }}
             >
               {post.tags.map((keyword) => (
-                <ListItem key={keyword}>{`#${keyword}`}</ListItem>
+                <ListItem
+                  key={keyword}
+                  marginRight="1"
+                >{`#${keyword}`}</ListItem>
               ))}
             </UnorderedList>
           </Wrap>
           <Box
             paddingTop="2"
-            marginTop="2"
+            marginTop="3"
             className="blog-post-content"
             borderTopWidth="1px"
             borderStyle="solid"
