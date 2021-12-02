@@ -23,7 +23,7 @@ const Home: NextPage<{ posts: Post[] }> = ({ posts }) => {
       <Seo />
       <Layout posts={posts}>
         <Box
-          padding={{ base: "3", md: "12" }}
+          maxW="3xl"
           display="flex"
           flexDirection="column"
           align="center"
@@ -31,8 +31,8 @@ const Home: NextPage<{ posts: Post[] }> = ({ posts }) => {
           <Heading
             as="h1"
             padding="4"
-            marginTop={{ base: "0", md: "10" }}
-            marginBottom={{ base: "6", md: "12" }}
+            marginTop={{ base: "3", md: "24" }}
+            marginBottom={{ base: "6", md: "8" }}
             textAlign="left"
             fontWeight="normal"
             fontSize={{ base: "4xl", md: "5xl" }}
@@ -45,6 +45,7 @@ const Home: NextPage<{ posts: Post[] }> = ({ posts }) => {
             align="left"
             textAlign="left"
             listStyleType="none"
+            width={{xl: "3xl"}}
           >
             {posts.map((post) => (
               <ListItem key={post.slug} marginTop="0">

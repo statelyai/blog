@@ -63,7 +63,7 @@ const PostPage: React.FC<{
           >
             All blog posts
           </Button>
-          <Heading size="xl" as="h1" fontWeight="medium">
+          <Heading size="xl" as="h1" fontWeight="medium" marginTop={{ base:"2", md:"7" }}>
             {post.title}
           </Heading>
           <Box
