@@ -39,19 +39,19 @@ function MyApp({ Component, pageProps }: AppProps) {
             rel="alternate"
             type="application/rss+xml"
             title="Subscribe to our blog feed"
-            href="/feeds/rss.xml"
+            href="/blog/feeds/rss.xml"
           />
           <link
             rel="alternate"
             type="application/atom+xml"
             title="Subscribe to our blog feed"
-            href="/feeds/atom.xml"
+            href="/blog/feeds/atom.xml"
           />
           <link
             rel="alternate"
             type="application/feed+json"
             title="Subscribe to our blog feed"
-            href="/feeds/feed.json"
+            href="/blog/feeds/feed.json"
           />
           <link rel="icon" href="/favicon.ico" sizes="any" />
           <link rel="icon" href="/icon.svg" type="image/svg+xml" />
