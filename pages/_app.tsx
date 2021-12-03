@@ -38,19 +38,19 @@ function MyApp({ Component, pageProps }: AppProps) {
           <link
             rel="alternate"
             type="application/rss+xml"
-            title="Subscribe to our blog feed"
+            title="Subscribe to Stately engineering blog"
             href="/blog/feeds/rss.xml"
           />
           <link
             rel="alternate"
             type="application/atom+xml"
-            title="Subscribe to our blog feed"
+            title="Subscribe to Stately engineering blog"
             href="/blog/feeds/atom.xml"
           />
           <link
             rel="alternate"
             type="application/feed+json"
-            title="Subscribe to our blog feed"
+            title="Subscribe to Stately engineering blog"
             href="/blog/feeds/feed.json"
           />
           <link rel="icon" href="/favicon.ico" sizes="any" />
