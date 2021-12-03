@@ -152,7 +152,7 @@ export const PageHeader: React.FC<{ posts: Post[] }> = ({ posts }) => {
             </Box>
             <Box as="li">
               <ChakraLink
-                href="https://github.com/stately.ai/eng-blog"
+                href="https://github.com/statelyai/eng-blog"
                 display="block"
                 padding="2"
                 color="gray.300"
