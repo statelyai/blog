@@ -67,61 +67,55 @@ const PostPage: React.FC<{
             {post.title}
           </Heading>
           <Box
+            as="p"
             marginTop="5"
-            direction={{ base: "column", md: "row" }}
-            alignItems={{ base: "left", md: "flex-end" }}
+            color="gray.400"
+          >
+            By&nbsp;
+            <span>{post.author}</span>
+            &nbsp;on&nbsp;
+            <span>{formatDate(post.publishedAt)}</span>.&nbsp;
+            <ChakraLink
+              isExternal
+              href={`https://github.com/statelyai/eng-blog/edit/main/content/posts/${post.fileName}`}
+              fontSize="md"
+              color="gray.200"
+              _hover={{ color: "white", textDecoration: "underline" }}
+              marginTop={{ base: "1", md: "0" }}
+              marginLeft={{ base: "0", md: "2" }}
+              marginRight="2"
+              display={{ base: "block", md: "inline" }}
+            >
+              <EditIcon
+                w={4}
+                h={4}
+                role="presentation"
+                marginTop="-0.2em"
+                marginRight="1"
+              />
+              Edit this page on GitHub
+            </ChakraLink>
+          </Box>
+          <UnorderedList
+            width="auto"
+            fontSize="smaller"
             display="flex"
             wrap="row"
+            flexDirection="row"
             flexWrap="wrap"
-            flexDirection={{ base: "column", md: "row" }}
+            marginLeft="0"
+            marginTop={{ base: "1", md: "0" }}
+            gridGap="1"
+            color="gray.400"
+            style={{ listStyleType: "none" }}
           >
-            <Box as="p" color="gray.400">
-              By&nbsp;
-              <span>{post.author}</span>
-              &nbsp;on&nbsp;
-              <span>{formatDate(post.publishedAt)}</span>.&nbsp;
-              <ChakraLink
-                isExternal
-                href={`https://github.com/statelyai/eng-blog/edit/main/content/posts/${post.fileName}`}
-                fontSize="md"
-                color="gray.200"
-                _hover={{ color: "white", textDecoration: "underline" }}
-                marginTop={{ base: "1", md: "0" }}
-                marginLeft={{ base: "0", md: "2" }}
-                marginRight="2"
-                display={{ base: "block", md: "inline" }}
-              >
-                <EditIcon
-                  w={4}
-                  h={4}
-                  role="presentation"
-                  marginTop="-0.2em"
-                  marginRight="1"
-                />
-                Edit this page on GitHub
-              </ChakraLink>
-            </Box>
-            <UnorderedList
-              width="auto"
-              fontSize="smaller"
-              display="flex"
-              wrap="row"
-              flexDirection="row"
-              flexWrap="wrap"
-              marginLeft="0"
-              marginTop={{ base: "1", md: "0" }}
-              gridGap="1"
-              color="gray.400"
-              style={{ listStyleType: "none" }}
-            >
-              {post.tags.map((keyword) => (
-                <ListItem
-                  key={keyword}
-                  marginRight="1"
-                >{`#${keyword}`}</ListItem>
-              ))}
-            </UnorderedList>
-          </Box>
+            {post.tags.map((keyword) => (
+              <ListItem
+                key={keyword}
+                marginRight="1"
+              >{`#${keyword}`}</ListItem>
+            ))}
+          </UnorderedList>
           <Box
             paddingTop="2"
             marginTop="3"
