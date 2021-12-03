@@ -96,9 +96,9 @@ Use the YouTube ID for the `id` attribute. For example in `https://www.youtube.c
 
 Use the Visualizer ID for the `id` attribute. For example in `https://stately.ai/viz/5c325385-a0f4-4eaa-b215-712424369cc2`, `5c325385-a0f4-4eaa-b215-712424369cc2` is the ID.
 
-You must also provide a `title` to it. Title is required for accessibility and testing purposes.
+You must also provide a `title` for your visualization. The `title` is required for accessibility and testing purposes.
 
-Additionally, you can configure how the visualization embed looks like by passing supported options below.
+Additionally, you can configure how the visualization embed displays by passing the options below:
 
 | Option           | Sample value | Available values                    |
 | ---------------- | ------------ | ----------------------------------- |
