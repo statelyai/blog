@@ -91,3 +91,38 @@ Use the YouTube ID for the `id` attribute. For example in `https://www.youtube.c
 ```
 <Youtube id="y6aGu0N8z9Q" />
 ```
+
+### Visualizer
+
+Use the Visualizer ID for the `id` attribute. For example in `https://stately.ai/viz/5c325385-a0f4-4eaa-b215-712424369cc2`, `5c325385-a0f4-4eaa-b215-712424369cc2` is the ID.
+
+A `title` is also required to describe your visualization for accessibility and testing purposes:
+
+```
+<Viz id="7c0ec648-09d6-46fe-a912-fc0e46da5094" title="Data fetching modeled as a statechart." />
+```
+
+Configure how the visualization embed displays by passing the options below.
+
+`1` is show, `0` is hide:
+
+| Option           | Default value | Available values                    |
+| ---------------- | ------------- | ----------------------------------- |
+| mode             | "viz"         | "viz", "full", "panels"             |
+| panel            | "code"        | "code", "state", "events", "actors" |
+| showOriginalLink | 1             | 1, 0                                |
+| readOnly         | 1             | 1, 0                                |
+| pan              | 0             | 1, 0                                |
+| zoom             | 0             | 1, 0                                |
+| controls         | 1             | 1, 0                                |
+
+```
+// Display in visualization mode
+<Viz id="5c325385-a0f4-4eaa-b215-712424369cc2" title="Data fetching modeled as a statechart." />
+
+// Display in panels mode showing the state panel without the link to the visualizer
+<Viz id="7c0ec648-09d6-46fe-a912-fc0e46da5094" title="Data fetching modeled as a statechart." mode="panels" panels="state" showOriginalLink="0" />
+
+// Display in visualization mode without any controls
+<Viz id="5c325385-a0f4-4eaa-b215-712424369cc2" title="Data fetching modeled as a statechart." controls="0" />
+```
