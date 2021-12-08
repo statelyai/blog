@@ -11,7 +11,7 @@ originalURL: "https://dev.to/mpocock1/state-management-how-to-tell-a-bad-boolean
 
 **TL;DR**: Bad booleans represent state. Good booleans are derived from state.
 
-When you're managing state in your app, it's easy to fall prey to bad booleans. Bad booleans look like this:
+When you’re managing state in your app, it’s easy to fall prey to bad booleans. Bad booleans look like this:
 
 ```js
 let isLoading = true;
@@ -19,7 +19,7 @@ let isComplete = false;
 let hasErrored = false;
 ```
 
-On the surface, this looks like good code. It appears as though you've represented three separate states with proper boolean names. In the 'model' you've pictured for your state, only one of these states can be true at any one time.
+On the surface, this looks like good code. It appears as though you’ve represented three separate states with proper boolean names. In the ‘model’ you’ve pictured for your state, only one of these states can be true at any one time.
 
 In a fetch request, you might model the state like this:
 
@@ -37,9 +37,9 @@ const makeFetch = async () => {
 };
 ```
 
-Again, this looks nice. We're orchestrating our booleans as we move through the async request.
+Again, this looks nice. We’re orchestrating our booleans as we move through the async request.
 
-But there's a bug here. What happens if we make the fetch, it succeeds, and we make the fetch again? We'll end up with:
+But there’s a bug here. What happens if we make the fetch, it succeeds, and we make the fetch again? We’ll end up with:
 
 ```js
 let isLoading = true;
@@ -49,17 +49,17 @@ let hasErrored = false;
 
 ## Implicit states
 
-You probably hadn't considered this when you made your initial model. You may have frontend components which are checking for `isComplete === ` true or `isLoading === true`. You might end up with a loading spinner and the previous data showing at the same time.
+You probably hadn’t considered this when you made your initial model. You may have frontend components which are checking for `isComplete === ` true or `isLoading === true`. You might end up with a loading spinner and the previous data showing at the same time.
 
-How is this possible? Well, you've created some implicit states. Let's imagine you considered 3 states as ones you actually wanted to handle:
+How is this possible? Well, you’ve created some implicit states. Let’s imagine you considered 3 states as ones you actually wanted to handle:
 
 1. `loading`: Loading the data
 2. `complete`: Showing the data
 3. `errored`: Erroring if the data doesn't turn up
 
-Well, you've actually allowed 8 states! That's 2 for the first boolean, times 2 for the second, times 2 for the third.
+Well, you’ve actually allowed 8 states! That’s 2 for the first boolean, times 2 for the second, times 2 for the third.
 
-This is what's known as boolean explosion - I learned about this from [https://egghead.io/lessons/javascript-eliminate-boolean-explosion-by-enumerating-states](Kyle Shevlin's egghead course).
+This is what's known as boolean explosion - I learned about this from [Kyle Shevlin's egghead course](https://egghead.io/lessons/javascript-eliminate-boolean-explosion-by-enumerating-states).
 
 ## Making states explicit
 
@@ -71,7 +71,7 @@ type Status = "loading" | "complete" | "errored";
 let status: Status = "loading";
 ```
 
-We'd implement this in a fetch like this:
+We’d implement this in a fetch like this:
 
 ```ts
 const makeFetch = async () => {
@@ -86,7 +86,7 @@ const makeFetch = async () => {
 };
 ```
 
-It's now impossible to be in the 'loading' and 'complete' state at once - we've fixed our bug. We've turned our bad booleans into a good enum.
+It’s now impossible to be in the 'loading' and 'complete' state at once - we’ve fixed our bug. We’ve turned our bad booleans into a good enum.
 
 ## Making good booleans
 
@@ -113,7 +113,7 @@ You can safely use this `isLoading` to display your loading spinner, happy in th
 
 ## Addendum: Enums in Javascript
 
-A couple of folks in the comments are asking how we represent a state enum in Javascript. While the above code will work without typings, you can also represent enums as an object type.
+We can represent a state enum in Javascript as well. While the above code will work without typings, you can represent enums as an object type.
 
 ```ts
 const statusEnum = {
