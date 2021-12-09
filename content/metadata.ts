@@ -4,6 +4,13 @@ export const DEFAULT_TITLE = "Stately Engineering Blog";
 export const DEFAULT_DESCRIPTION =
   "The official engineering blog of Stately.ai";
 export const DEFAULT_URL = "https://stately.ai/blog";
+export const DEFAULT_OG_IMAGE = {
+  url: "https://stately.ai/blog/og-image.png", // needs to be absolute URL
+  width: 0,
+  height: 0,
+  alt: DEFAULT_TITLE,
+  type: "image/png", // change based on actual OG image type
+};
 
 export const AUTHORS = [
   { name: "Farzad Yousefzadeh", twitterHandle: "@farzad_yz" },
@@ -20,6 +27,7 @@ export const makeMetadata = ({
   url = DEFAULT_URL,
   originalURL,
   article,
+  ogImage = DEFAULT_OG_IMAGE.url,
 }: MetadataOverrides | undefined = {}) => ({
   title,
   description,
@@ -34,11 +42,11 @@ export const makeMetadata = ({
     site_name: DEFAULT_TITLE,
     images: [
       {
-        url: "https://stately.ai/blog/og-image.png", // needs to be absolute URL
+        url: ogImage, // needs to be absolute URL
         width: 0,
         height: 0,
         alt: title,
-        type: "image/png", // change based on actual OG image type
+        type: "image/png",
       },
     ],
     article,
