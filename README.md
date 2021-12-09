@@ -63,6 +63,8 @@ Use `yarn post:edit` to update an existing blog post’s updatedAt frontmatter f
 
 By default, a post will use the blog’s default open graph image (`/public/og-image.png`) for the social media `meta` elements.
 
+Images must be in `.png` file format. Use the open graph templates in Canva, or ask @laurakalbag to create an image for you.
+
 To override the default image with a new image:
 1. Save your image in the `/public` folder with the same filename as its corresponding blog post. *Note: the corresponding filename is not necessary for the functioning of the open graph images, but improves the maintainability of the public folder.*
 2. Add the `ogImage` field to the frontmatter of the blog post using the absolute URL:
