@@ -36,6 +36,7 @@ const PostPage: React.FC<{
           modifiedTime: post.updatedAt,
           tags: post.tags,
         }}
+        ogImage={post.ogImage}
       />
       <Layout posts={posts}>
         <Box
