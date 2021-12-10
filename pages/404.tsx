@@ -1,5 +1,6 @@
 import { NextPage } from "next";
 import React from "react";
+import Link from "next/link";
 import { Post } from "../src/types";
 import { Box, Heading, Link as ChakraLink } from "@chakra-ui/react";
 import { PageHeader } from "../src/components/PageHeader";
@@ -35,9 +36,11 @@ const NotFound: NextPage<{ posts: Post[] }> = ({ posts }) => (
       </Heading>
       <Box as="p" textAlign="left" padding="6">
         Sorry we can’t find that page.{" "}
-        <ChakraLink href="/blog" color="primary.300" textDecoration="underline">
-          Return to all blog posts
-        </ChakraLink>{" "}
+        <Link href="/" passHref>
+          <ChakraLink color="primary.300" textDecoration="underline">
+            Return to all blog posts
+          </ChakraLink>
+        </Link>{" "}
         or use the search box above.
       </Box>
     </Box>
