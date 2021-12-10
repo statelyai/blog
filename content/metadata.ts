@@ -45,7 +45,9 @@ export const makeMetadata = ({
         url: ogImage, // needs to be absolute URL
         width: 0,
         height: 0,
-        alt: title,
+        alt: `${title} by ${
+          article?.authors![0]
+        } on the Stately Engineering Blog`, // TODO: multiple authors
         type: "image/png",
       },
     ],
