@@ -5,12 +5,13 @@ import { getAllPosts } from "../src/posts";
 import { Layout } from "../src/components/Layout";
 import {
   Box,
+  Button,
   Heading,
   UnorderedList,
   ListItem,
   Link as ChakraLink,
 } from "@chakra-ui/react";
-import { EditIcon } from "@chakra-ui/icons";
+import { ArrowBackIcon, EditIcon } from "@chakra-ui/icons";
 import Link from "next/link";
 import { MDXComponents } from "../src/components/MDXComponents";
 import { Seo } from "../src/Seo";
@@ -47,7 +48,9 @@ const PostPage: React.FC<{
           maxW="3xl"
         >
           <Link href="/" passHref>
-            <ChakraLink>All blog posts</ChakraLink>
+            <ChakraLink as={Button}>
+              {<ArrowBackIcon />} All blog posts
+            </ChakraLink>
           </Link>
           <Heading
             size="xl"
