@@ -10,6 +10,7 @@ export interface PostFrontmatter {
   publishedAt: string;
   updatedAt?: string;
   originalURL?: string;
+  ogImage?: string;
 }
 
 export interface Post extends PostFrontmatter {
@@ -33,6 +34,7 @@ export type MetadataOverrides = Partial<{
   url: string;
   article: OpenGraphArticle;
   originalURL: string;
+  ogImage: string;
 }>;
 
 export type EmbedMode = "viz" | "panels" | "full";
