@@ -6,16 +6,12 @@ import { Layout } from "../src/components/Layout";
 import {
   Box,
   Heading,
-  Wrap,
   Button,
   UnorderedList,
   ListItem,
   Link as ChakraLink,
 } from "@chakra-ui/react";
-import {
-  ArrowBackIcon,
-  EditIcon
-} from "@chakra-ui/icons";
+import { ArrowBackIcon, EditIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/router";
 import { MDXComponents } from "../src/components/MDXComponents";
 import { Seo } from "../src/Seo";
@@ -53,9 +49,7 @@ const PostPage: React.FC<{
         >
           <Button
             as="a"
-            onClick={() => {
-              router.back();
-            }}
+            href="/blog"
             marginBottom="8"
             cursor="pointer"
             textDecoration="none"
@@ -63,14 +57,15 @@ const PostPage: React.FC<{
           >
             All blog posts
           </Button>
-          <Heading size="xl" as="h1" fontWeight="medium" marginTop={{ base:"2", md:"7" }}>
+          <Heading
+            size="xl"
+            as="h1"
+            fontWeight="medium"
+            marginTop={{ base: "2", md: "7" }}
+          >
             {post.title}
           </Heading>
-          <Box
-            as="p"
-            marginTop="5"
-            color="gray.400"
-          >
+          <Box as="p" marginTop="5" color="gray.400">
             By&nbsp;
             <span>{post.author}</span>
             &nbsp;on&nbsp;
@@ -110,10 +105,7 @@ const PostPage: React.FC<{
             style={{ listStyleType: "none" }}
           >
             {post.tags.map((keyword) => (
-              <ListItem
-                key={keyword}
-                marginRight="1"
-              >{`#${keyword}`}</ListItem>
+              <ListItem key={keyword} marginRight="1">{`#${keyword}`}</ListItem>
             ))}
           </UnorderedList>
           <Box
