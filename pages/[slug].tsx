@@ -48,9 +48,9 @@ const PostPage: React.FC<{
           maxW="3xl"
         >
           <Link href="/" passHref>
-            <ChakraLink as={Button}>
-              {<ArrowBackIcon />} All blog posts
-            </ChakraLink>
+            <Button as="a" textDecoration="none" marginBottom="8">
+              {<ArrowBackIcon marginRight="2" />} All blog posts
+            </Button>
           </Link>
           <Heading
             size="xl"
