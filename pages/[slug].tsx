@@ -5,14 +5,14 @@ import { getAllPosts } from "../src/posts";
 import { Layout } from "../src/components/Layout";
 import {
   Box,
-  Heading,
   Button,
+  Heading,
   UnorderedList,
   ListItem,
   Link as ChakraLink,
 } from "@chakra-ui/react";
 import { ArrowBackIcon, EditIcon } from "@chakra-ui/icons";
-import { useRouter } from "next/router";
+import Link from "next/link";
 import { MDXComponents } from "../src/components/MDXComponents";
 import { Seo } from "../src/Seo";
 import { DEFAULT_URL } from "../content/metadata";
@@ -24,7 +24,6 @@ const PostPage: React.FC<{
   post: Post;
   mdx: MDXRemoteSerializeResult;
 }> = ({ posts, post, mdx }) => {
-  const router = useRouter();
   return (
     <>
       <Seo
@@ -48,18 +47,11 @@ const PostPage: React.FC<{
           padding="4"
           maxW="3xl"
         >
-          <Button
-            as="a"
-            onClick={() => {
-              router.back();
-            }}
-            marginBottom="8"
-            cursor="pointer"
-            textDecoration="none"
-            leftIcon={<ArrowBackIcon />}
-          >
-            All blog posts
-          </Button>
+          <Link href="/" passHref>
+            <Button as="a" textDecoration="none" marginBottom="8">
+              {<ArrowBackIcon marginRight="2" />} All blog posts
+            </Button>
+          </Link>
           <Heading
             size="xl"
             as="h1"
