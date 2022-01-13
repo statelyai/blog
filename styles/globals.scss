@@ -22,6 +22,25 @@ h1 {
   font-size: var(--chakra-fontSizes-4xl);
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+.toc {
+  ul {
+    list-style: none;
+    margin-top: 0.5rem;
+
+    ul {
+      margin-left: 1rem;
+    }
+  }
+}
+
+.blog-post [id] {
+  scroll-margin-top: 2rem;
+}
+
 .blog-post h2,
 .blog-post h3,
 .blog-post h4,

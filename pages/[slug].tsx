@@ -1,8 +1,8 @@
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
-import { Post } from "../src/types";
+import { ElementNode, Post, TextNode } from "../src/types";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { getAllPosts } from "../src/posts";
-import { Layout } from "../src/components/Layout";
+import { Layout, LayoutSidebar } from "../src/components/Layout";
 import {
   Box,
   Button,
@@ -10,20 +10,50 @@ import {
   UnorderedList,
   ListItem,
   Link as ChakraLink,
+  VStack,
+  Stack,
 } from "@chakra-ui/react";
-import { ArrowBackIcon, EditIcon } from "@chakra-ui/icons";
+import { ArrowBackIcon, ArrowUpIcon, EditIcon } from "@chakra-ui/icons";
 import Link from "next/link";
 import { MDXComponents } from "../src/components/MDXComponents";
 import { Seo } from "../src/Seo";
 import { DEFAULT_URL } from "../content/metadata";
-import { formatDate } from "../src/utils";
+import { formatDate, isElementNode } from "../src/utils";
 import { serializePost } from "../src/serializePost";
+import React, { ElementType } from "react";
+
+const TOC: React.FC<{ toc: ElementNode | TextNode }> = ({ toc }) => {
+  if (!isElementNode(toc)) {
+    return <>{toc.value}</>;
+  }
+
+  const Tag =
+    toc.tagName === "a"
+      ? (props) => (
+          <ChakraLink
+            {...props}
+            display="block"
+            padding="2"
+            color="gray.300"
+            _hover={{ color: "white", textDecoration: "underline" }}
+          />
+        )
+      : (toc.tagName as ElementType);
+  return (
+    <Tag {...toc.properties}>
+      {toc.children.map((child, index) => (
+        <TOC key={index} toc={child} />
+      ))}
+    </Tag>
+  );
+};
 
 const PostPage: React.FC<{
   posts: Post[];
   post: Post;
-  mdx: MDXRemoteSerializeResult;
+  mdx: { serializedContent: MDXRemoteSerializeResult; toc: ElementNode | null };
 }> = ({ posts, post, mdx }) => {
+  console.log(mdx.toc);
   return (
     <>
       <Seo
@@ -39,7 +69,29 @@ const PostPage: React.FC<{
         }}
         ogImage={post.ogImage}
       />
-      <Layout posts={posts}>
+      <Layout
+        posts={posts}
+        renderSidebar={() => (
+          <Stack
+            alignItems="flex-start"
+            position="sticky"
+            bottom="100px"
+            gap="4"
+          >
+            <Button
+              justifyContent="center"
+              aria-label="scroll to top"
+              leftIcon={<ArrowUpIcon />}
+              as="a"
+              textDecoration="none"
+              href="#top"
+            >
+              Scroll to top
+            </Button>
+            <TOC toc={mdx.toc} />
+          </Stack>
+        )}
+      >
         <Box
           as="article"
           className="blog-post"
@@ -111,7 +163,7 @@ const PostPage: React.FC<{
             borderStyle="solid"
             borderColor="gray.700"
           >
-            <MDXRemote {...mdx} components={MDXComponents} />
+            <MDXRemote {...mdx.serializedContent} components={MDXComponents} />
           </Box>
         </Box>
       </Layout>

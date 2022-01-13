@@ -13,7 +13,6 @@ import { getAllPosts } from "../src/posts";
 import { Post } from "../src/types";
 import Link from "next/link";
 import { Seo } from "../src/Seo";
-import { useMetadata } from "../src/MetadataContext";
 import { formatDate } from "../src/utils";
 import { generateFeed } from "../src/feed";
 
@@ -22,12 +21,7 @@ const Home: NextPage<{ posts: Post[] }> = ({ posts }) => {
     <>
       <Seo />
       <Layout posts={posts}>
-        <Box
-          maxW="3xl"
-          display="flex"
-          flexDirection="column"
-          align="center"
-        >
+        <Box maxW="3xl" display="flex" flexDirection="column" align="center">
           <Heading
             as="h1"
             padding="4"
@@ -45,7 +39,7 @@ const Home: NextPage<{ posts: Post[] }> = ({ posts }) => {
             align="left"
             textAlign="left"
             listStyleType="none"
-            width={{xl: "3xl"}}
+            width={{ xl: "3xl" }}
           >
             {posts.map((post) => (
               <ListItem key={post.slug} marginTop="0">
@@ -78,12 +72,14 @@ const Home: NextPage<{ posts: Post[] }> = ({ posts }) => {
 export const getStaticProps = async () => {
   const posts = await getAllPosts();
 
-  const feed = await generateFeed(posts);
+  if (process.env.NODE_ENV === "production") {
+    const feed = await generateFeed(posts);
 
-  fs.mkdirSync("public/feeds/", { recursive: true });
-  fs.writeFileSync("public/feeds/rss.xml", feed.rss2());
-  fs.writeFileSync("public/feeds/feed.json", feed.json1());
-  fs.writeFileSync("public/feeds/atom.xml", feed.atom1());
+    fs.mkdirSync("public/feeds/", { recursive: true });
+    fs.writeFileSync("public/feeds/rss.xml", feed.rss2());
+    fs.writeFileSync("public/feeds/feed.json", feed.json1());
+    fs.writeFileSync("public/feeds/atom.xml", feed.atom1());
+  }
 
   return { props: { posts } };
 };

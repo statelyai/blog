@@ -1,0 +1,25 @@
+diff --git a/node_modules/@jsdevtools/rehype-toc/lib/create-toc.js b/node_modules/@jsdevtools/rehype-toc/lib/create-toc.js
+index 2534860..795a3ad 100644
+--- a/node_modules/@jsdevtools/rehype-toc/lib/create-toc.js
++++ b/node_modules/@jsdevtools/rehype-toc/lib/create-toc.js
+@@ -87,7 +87,7 @@ function createTocList(headings, options) {
+ function createList(heading, depth, options) {
+     let list = {
+         type: "element",
+-        tagName: "ol",
++        tagName: options.listElement,
+         properties: {
+             className: options_1.buildClass(options.cssClasses.list, depth),
+         },
+diff --git a/node_modules/@jsdevtools/rehype-toc/lib/options.js b/node_modules/@jsdevtools/rehype-toc/lib/options.js
+index cd14de3..6fc874e 100644
+--- a/node_modules/@jsdevtools/rehype-toc/lib/options.js
++++ b/node_modules/@jsdevtools/rehype-toc/lib/options.js
+@@ -12,6 +12,7 @@ class NormalizedOptions {
+     constructor(options = {}) {
+         let cssClasses = options.cssClasses || {};
+         this.nav = options.nav === undefined ? true : Boolean(options.nav);
++        this.listElement = options.listElement || "ol";
+         this.position = options.position || "afterbegin";
+         this.headings = options.headings || ["h1", "h2", "h3", "h4", "h5", "h6"];
+         this.cssClasses = {

@@ -44,7 +44,7 @@ export const generateFeed = async (posts: Post[]): Promise<Feed> => {
     const mdx = await serializePost(post);
     const htmlContent = ReactDOMServer.renderToStaticMarkup(
       <ChakraProvider resetCSS theme={theme}>
-        <MDXRemote {...mdx} components={MDXComponents} />
+        <MDXRemote {...mdx.serializedContent} components={MDXComponents} />
       </ChakraProvider>
     );
     const cleanHtmlContent = stripHtml(htmlContent, {

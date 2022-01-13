@@ -20,6 +20,7 @@
     "@chakra-ui/react": "^1.6.8",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
+    "@jsdevtools/rehype-toc": "^3.0.2",
     "dayjs": "^1.10.7",
     "feed": "^4.2.2",
     "framer-motion": "^4",

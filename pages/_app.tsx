@@ -1,4 +1,4 @@
-import "../styles/globals.css";
+import "../styles/globals.scss";
 import "../styles/nprogress.css";
 import "../styles/highlight.css";
 import "../styles/post.scss";
