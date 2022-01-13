@@ -26,13 +26,16 @@ html {
   scroll-behavior: smooth;
 }
 
+.toc-title {
+  margin-top: 0.5rem;
+}
 .toc {
   ul {
     list-style: none;
-    margin-top: 0.5rem;
 
     ul {
       margin-left: 1rem;
+      margin-top: 0.5rem;
     }
   }
 }

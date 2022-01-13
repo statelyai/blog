@@ -2,7 +2,7 @@ import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
 import { ElementNode, Post, TextNode } from "../src/types";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { getAllPosts } from "../src/posts";
-import { Layout, LayoutSidebar } from "../src/components/Layout";
+import { Layout } from "../src/components/Layout";
 import {
   Box,
   Button,
@@ -10,8 +10,7 @@ import {
   UnorderedList,
   ListItem,
   Link as ChakraLink,
-  VStack,
-  Stack,
+  Flex,
 } from "@chakra-ui/react";
 import { ArrowBackIcon, ArrowUpIcon, EditIcon } from "@chakra-ui/icons";
 import Link from "next/link";
@@ -53,7 +52,6 @@ const PostPage: React.FC<{
   post: Post;
   mdx: { serializedContent: MDXRemoteSerializeResult; toc: ElementNode | null };
 }> = ({ posts, post, mdx }) => {
-  console.log(mdx.toc);
   return (
     <>
       <Seo
@@ -72,7 +70,8 @@ const PostPage: React.FC<{
       <Layout
         posts={posts}
         renderSidebar={() => (
-          <Stack
+          <Flex
+            flexDirection="column"
             alignItems="flex-start"
             position="sticky"
             bottom="100px"
@@ -88,8 +87,9 @@ const PostPage: React.FC<{
             >
               Scroll to top
             </Button>
+            <h2 className="toc-title">Table of contents</h2>
             <TOC toc={mdx.toc} />
-          </Stack>
+          </Flex>
         )}
       >
         <Box
