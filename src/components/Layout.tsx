@@ -13,6 +13,7 @@ const LayoutSidebar: React.FC<BoxProps> = ({ children, ...props }) => {
       opacity="0.5"
       transition="opacity 0.25s ease"
       maxWidth="300px"
+      paddingBlock="4" // match padding of main content
       _hover={{
         opacity: 1,
       }}
