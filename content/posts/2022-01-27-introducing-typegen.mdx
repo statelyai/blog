@@ -15,19 +15,19 @@ excerpt: "XState and TypeScript are a match made in heaven, and XState's TypeScr
 publishedAt: "2022-01-27"
 ---
 
-**XState and TypeScript are a match made in heaven**. TypeScript gives you type safety, and XState gives you logical safety. Together, they give you confidence that your code will do what you expect it to.
+**XState and TypeScript are a match made in heaven**. TypeScript gives you type safety, and XState gives you logical safety. Together, they give you confidence that your code will do what you expect.
 
 However, we’ve been hearing from the community for some time that the _experience_ of using TypeScript with XState needed improving.
 
-Today's your lucky day. **XState's TypeScript experience just got an _enormous_ upgrade**.
+Today's your lucky day. **XState’s TypeScript experience just got an _enormous_ upgrade**.
 
-We have brought type generation into XState v4.29.0, and we're aiming for **perfect types on all parts of XState's API**.
+We have brought type generation into XState v4.29.0, and we’re aiming for **perfect types on all parts of XState’s API**.
 
-We're releasing it today as an opt-in beta. Be sure to check out the [known limitations](https://xstate.js.org/docs/guides/typescript.html#known-limitations) section of the docs.
+We’re releasing typegen today as an opt-in beta. Be sure to check out the [known limitations](https://xstate.js.org/docs/guides/typescript.html#known-limitations) section of the docs.
 
 ## Getting Started
 
-You can visit the [official docs](https://xstate.js.org/docs/guides/typescript.html#typegen-with-the-vscode-extension) for the full guide, or follow the instructions here:
+You can visit the [official docs](https://xstate.js.org/docs/guides/typescript.html#typegen-with-the-vscode-extension) for the full guide, or follow the instructions:
 
 1. Download and install the [VS Code extension](https://marketplace.visualstudio.com/items?itemName=statelyai.stately-vscode).
 
@@ -60,9 +60,9 @@ const machine = createMachine({
 
 3. Add `tsTypes: {}` to the machine and save the file:
 
-```ts
+```diff
 const machine = createMachine({
-  tsTypes: {},
++ tsTypes: {},
   schema: {
     context: {} as { value: string },
     events: {} as { type: "FOO"; value: string } | { type: "BAR" },
@@ -108,7 +108,7 @@ const machine = createMachine(
 
 ## Typing improvements
 
-Let's go into the nitty gritty and show you exactly what's improved.
+Let’s get into the nitty-gritty and show you exactly what’s improved.
 
 ### Events in machine options
 
@@ -171,13 +171,13 @@ createMachine(
 
 This works for actions, services, guards and delays. It even works for **entry actions**, another big pain point from the community.
 
-We're hoping this lets you cut hundreds of lines of useless defensive code.
+We’re hoping this lets you cut hundreds of lines of useless defensive code.
 
 ### Autocomplete on machine options
 
-Another thing we've been hearing from the community is that it's easy to make typos on machine options.
+Another thing we’ve been hearing from the community is that it’s easy to make typos on machine options.
 
-Now, with typegen, you get **autocomplete on all machine options**. This will error:
+Now, with typegen, you get **autocomplete on all machine options**. The following code will error:
 
 ```ts
 createMachine(
@@ -196,7 +196,7 @@ createMachine(
 );
 ```
 
-We've also made it so any _missing_ machine options will error when
+We’ve also made it so any _missing_ machine options will error when
 you implement them later. So, in a React component:
 
 ```tsx
@@ -219,7 +219,7 @@ That gives you 100% confidence that your machine has all the things it needs to 
 
 Using promise-based services might be the single biggest pain point with XState and TypeScript. We used to have an entire troubleshooting section in our docs dedicated to them.
 
-Now, you can **strongly type the results of promise-based services**. Here's how:
+Now, you can **strongly type the results of promise-based services**. Here’s how:
 
 ```ts
 createMachine(
@@ -273,4 +273,4 @@ This makes handling data return types in XState intuitive, easy and type-safe.
 
 ## Acknowledgements
 
-I want to thank my Stately colleague [Andarist](https://twitter.com/AndaristRake). His TypeScript wizardry, incredible attention to detail and deep love of open source helped make this possible. We've literally been talking about this for 18 months - and it's finally here.
+I want to thank my Stately colleague [Andarist](https://twitter.com/AndaristRake). His TypeScript wizardry, incredible attention to detail and deep love of open source helped make this possible. We’ve literally been talking about this for 18 months - and it’s finally here.
