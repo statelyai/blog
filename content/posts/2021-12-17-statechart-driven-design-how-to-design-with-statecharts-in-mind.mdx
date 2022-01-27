@@ -1,0 +1,76 @@
+---
+title: "How to solve design/developer handover with statecharts"
+description: awdawd
+tags:
+  - ""
+  - blog
+  - statechart
+  - xstate
+author:
+  - Matt Pocock
+originalURL: ""
+excerpt: ""
+publishedAt: "2021-12-17"
+---
+
+Visual design assets are incredibly useful tools. They help maintain the integrity of a site's visual language. They can give developers a clear idea of what they're building. Perhaps most critically, they help bring the client's _idea_ of the product into reality.
+
+This last point can't be overstated. The first time a client sees a design is the first time they've seen their app on a screen before. The app feel less abstract, closer to reality. Usually this results in a lot of useful feedback.
+
+Often, the feedback is divided into two parts:
+
+- The **visual**: 'make this blue darker'
+- The **logical**: 'this screen should come before this'
+
+The visual is often clear to deal with. You can modify the design and ask for another round of feedback.
+
+But the logical feedback is often harder to address in the design phase. Designs are _not_ working apps, so they don't have to make sense logically. Loading states are often forgotten. Complicated interactions are summarised in written notes instead of visual assets.
+
+This often means that, by the time developers get their hands on the designs, the **logical** parts of the app have been under-specced. The designers themselves, having completed their part in the process, have moved on to new projects. They need to 'context switch', losing focus on their new projects to chase up leads on the old.
+
+It feels clear to me that we **need to flesh out the business logic of apps earlier in the design process**. Luckily, statecharts can help.
+
+## Statechart-driven-design
+
+Let's re-imagine the design process above. Let's split the **visual** and **logical** feedback into two different stages - with logical feedback first. In the first meeting with a client, build a statechart with how they imagine the app will work.
+
+<Viz id="21d6501a-63a7-4c50-aca7-a686712cb6f3" />
+
+Here, we can imagine two top-level screens. A dashboard and a calendar.
+
+Just by clicking through the chart, the client will be able to visualise their app working. It's still quite abstract, though. Let's complicate it a little to see if it still holds up.
+
+<Viz id="febc6d6a-72a8-4fa1-a28a-c9c53e6d3a9a" />
+
+We've added a loading state to the calendar. It's still clear - but as you can see, the **more complex a statechart gets, the more abstract the app will feel to the client**.
+
+How can we make this prototype feel more real? By **attaching visual assets to the statechart**.
+
+But how do we convert this chart into a visual design? Let me introduce you to a technique I'll call _state layering_. We're going to make a design for each individual state node - going from the root downwards. Let's start with the root state:
+
+<img src="/blog/developer-handover/root.png" alt="A simple app layout" />
+
+This design represents the 'root' state. Two buttons can be clicked - 'Dashboard' and 'Calendar'. Now, let's build the dashboard state.
+
+<img src="/blog/developer-handover/dashboard.png" alt="A dashboard layout" />
+
+This is what the app looks like when it's in the dashboard state. The dashboard is _layered_ on top of the root state.
+
+This uses a useful property of statecharts - nested states. Since the dashboard is _nested_ inside the root state - both designs are shown at once (I've faded out the root state for clarity). As the statechart says, we can still go to the 'calendar' state from within the 'dashboard' state, so the buttons are still clickable.
+
+Next, let's build the calendar state. There are a couple of states to design. First, the calendar loading state:
+
+<img
+  src="/blog/developer-handover/calendar-loading.png"
+  alt="A loading screen"
+/>
+
+Next, the calendar idle state with ''
+
+<!-- The process for designing user-facing applications can be painful. The pain is usually caused by miscommunication in what the app needs to _do_. In the course of emails, meetings, feedback - often taken over many months - information gets lost. A stray phrase in a Slack message may turn out to be a critical requirement. -->
+
+<!-- When the requirements are well-understood, the 'design' process begins. This generates a design (and sometimes a basic prototype) that the client can verify. Usually, this is the first time the client has seen their app on a screen before. Things feel less abstract, closer to reality, and this usually means more detailed requirements come out of this process.
+
+The design gets amended, then gets handed to the developers. If the app is particularly large (or the time budget tight), the designers immediately get to work on a different part of the feature set. This means that developers and designers are pretty much always working on _different parts of the app_ at the same time. -->
+
+<!-- Many companies build detailed specs in order to lay out requirements early on in the process. These can be important for billing -->
