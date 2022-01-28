@@ -1,0 +1,245 @@
+---
+title: Connect Four
+description: "Learn how "
+tags:
+  - game
+  - tutorial
+author:
+  - David Khourshid
+originalURL: ""
+excerpt: ""
+publishedAt: 2022-1-27
+---
+
+Connect four is a game with simple rules: two players have to try to connect four discs of the same color, either horizontally, vertically, or diagonally, on a 6 x 7 grid. They take turns dropping their color on a column to achieve this.
+
+[[TODO: gif of connect four gameplay]]
+
+This has a similar gameplay to [tic-tac-toe](TODO: link to post), but what's interesting about connect four is that [there are many variations](https://en.wikipedia.org/wiki/Connect_Four#Rule_variations) that can be played. By modeling the game as a statechart, we can not only visualize the logic of the gameplay, but we can easily adapt the statechart to each of the different variations.
+
+## Modeling the game
+
+There are 3 distinct stages of the gameplay. These can be considered the _finite states_ of the game:
+
+- **idle** (game hasn't started yet)
+- **playing** (first player has started playing)
+- **win** (one of the players has connected four in a row)
+- **draw** (the board fills up before any player achieves four in a row)
+
+There are _events_ that can change the state of the game:
+
+- The game is started
+- A player plays by dropping their disc into one of the columns
+- The game is reset
+
+The game transitions to a `win` or `draw` state when a win or draw condition is met immediately after a player makes their move. The game must also prevent players from making illegal moves, such as playing in a column that is already full, or playing out of turn. We can summarize the transitions as given-when-then statements:
+
+- Given the game is in the `idle` state, when the game is started, then the game is in the `playing` state.
+- Given the game is in the `playing` state, when a player makes a move and the move is legal, then the board is updated (and the game is still in the `playing` state).
+- Given the game is in the `playing` state, when a player achieves four in a row, then the game is in the `win` state.
+- Given the game is in the `playing` state, when the board is filled without any player reaching four in a row, then the game is in the `draw` state.
+
+The last two statements are actually not based on events; they're based on conditions that are _always_ checked after an event (e.g., a player move) occurs. They immediately transition when the condition is met.
+
+We can visualize these statements succinctly as a [state machine diagram](TODO):
+
+[[TODO: state machine]]
+
+The contextual data also needs to be considered; this is the "state" that does not describe the behavior, but is instead qualitative, such as who is playing or the state of the board. We can even expand this to keep track of things like elapsed playing time or previous scores. But for now, we're going to keep track of these things:
+
+- `player` - which player is playing
+- `board` - an array representing each player's disc on the board
+
+## Using XState
+
+Now that we know the basic states, events, and transitions for the game logic, we can start implementing it in [XState](https://github.com/statelyai/xstate). Just to get things started, we can initiate the machine with a single root state and the contextual data (the `context`):
+
+```js
+const initialBoard = Array(6 * 7).fill(null);
+
+const initialContext = {
+  player: "yellow",
+  board: initialBoard,
+};
+
+const connectFourMachine = createMachine({
+  context: initialContext,
+});
+```
+
+You might be wondering why I'm using a single-dimensional array to represent a 2D, 7-column, 6-row board. This is to make calculating whether there is a "win" (four connected discs) on the board easier, by using a little bit of math instead of having to traverse arrays-of-arrays. I'll explain that later.
+
+To get an idea of how the overall state of this machine will look, inspect the `connectFourMachine.initialState`:
+
+```js
+connectFourMachine.initialState;
+// State {
+//   value: {},
+//   context: {
+//     player: 'yellow',
+//     board: [ ... ]
+//   }
+// }
+```
+
+The two most important parts of the state will be the `state.value`, which represents the _finite state_ of our machine, and the `state.context`, which holds the contextual data that may be updated as the state machine receives events.
+
+## Adding the states
+
+Now let's add the four states we've modeled:
+
+```js
+// ...
+
+const connectFourMachine = createMachine({
+  id: "toggle",
+  context: initialContext,
+  initial: "idle",
+  states: {
+    idle: {},
+    playing: {},
+    win: {},
+    draw: {},
+  },
+});
+```
+
+A machine always needs an initial state; in this case, we start in the `"idle"` state. Each of these states specify the _behavior_ of the game:
+
+- In the `"idle"` state, the players can start the game.
+- In the `"playing"` state, the players can make moves.
+- In the `"win"` and `"draw"` states, no players can make moves, and the winner (if any) is displayed, with an option to restart the game.
+
+## Adding the transitions
+
+The behavior (finite states) of the gameplay can change, or **transition** due to events. For example, when the game is in the `idle` state, it can transition to the `playing` state when the `start` event is received by the state machine.
+
+Let's transform our given-when-then specifications to transitions:
+
+```js
+// ...
+
+const connectFourMachine = createMachine({
+  id: "toggle",
+  context: initialContext,
+  initial: "idle",
+  states: {
+    idle: {
+      on: {
+        start: {
+          target: "playing",
+        },
+      },
+    },
+    playing: {
+      on: {
+        play: {
+          // TODO: update board
+        },
+      },
+      // TODO: transition to "win" when win condition is met
+    },
+    win: {
+      on: {
+        replay: {
+          // TODO: reset context
+          target: "playing",
+        },
+      },
+    },
+    draw: {
+      on: {
+        replay: {
+          // TODO: reset context
+          target: "playing",
+        },
+      },
+    },
+  },
+});
+```
+
+There's one transition that isn't based on an explicit event: when we're in the `playing` state, the state machine should transition to the `win` state once some win condition has been reached, and similarly for a `draw` state once some draw condition has been reached. This needs to _always_ be checked after every event in this state. We can use an "always" (eventless) transition for this:
+
+```js
+// ...
+    playing: {
+      on: {
+        play: {
+          // TODO: update board
+        },
+      },
+      always: [
+        {
+          cond: 'winCondition',
+          target: 'winner'
+        }, {
+          cond: 'drawCondition',
+          target: 'draw'
+        }
+      ]
+    },
+// ...
+```
+
+After every event in this state, each transition will be checked in order to determine if they are _enabled_; that is, if they will be taken. If `'winCondition'` evaluates to `true`, then the transition is enabled and the machine transitions to the `winner` state. Otherwise, `'drawCondition'` is checked similarly to determine if the `draw` state is targeted.
+
+## Adding the actions
+
+Whenever the `replay` event happens, the machine should reset the `context` to its initial data. This is done by using the `assign(...)` action creator to set the `context` to `initialContext`:
+
+```js
+// ...
+      on: {
+        replay: {
+          actions: assign(initialContext),
+          target: "playing",
+        },
+      },
+// ...
+```
+
+The `play` transition on the `playing` state is more interesting: we need to update the `context.board` as well as changing `context.player`. Since the board is a single-dimensional array, we'll determine which position in the board the player's disc will fall to, and then update that "cell" in the array:
+
+```js
+// ...
+on: {
+  play: {
+    actions: assign({
+      // Update the board
+      board: (context, event) => {
+        const colPos = getColumnPos(context.board, event.column);
+
+        return context.board.map((value, i) => {
+          if (i === colPos) {
+            return context.player;
+          }
+
+          return value;
+        });
+      },
+      // Change the player
+      player: (context) => (context.player === "yellow" ? "red" : "yellow"),
+    });
+  }
+}
+// ...
+```
+
+TODO: explain `getColumPos`
+
+## Adding the guards
+
+TODO
+
+## Adding the user interface
+
+TODO
+
+## Testing
+
+TODO
+
+## Adding variations
+
+TODO
