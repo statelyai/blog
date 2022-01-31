@@ -10,17 +10,16 @@ const LayoutSidebar: React.FC<BoxProps> = ({ children, ...props }) => {
       {...props}
       as="aside"
       marginInlineEnd="32"
-      opacity="0.5"
-      transition="opacity 0.25s ease"
-      maxWidth="300px"
-      paddingBlock="4" // match padding of main content
+      opacity="0.75"
+      _focusWithin={{
+        opacity: 1,
+      }}
       _hover={{
         opacity: 1,
       }}
-      _focus={{
-        opacity: 1,
-      }}
-      _active={{ opacity: 1 }}
+      transition="opacity 0.25s ease"
+      maxWidth="300px"
+      paddingBlock="4" // match padding of main content
     >
       <Box
         as="section"

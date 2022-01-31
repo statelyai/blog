@@ -34,6 +34,7 @@ const TOC: React.FC<{ toc: ElementNode | TextNode }> = ({ toc }) => {
             display="block"
             padding="2"
             color="gray.300"
+            fontSize="md"
             _hover={{ color: "white", textDecoration: "underline" }}
           />
         )
