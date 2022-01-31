@@ -26,10 +26,10 @@ html {
   scroll-behavior: smooth;
 }
 
-.toc-title {
-  margin-top: 0.5rem;
-}
 .toc {
+  display: flex;
+  flex-direction: column;
+  gap: var(--chakra-space-5);
   ul {
     list-style: none;
 

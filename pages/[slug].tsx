@@ -75,7 +75,7 @@ const PostPage: React.FC<{
             alignItems="flex-start"
             position="sticky"
             bottom="4"
-            gap="4"
+            gap="6"
           >
             <Button
               justifyContent="center"
@@ -87,7 +87,6 @@ const PostPage: React.FC<{
             >
               Scroll to top
             </Button>
-            <h2 className="toc-title">Table of contents</h2>
             <TOC toc={mdx.toc} />
           </Flex>
         )}

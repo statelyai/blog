@@ -25,12 +25,25 @@ export async function serializePost(post: Post): Promise<{
             {
               listElement: "ul",
               customizeTOC: (toc: ElementNode) => {
-                visit(toc, "element", (node) => {
-                  // Delete it as it only contains MDX related data. We render it as text in the TOC
-                  delete node.data?.hookArgs;
+                visit(toc, "element", (node: ElementNode | TextNode) => {
+                  if (isElementNode(node) && node.tagName === "nav") {
+                    node.children.unshift({
+                      type: "element",
+                      tagName: "h2",
+                      properties: {
+                        className: "toc-title",
+                      },
+                      children: [
+                        {
+                          type: "text",
+                          value: "Table of contents",
+                        } as TextNode,
+                      ],
+                    });
+                  }
                 });
                 tocRef = toc;
-                return false;
+                return null;
               },
             },
           ],
