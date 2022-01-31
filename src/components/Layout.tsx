@@ -17,6 +17,10 @@ const LayoutSidebar: React.FC<BoxProps> = ({ children, ...props }) => {
       _hover={{
         opacity: 1,
       }}
+      _focus={{
+        opacity: 1,
+      }}
+      _active={{ opacity: 1 }}
     >
       <Box
         as="section"

@@ -74,7 +74,7 @@ const PostPage: React.FC<{
             flexDirection="column"
             alignItems="flex-start"
             position="sticky"
-            bottom="100px"
+            bottom="4"
             gap="4"
           >
             <Button
