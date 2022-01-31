@@ -16,13 +16,14 @@ import {
   useClipboard,
   IconProps,
   BoxProps,
+  Flex,
 } from "@chakra-ui/react";
 import { Logo } from "./Logo";
 import { Post } from "../types";
 import React, { RefObject, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import FuzzySearch from "fuzzy-search";
-import { ChevronDownIcon } from "@chakra-ui/icons";
+import { CheckIcon, ChevronDownIcon, CopyIcon } from "@chakra-ui/icons";
 
 const useSearch = (
   posts: Post[],
@@ -230,16 +231,23 @@ export const PageHeader: React.FC<{ posts: Post[] }> = ({ posts }) => {
                 {Object.entries(feeds).map(([feed, { onCopy, hasCopied }]) => (
                   <MenuItem
                     onClick={onCopy}
-                    display="flex"
-                    justifyContent="space-between"
                     key={feed}
+                    icon={
+                      hasCopied ? <CheckIcon color="green.400" /> : <CopyIcon />
+                    }
                   >
-                    {feed}{" "}
-                    {hasCopied && (
-                      <small>
-                        <em>copied</em>
-                      </small>
-                    )}
+                    <Flex
+                      as="span"
+                      justifyContent="space-between"
+                      alignItems="baseline"
+                    >
+                      {feed}{" "}
+                      {hasCopied && (
+                        <small>
+                          <em>copied</em>
+                        </small>
+                      )}
+                    </Flex>
                   </MenuItem>
                 ))}
               </MenuList>
