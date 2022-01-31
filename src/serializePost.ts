@@ -41,6 +41,9 @@ export async function serializePost(post: Post): Promise<{
                       ],
                     });
                   }
+
+                  // Delete it as it only contains MDX related data. We render it as text in the TOC
+                  delete node.data?.hookArgs;
                 });
                 tocRef = toc;
                 return null;
