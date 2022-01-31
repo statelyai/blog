@@ -19,7 +19,9 @@ import { Seo } from "../src/Seo";
 import { DEFAULT_URL } from "../content/metadata";
 import { formatDate, isElementNode } from "../src/utils";
 import { serializePost } from "../src/serializePost";
-import React, { ElementType } from "react";
+import React, { ElementType, useEffect } from "react";
+import { createMachine } from "xstate";
+import { useMachine } from "@xstate/react";
 
 const TOC: React.FC<{ toc: ElementNode | TextNode }> = ({ toc }) => {
   if (!isElementNode(toc)) {
@@ -48,11 +50,67 @@ const TOC: React.FC<{ toc: ElementNode | TextNode }> = ({ toc }) => {
   );
 };
 
+const scrollMachine = createMachine({
+  id: "scroll machine",
+  initial: "racing",
+  exit: ["disableSmoothScroll"],
+  states: {
+    racing: {
+      after: {
+        threshold: {
+          target: "scrolled",
+        },
+      },
+      invoke: {
+        src: "listenToWindowScroll",
+      },
+      on: {
+        scrolled: "scrolled",
+      },
+    },
+    scrolled: {
+      entry: ["enableSmoothScroll"],
+      on: {
+        disableScroll: {
+          actions: ["disableSmoothScroll"],
+        },
+      },
+    },
+  },
+});
+
 const PostPage: React.FC<{
   posts: Post[];
   post: Post;
   mdx: { serializedContent: MDXRemoteSerializeResult; toc: ElementNode | null };
 }> = ({ posts, post, mdx }) => {
+  // Enable smooth scrolling either after the initial scroll due to existing hash in the URL or 1 second after the page is loaded (safe threshold)
+  useMachine(scrollMachine, {
+    services: {
+      listenToWindowScroll: () => (sendBack) => {
+        const onScroll = () => {
+          sendBack({ type: "scrolled" });
+        };
+        window?.addEventListener("scroll", onScroll);
+        return () => {
+          window?.removeEventListener("scroll", onScroll);
+        };
+      },
+    },
+    actions: {
+      enableSmoothScroll: () => {
+        document.documentElement.style.scrollBehavior = "smooth";
+      },
+      disableSmoothScroll: () => {
+        console.log("disableSmoothScroll");
+        document.documentElement.style.scrollBehavior = "auto";
+      },
+    },
+    delays: {
+      threshold: 100,
+    },
+  });
+
   return (
     <>
       <Seo
@@ -84,7 +142,7 @@ const PostPage: React.FC<{
               leftIcon={<ArrowUpIcon />}
               as="a"
               textDecoration="none"
-              href="#top"
+              href="#"
             >
               Scroll to top
             </Button>
