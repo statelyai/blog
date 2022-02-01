@@ -1,6 +1,6 @@
 import React from "react";
 import dayjs from "dayjs";
-import { EmbedProps, Post } from "./types";
+import { ElementNode, EmbedProps, Post, TextNode } from "./types";
 
 export function createRequiredContext<T>(displayName: string) {
   const context = React.createContext<T | null>(null);
@@ -74,4 +74,10 @@ export const makeEmbedUrl = (id: string, embedProps: EmbedProps): string => {
 
 export const formatDate = (dateString: string): string => {
   return dayjs(dateString).format("MMMM D, YYYY");
+};
+
+export const isElementNode = (
+  node: ElementNode | TextNode
+): node is ElementNode => {
+  return node.type === "element";
 };

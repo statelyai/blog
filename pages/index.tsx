@@ -13,7 +13,6 @@ import { getAllPosts } from "../src/posts";
 import { Post } from "../src/types";
 import Link from "next/link";
 import { Seo } from "../src/Seo";
-import { useMetadata } from "../src/MetadataContext";
 import { formatDate } from "../src/utils";
 import { generateFeed } from "../src/feed";
 
@@ -75,6 +74,7 @@ export const getStaticProps = async () => {
 
   if (process.env.NODE_ENV === "production") {
     const feed = await generateFeed(posts);
+
     fs.mkdirSync("public/feeds/", { recursive: true });
     fs.writeFileSync("public/feeds/rss.xml", feed.rss2());
     fs.writeFileSync("public/feeds/feed.json", feed.json1());
