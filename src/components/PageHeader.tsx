@@ -15,7 +15,7 @@ import {
   MenuList,
   useClipboard,
   IconProps,
-  BoxProps,
+  Text,
   Flex,
 } from "@chakra-ui/react";
 import { Logo } from "./Logo";
@@ -23,7 +23,7 @@ import { Post } from "../types";
 import React, { RefObject, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import FuzzySearch from "fuzzy-search";
-import { CheckIcon, ChevronDownIcon, CopyIcon } from "@chakra-ui/icons";
+import { CheckIcon, CopyIcon } from "@chakra-ui/icons";
 
 const useSearch = (
   posts: Post[],
@@ -90,22 +90,29 @@ const FeedIcon: React.FC<Pick<IconProps, "mt">> = (props) => (
     <rect
       className="button"
       stroke="none"
-      fill="orange"
+      fill="white"
       width="8"
       height="8"
       rx="1.5"
     />
-    <circle className="symbol" stroke="none" fill="white" cx="2" cy="6" r="1" />
+    <circle
+      className="symbol"
+      stroke="none"
+      fill="var(--chakra-colors-black)"
+      cx="2"
+      cy="6"
+      r="1"
+    />
     <path
       className="symbol"
       stroke="none"
-      fill="white"
+      fill="var(--chakra-colors-black)"
       d="m 1,4 a 3,3 0 0 1 3,3 h 1 a 4,4 0 0 0 -4,-4 z"
     />
     <path
       className="symbol"
       stroke="none"
-      fill="white"
+      fill="var(--chakra-colors-black)"
       d="m 1,2 a 5,5 0 0 1 5,5 h 1 a 6,6 0 0 0 -6,-6 z"
     />
   </svg>
@@ -232,6 +239,7 @@ export const PageHeader: React.FC<{ posts: Post[] }> = ({ posts }) => {
                   <MenuItem
                     onClick={onCopy}
                     key={feed}
+                    title="copy"
                     icon={
                       hasCopied ? <CheckIcon color="green.400" /> : <CopyIcon />
                     }
@@ -243,9 +251,9 @@ export const PageHeader: React.FC<{ posts: Post[] }> = ({ posts }) => {
                     >
                       {feed}{" "}
                       {hasCopied && (
-                        <small>
-                          <em>copied</em>
-                        </small>
+                        <Text as="em" fontSize="small">
+                          copied
+                        </Text>
                       )}
                     </Flex>
                   </MenuItem>
