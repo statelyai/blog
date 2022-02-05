@@ -70,7 +70,8 @@ const Home: NextPage<{ posts: Post[] }> = ({ posts }) => {
 };
 
 export const getStaticProps = async () => {
-  const posts = await getAllPosts();
+  // TODO: Generate the feed only when there is a change in the posts
+  const posts = await getAllPosts({ withContent: true });
 
   if (process.env.NODE_ENV === "production") {
     const feed = await generateFeed(posts);

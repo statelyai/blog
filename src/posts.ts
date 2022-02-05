@@ -10,7 +10,13 @@ const getPostFrontMatter = async (fileName: string) => {
   return matter(await fs.readFile(path.join(POSTS_DIR, fileName)));
 };
 
-export const getAllPosts = async (): Promise<Array<Post>> => {
+export const getAllPosts = async (
+  {
+    withContent = false,
+  }: {
+    withContent?: boolean;
+  } = { withContent: false }
+): Promise<Array<Post>> => {
   let posts = [];
   const files = (await fs.readdir(POSTS_DIR)).filter((name) =>
     name.endsWith(".mdx")
@@ -26,7 +32,7 @@ export const getAllPosts = async (): Promise<Array<Post>> => {
       title,
       slug: slugify(title),
       excerpt,
-      content,
+      ...(withContent && { content }),
       fileName,
     } as Post);
   }
