@@ -74,6 +74,7 @@ const createQuestions: (
     choices: authors.map((ch) => ({ title: ch, value: ch })),
     max: 1, // Change this to support multiple authors
     hint: "- Space to select. Return to submit",
+    format: (value) => value[0], // We only support a single author
   },
   {
     type: (prev) => (prev.length === 0 ? "text" : null), // hide this questions if author is picked from the previous question
