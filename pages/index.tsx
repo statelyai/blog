@@ -15,6 +15,7 @@ import Link from "next/link";
 import { Seo } from "../src/Seo";
 import { formatDate } from "../src/utils";
 import { generateFeed } from "../src/feed";
+import { postsCache } from "../lib/postsCache";
 
 const Home: NextPage<{ posts: Post[] }> = ({ posts }) => {
   return (
@@ -70,16 +71,21 @@ const Home: NextPage<{ posts: Post[] }> = ({ posts }) => {
 };
 
 export const getStaticProps = async () => {
-  // TODO: Generate the feed only when there is a change in the posts
   const posts = await getAllPosts({ withContent: true });
 
-  if (process.env.NODE_ENV === "production") {
+  if (
+    (await postsCache.arePostsChanged()) &&
+    process.env.NODE_ENV === "production"
+  ) {
+    console.log("generating feed");
     const feed = await generateFeed(posts);
 
     fs.mkdirSync("public/feeds/", { recursive: true });
     fs.writeFileSync("public/feeds/rss.xml", feed.rss2());
     fs.writeFileSync("public/feeds/feed.json", feed.json1());
     fs.writeFileSync("public/feeds/atom.xml", feed.atom1());
+
+    await postsCache.updatePostsCache();
   }
 
   return { props: { posts } };
