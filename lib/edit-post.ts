@@ -8,7 +8,7 @@ import pick = require("lodash.pick");
 
 function updatePostOnDisk(post: Post): void {
   fs.writeFileSync(
-    path.join(POSTS_DIR, `${post.publishedAt}-${post.slug}.mdx`),
+    path.join(POSTS_DIR, post.fileName),
     makeFrontmatterFromPost(post),
     { encoding: "utf8" }
   );
@@ -32,7 +32,7 @@ const createQuestions: (posts: Post[]) => prompts.PromptObject[] = (posts) => [
 
 (async function main() {
   try {
-    const posts = await getAllPosts();
+    const posts = await getAllPosts({ withContent: true });
     const answers = await prompts(createQuestions(posts));
     const pickedTitle = answers.title[0]; // Since the prompt is of type multiselect but limited to max 1 picked value, it's always a single item array
 
