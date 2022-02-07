@@ -1,7 +1,7 @@
 import { Flex, Button, Text } from "@chakra-ui/react";
 import React from "react";
 
-export const Announcement: React.FC<{ cta?: React.ReactNode }> = ({
+export const Announcement: React.FC<{ cta: React.ReactNode }> = ({
   cta,
   children,
 }) => {
