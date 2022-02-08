@@ -1,8 +1,14 @@
 import { Flex, Button, Text } from "@chakra-ui/react";
 import React from "react";
 
-export const Announcement: React.FC<{ cta?: React.ReactNode }> = ({
+interface AnnouncementProps {
+  cta?: React.ReactNode;
+  href: string;
+}
+
+export const Announcement: React.FC<AnnouncementProps> = ({
   cta,
+  href,
   children,
 }) => {
   return (
@@ -29,8 +35,9 @@ export const Announcement: React.FC<{ cta?: React.ReactNode }> = ({
         color="white"
         as="a"
         textDecoration="none"
-        href="#"
+        href={href}
         width="max-content"
+        target="_blank"
       >
         {cta}
       </Button>
