@@ -26,7 +26,7 @@ Today, I’m going to share **an opinionated, step-by-step guide for building st
 2. A statechart builder, such as [our visual editor](https://stately.ai/editor) or an XState machine in our [XState visualizer](https://stately.ai/viz)
 3. A clear idea of what you’re building. Maybe something you’ve implemented at work? You could also pick something from [XState Catalogue](https://xstate-catalogue.com).
 
-I’ve also build this [process as a statechart](https://stately.ai/registry/editor/d24479eb-ac20-44ae-a7b7-c0910e6247ad), on our visual editor.
+I’ve also built this [process as a statechart](https://stately.ai/registry/editor/d24479eb-ac20-44ae-a7b7-c0910e6247ad) using our visual editor.
 
 ## 1. List all the possible events
 
@@ -69,7 +69,7 @@ Once you have a list of tasks, you need to divide them into two groups.
 
 ### 2a. Services
 
-The first group is for services, tasks where you need to _do something when they finish_. I wrote a [longer guide about this distinction here](/blog/should-this-be-an-action-or-a-service).
+The first group is for services, tasks where you need to _do something when they finish_. I wrote a [longer guide about the distinction between actions and services here](/blog/should-this-be-an-action-or-a-service).
 
 From our list above, these are services:
 
@@ -117,7 +117,7 @@ From our list above, these are actions:
 
 1. **Adding an item to a todo list (in local state)**
 
-Changes to local state are pretty much always fire-and-forget. The reason is that, since we manage the local state ourselves, making updates to it is instant. [XState’s assign action](https://xstate.js.org/docs/guides/context.html#assign-action) is a good example.
+Changes to local state are pretty much always fire-and-forget. The reason is that, since we manage the local state ourselves, updating it is instant. [XState’s assign action](https://xstate.js.org/docs/guides/context.html#assign-action) is a good example.
 
 2. **Focusing an input**
 
@@ -131,7 +131,7 @@ Now that you know _what can happen_ (events) and _what can be done_ (actions & s
 
 It’s always easiest to start at the beginning. Before you add your first state, consider the moment that your statechart gets initiated. What causes your statechart to run? Some examples:
 
-An **authentication** statechart, which manages the state for if the user is logged in to a website or not. This would be started the _first moment_ the user clicks onto any page of your app, and finished when they close your app.
+An **authentication** statechart, which manages the state for whether the user is logged in to a website or not. This would be started the _first moment_ the user clicks on to any page of your app, and finished when they close your app.
 
 A **sign up form** statechart, which handles a user signing up to your app. This might be started when the user visits the `/sign-up` route, and stopped when they exit it.
 
@@ -141,9 +141,9 @@ Now that you know what your app looks like when your statechart gets initiated, 
 
 #### Dynamic initial states
 
-Every statechart _must_ have an initial state, and it can’t be dynamic — i.e. it must be the same every time your statechart runs.
+Every statechart _must_ have an initial state, and it can’t be dynamic — it must be the same every time your statechart runs.
 
-If you feel your statechart _does_ have more than one initial state (i.e. it could start in two different modes) consider using a ‘checking’ state via an [eventless transition](https://xstate.js.org/docs/guides/transitions.html#eventless-always-transitions).
+If you feel your statechart _does_ have more than one initial state (for instance it could start in two different modes) consider using a ‘checking’ state via an [eventless transition](https://xstate.js.org/docs/guides/transitions.html#eventless-always-transitions).
 
 ## 4. Build out the states
 
@@ -181,7 +181,7 @@ If you have an event like this, draw out the new event and either create a new s
 
 Sometimes, [events can be used to fire an action](https://xstate.js.org/docs/guides/actions.html#api) instead of changing state. A good example of this is when a form input changes, and you need to save the new value to local state.
 
-This is called a [self-transition](https://xstate.js.org/docs/guides/transitions.html#self-transitions), where the event doesn’t change the state — i.e. the state transitions to itself.
+This is called a [self-transition](https://xstate.js.org/docs/guides/transitions.html#self-transitions), where the event doesn’t change the state — the state transitions to itself.
 
 #### Events that do nothing
 
@@ -197,4 +197,4 @@ You can also leave parts of your statechart unimplemented, and dive into buildin
 
 I’ve found this approach really useful when getting to grips with what my app does. You can even use a statechart as an early validation tool to confirm that what you’re building is correct.
 
-If you’ve got any more questions, do join our [Discord](https://discord.gg/invite/xstate) and ask in the ‘modelling-help’ channel.
+If you’ve got any more questions, do [join our Discord](https://discord.gg/invite/xstate) and ask in the ‘modelling-help’ channel.
