@@ -17,9 +17,11 @@ Around a month ago, we released [TypeScript Typegen](/blog/introducing-typescrip
 
 We’ve had a great response to it so far, but it’s only been available for VSCode users.
 
-No longer. Now, with our new XState CLI, **you can get Typegen from the command line**.
+Until now. With our new XState CLI, **you can get Typegen from the command line**.
 
-You can read the full documentation on the [`@xstate/cli` docs](https://xstate.js.org/docs/packages/xstate-cli), check out our updated [TypeScript Typegen guide](https://xstate.js.org/docs/guides/typescript.html#typegen), and see the code at the [GitHub repo](https://github.com/statelyai/xstate-tools/tree/main/apps/cli).
+- Read the full documentation on the [`@xstate/cli` docs](https://xstate.js.org/docs/packages/xstate-cli).
+- Check out [our updated TypeScript Typegen guide](https://xstate.js.org/docs/guides/typescript.html#typegen). 
+- Find the code on the [@xstate/cli GitHub repo](https://github.com/statelyai/xstate-tools/tree/main/apps/cli).
 
 ## Installation
 
@@ -35,7 +37,7 @@ OR
 
 `xstate typegen "src/**/*.tsx?"`
 
-Run the typegen against a glob of files. This will scan every file targeted, and generate a typegen file accompanying it. It will also import the typegen into your file, as described in [our typegen documentation](https://xstate.js.org/docs/guides/typescript.html#typegen).
+Run the typegen against a glob of files. This will scan every targeted file and generate a typegen file accompanying it. It will also import the typegen into your file, as described in [our typegen documentation](https://xstate.js.org/docs/guides/typescript.html#typegen).
 
 Ensure you wrap your glob in quotes so that it executes correctly. Otherwise, you’ll get unexpected results.
 
