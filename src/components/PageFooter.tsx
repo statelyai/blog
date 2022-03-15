@@ -54,6 +54,22 @@ export const PageFooter: React.FC = () => (
         </Box>
         <Box as="li">
           <ChakraLink
+            href="https://stately.ai/code-of-conduct/"
+            display="block"
+            padding="5"
+            paddingBottom={{ base: "5", md: "0" }}
+            color="gray.300"
+            borderRightWidth={{ base: "0", md: "1px" }}
+            borderBottomWidth={{ base: "1px", md: "0" }}
+            borderStyle="solid"
+            borderColor="gray.700"
+            _hover={{ color: "white", textDecoration: "underline" }}
+          >
+            Code of conduct
+          </ChakraLink>
+        </Box>
+        <Box as="li">
+          <ChakraLink
             href="https://xstate.js.org/docs"
             display="block"
             padding="5"
@@ -121,7 +137,7 @@ export const PageFooter: React.FC = () => (
         textTransform="uppercase"
         letterSpacing="0.1em"
       >
-        Copyright &copy; Stately, 2021
+        Copyright &copy; Stately, 2022
       </Box>
     </Box>
   </Box>
