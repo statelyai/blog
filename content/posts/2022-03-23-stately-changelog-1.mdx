@@ -1,0 +1,81 @@
+---
+title: "Stately Changelog #1 - Snap To Elements"
+description: The Stately Editor changelog, where we discuss the new things being released to the Stately Editor beta.
+tags:
+  - stately
+  - announcement
+  - editor
+  - beta
+author:
+  - Matt Pocock
+originalURL: ""
+excerpt: ""
+publishedAt: "2022-03-23"
+---
+
+Happy Wednesday! Time for our first Editor Changelog blog, where we'll talk about the new updates we've shipped in the editor.
+
+## Snap To Elements
+
+When you're placing states and events in the canvas, you'll now be able to snap them to surrounding elements.
+
+This is a hugely requested feature and should help make your charts neater and more legible.
+
+<!-- Video -->
+
+So far, we've implemented snapping to the _center_ of elements only. We're keen to [hear your feedback](https://github.com/statelyai/editor-feedback/issues) if you want more snapping!
+
+## Right-click menu
+
+You can now right-click events and states to perform actions like:
+
+- Renaming states/events
+- Making states the 'initial' state
+- Adding guards
+- Turning events into self-transitions
+
+And many more.
+
+<!-- Video -->
+
+## Improvements to VSCode output
+
+We've massively improved the way we handle transition targets in VSCode. Instead of every transition having an ugly `#(machine).state1.state2`, the VSCode extension will now make the most idiomatic choice out of `targetState`, `.targetState`, or `targetState.child`.
+
+```ts
+const machine = createMachine({
+  initial: "a",
+  states: {
+    a: {
+      on: {
+        EVENT: {
+          // Before
+          target: "#(machine).b",
+        },
+      },
+    },
+    b: {},
+  },
+});
+
+const machine = createMachine({
+  initial: "a",
+  states: {
+    a: {
+      on: {
+        EVENT: {
+          // After
+          target: "b",
+        },
+      },
+    },
+    b: {},
+  },
+});
+```
+
+As part of this work, we've also improved the way `internal` is handled - you'll now get proper warnings inside the visual editor when you use `internal` incorrectly.
+
+## Other Improvements
+
+We've been hard at work fixing bugs in the VSCode extension and the CLI. You can keep up to date with those changes in our [`xstate-tools`](https://github.com/statelyai/xstate-tools/releases) repo.
