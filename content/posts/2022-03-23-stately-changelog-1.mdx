@@ -12,7 +12,7 @@ author:
 originalURL: ""
 excerpt: ""
 publishedAt: "2022-03-23"
-ogImage: "https://stately.ai/2022-03-23-stately-changelog-1.png"
+ogImage: "https://stately.ai/blog/2022-03-23-stately-changelog-1.png"
 ---
 
 Happy Wednesday! Time for our first Editor Changelog blog, where we’ll talk about the new updates we’ve shipped in the editor.
@@ -42,13 +42,13 @@ And many more.
 
 ## Visual update for events
 
-We've streamlined the way our events look to make them more visually distinct from states. This new look keeps the focus on the arrow, the direction of travel, and the flow of the chart.
+We’ve streamlined the way our events look to make them more visually distinct from states. This new look keeps the focus on the arrow, the direction of travel, and the flow of the chart.
 
-![](/blog/changelog-1-events.png)
+![Statechart depicting the states of a Matt machine. The states are displayed as large rectangles with slightly rounded corners and lighter grey backgrounds. The events are displayed as smaller pill-shaped rounded rectangles with darker grey backgrounds.](/blog/changelog-1-events.png)
 
 ## Improvements to VSCode output
 
-We've massively improved the way we handle transition targets in VSCode. Instead of every transition having an ugly `#(machine).state1.state2`, the VSCode extension will now make the most idiomatic choice out of `targetState`, `.targetState`, or `targetState.child`.
+We’ve massively improved the way we handle transition targets in VSCode. Instead of every transition having an ugly `#(machine).state1.state2`, the VSCode extension will now make the most idiomatic choice out of `targetState`, `.targetState`, or `targetState.child`.
 
 ```ts
 const machine = createMachine({
