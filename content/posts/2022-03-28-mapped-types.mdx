@@ -1,0 +1,532 @@
+---
+title: mapped types
+description:
+keywords:
+  - typescript
+author: Mateusz Burzyński
+category: entry
+publishedAt: "2022-03-28"
+---
+
+Back in February we've released typegen support in XState ([announcement post](./blog/introducing-typescript-typegen-for-xstate)). It's a way for us to enhance machine's type definitions with some extra information and makes the final type much more strict and correct.
+
+This works by injecting extra property (`tsTypes`) to machine configs. We have built some clever type-plumbing in the `createMachine`'s signature to pass this injected information around and utilize it to produce the final types. Let's explore one of the tricks used there.
+
+## Goals
+
+One of the main goals of this work was to provide type-safe (and inferred!) event types for our actions, delays, guards and services (let's call this group "implementations").
+
+If we take a look at this simple example:
+
+```ts
+type IncrementEvent = { type: "INC"; value: number };
+type ResetEvent = { type: "RESET" };
+
+createMachine(
+  {
+    schema: {
+      events: {} as IncrementEvent | ResetEvent,
+    },
+    context: {
+      count: 0,
+    },
+    on: {
+      INC: {
+        actions: "increment",
+      },
+    },
+  },
+  {
+    actions: {
+      increment: assign((ctx, event) => {
+        return {
+          count: ctx.count + event.value,
+        };
+      }),
+    },
+  }
+);
+```
+
+In this example, ideally, the `event` parameter in the `increment` action would be typed automatically as `IncrementEvent`. Therefore making the `event.value` property access safe and sound. The problem is that our "input" `TEvent` is a union of all the events that a machine can accept and thus we need to somehow narrow down this union to its specific members for all of the implementation types.
+
+This example is very simple but in XState:
+
+- we also have entry and exit actions that are called when a machine actually transitions between states,
+- the same action type can also appear in multiple places in the machine's config.
+
+The only way to be able to properly narrow the input union is to gain the knowledge about the full graph of this machine and its edges. This is a problem that can be solved using standard computer science algorithms for graph traversals. In a language with support for loops, local variables and other constructs this is a fairly easy task. It becomes much less obvious if the only language at our disposal is TypeScript - to pull this off we'd have to resolve all defined transitions at the type-level.
+
+It was being proven to us, by [Devansh](https://twitter.com/devanshj__), that this actually might be possible. The type-level code responsible for it was **very advanced** and hard to grok. The problem with such solutions is that there are not many people who can actually read this level of type wizardy and even less people that could meaningfully edit it and maintain over time.
+
+That's why we've settled on type generation - a simplified solution that still needs more than a pinch of type tricks to work properly.
+
+## Static shape requirement
+
+One thing that we need to understand is that the said injected information has to have a "static" shape. We can't inject any type that expects generic type parameters because such unbounded types are not allowed in TypeScript:
+
+```ts
+type Resolve<T> = T;
+
+createMachine({
+  tsTypes: {} as Resolve, // Generic type 'Process' requires 1 type argument(s).(2314)
+});
+```
+
+This is somewhat limiting because it means that such an injected type can't simply "accept" our usual generics that can be found in a lot of our types, such as `TContext` and `TEvent`.
+
+A strong requirement of our design was also that those generics would still be specified by the user at the `createMachine` call. So we had to figure out how to generate some static shape of an object that could later on be "resolved"/bound with the provided generics in a custom way.
+
+We've settled on a shape resembling something like this:
+
+```ts
+interface Typegen0 {
+  "@@xstate/typegen": true;
+  eventsCausingActions: {
+    increment: "INC";
+  };
+  eventsCausingDelays: never;
+  eventsCausingGuards: never;
+  eventsCausingServices: never;
+  /* ... */
+}
+```
+
+The key takeaway from here is that we are creating a map of, for example, action types to event types that can cause those actions to be called. In here, we don't need to have access to any generics and to any other information contained on the `TEvent` union.
+
+It's also worth noting here that we can freely use `never` in places where no extra information is available because `never` is assignable to everything.
+
+## Resolving (basics)
+
+The next step was just to realize that we can grab the input generics (like `TEvent`) and the injected typegen information and just "stitch" them together. Since all of those are generic parameters and TypeScript allows us actually "process" types with other types, we can create a type just for that - for stitching those things into a single type. One that won't exist anywhere on the outside but one that is going to make our lives way easier internally.
+
+This looks in XState something like this:
+
+```ts
+declare function createMachine<
+  TContext,
+  TEvent extends { type: string },
+  TTypegen
+>(
+  config: MachineConfig<TContext, TEvent, TTypegen>,
+  implementations: MachineImplementations<
+    TContext,
+    ResolveTypegen<TEvent, TTypegen>
+  >
+): void;
+```
+
+Notice here that we pass existing type parameters to `ResolveTypegen` and the result is just passed to `MachineImplementations`.
+
+## Indexing
+
+Once we finally get to providing types for our implementations we will need a way to narrow down the input union to specific events. So basically we'll need a type in place of `GetJustIncrementEvent`:
+
+```ts
+{
+    actions: {
+        incremenet: (ctx: TContext, ev: GetJustIncrementEvent<TResolvedTypegen>)
+    }
+}
+```
+
+I've figured out that I don't want to actually "search through" the `TResolvedTypegen` for each provided implementation separately. Remember that we might be dealing with a huge machine that accept many events, with one that has a lot of implementations. So it seemed that we should also think about performace of our types here.
+
+In here, we can start thinking in a more classic ways of programming - how do I search through an array of items and select interesting items?
+
+```js
+const matchingEvents = allEvents.filter((event) =>
+  matchingEventTypes.includes(event.type)
+);
+```
+
+This simple algorithm has a quadratic complexity - it needs to compare all existing items with all criterion items. Usually, it wouldn't be too bad but, as mentioned, we might want to execute this algorithm many times.
+
+It's quite easy to optimize this algorithm, especially given that `allEvents` are shared for the whole machine. We just need to create a map of all the events up front and map our `matchingEventTypes` using it:
+
+```js
+const eventMap = new Map(allEvents.map((event) => [event.type, event]));
+const matchingEvents = matchingEventTypes.map((type) => eventMap.get(type));
+```
+
+This has linearithmic time complexity (`O(n log n)`)! It's much better for the performance and it turns out that we can actually implement this in TypeScript for our needs.
+
+Let's take a look at what, roughly, we want to achieve and why:
+
+```ts
+// specific types
+type IncrementEvent = { type: "INC"; value: number };
+type DecrementEvent = { type: "DEC"; value: number };
+type ResetEvent = { type: "RESET" };
+
+// union
+type MyEvent = IncrementEvent | DecrementEvent | ResetEvent;
+
+// indexed event map
+type EventMap = {
+  INC: IncrementEvent;
+  DEC: DecrementEvent;
+  RESET: ResetEvent;
+};
+
+// input from the typegen
+type ActionsMap = {
+  increment: "INC";
+  catchAll: "INC" | "DEC" | "RESET";
+};
+
+// showcase what we want to be able to do within `MachineImplementations`
+type Resolved = {
+  [K in keyof ActionsMap]: EventMap[ActionsMap[K]];
+};
+/* `Resolved` now holds a type that looks like this
+type Resolved = {
+    increment: IncrementEvent;
+    catchAll: IncrementEvent | DecrementEvent | ResetEvent;
+}
+*/
+```
+
+We have two important parts here: already resolved `EventMap` and an outline for what we want to do with that `EventMap` in the `MachineImplementations`.
+
+Notice how nicely we get the value of the `Resolved['catchAll']` just by indexing the `EventMap` with a union of strings (that might be a value type within the `ActionsMap` type). TypeScript just expands/distributes the union over that indexed access, making those equivalent:
+
+```ts
+type CatchAllEvents = ActionsMap["INC" | "DEC" | "RESET"];
+type CatchAllEvents2 =
+  | ActionsMap["INC"]
+  | ActionsMap["DEC"]
+  | ActionsMap["RESET"];
+```
+
+Isn't this just nice?
+
+<img
+  src="https://media.giphy.com/media/vra43B4qa17k2p9RSk/giphy.gif"
+  alt="Man with dreamy eyes and 'How nice' text"
+/>
+
+So the remaining thing that I want to explain in this article is how to actually create `EventMap` using a supplied generic.
+
+We can grab our JavaScript implementation from before:
+
+```js
+const eventMap = new Map(allEvents.map((event) => [event.type, event]));
+```
+
+and try to translate it somewhat literally to TypeScript:
+
+```ts
+type UnionToIntersection<T> = (T extends any ? (x: T) => any : never) extends (
+  x: infer R
+) => any
+  ? R
+  : never;
+
+type IndexByType<T extends { type: string }> = UnionToIntersection<
+  T extends any ? { [K in T["type"]]: T } : never
+>;
+```
+
+This solution depends on one hell of a scary `UnionToIntersection` type. I won't be explaining here how does it work because this has already been explained super well by [@ddprrt](https://twitter.com/ddprrt) in his [TypeScript: Union to intersection type](https://fettblog.eu/typescript-union-to-intersection/) article.
+
+All we need to know here is that it transforms a union to intersection through some voodoo magic. Before we hand our intermediate result to that type, we first distribute the input union and create small object types out of it. They are small because they all have a single property each because each of them is created based on just one member of the union. This happens thanks to distribution that kicks in when our conditional type uses a "naked" type parameter.
+
+This solution creates a correct, but somewhat suboptimal, type because it's displayed in our little example like this:
+
+```ts
+type Result = {
+  INC: IncrementEvent;
+} & {
+  DEC: DecrementEvent;
+} & {
+  RESET: ResetEvent;
+};
+```
+
+We can "fix" this by forcing TS to evaluate this intersection using a `Compute` type:
+
+```ts
+type Compute<T> = { [K in keyof T]: T[K] } & unknown;
+
+type IndexByType<T extends { type: string }> = Compute<
+  UnionToIntersection<T extends any ? { [K in T["type"]]: T } : never>
+>;
+```
+
+With that in place the final type gets displayed nicely:
+
+```ts
+type Result = {
+  INC: IncrementEvent;
+  DEC: DecrementEvent;
+  RESET: ResetEvent;
+};
+```
+
+There is no actual difference between those 2 results, they should be functionally-equivalent. However, for readability purposes it might be preferred to use the "computed variant" as the string representation of this type might get printed in some TS tooltips when we make a mistake somewhere or when we simply hover over some type that refers to it.
+
+Quite frankly, I've never reached for the implementation showcased so far. This has only been presented as a comparison to the "JavaScript implementation" and for fun 😉
+
+At the moment, in XState, we are using this implementation:
+
+```ts
+type IndexByType<T extends { type: string }> = {
+  [K in T["type"]]: Extract<T, { type: K }>;
+};
+```
+
+One of our users has pointed out to me though that this falls short when one of the union members have a type property that itself is a union. We could rewrite our example types like this:
+
+```ts
+type MyEvent = { type: "INC" | "DEC"; value: number } | { type: "RESET" };
+type Result = IndexByType<MyEvent>;
+```
+
+If we inspect the `Result` type now we might see that it doesn't match our expectations:
+
+```ts
+type Result = {
+  INC: never;
+  DEC: never;
+  RESET: {
+    type: "RESET";
+  };
+};
+```
+
+Why this has happened here? Let's first check how the `Extract` type is defined:
+
+```ts
+type Extract<T, U> = T extends U ? T : never;
+```
+
+The important bit to understand here is to understand how conditional types work, distributivity and the rules for assignability of object types.
+
+A conditional type usually checks if a given type is a subtype of another type (while potentially inferring some types along the way). So in other words, it checks a condition (based on the subtype-supertype reliationship between two types) and selects the respective branch based on the result of this check.
+
+Distributivity is a hidden property of a conditional type that makes it evaluated differently. When a type is distributive the condition is checked for each union member separately and the result is a union of those per-member results. The `Extract` type is distributive because it operates on a "naked" `T` type - perhaps the best way to showcase what that means is to illustrate with a non-distributive variant of `Extract`:
+
+```js
+type NonDistributiveExtract<T> = [T] extends [U] ? T : never
+```
+
+In this type the `T` has been "wrapped" in tuple type and thus it's not longer naked, it has some kind of a "modifier" around it. Note that the modifier could be an index access (`T['property']`), a type alias instantiation (`TypeAlias<T>`) and more.
+
+So how should we think about assignability object types? A subtype of an object type is a type that has a _more_ specific property or/and additional properties:
+
+```ts
+type IsAssignable = true extends boolean ? 1 : 0;
+//   ^? 1
+type IsAssignable2 = { type: "FOO" } extends { type: string } ? 1 : 0;
+//   ^? 1
+type IsAssignable3 = { type: string; value: number } extends { type: string }
+  ? 1
+  : 0;
+//   ^? 1
+```
+
+Let's see what happens during one of the `Extract` "iterations" (per member check) with our example type:
+
+```ts
+type IsAssignable4 = { type: "INC" | "DEC"; value: number } extends {
+  type: "INC";
+}
+  ? { type: "INC" | "DEC"; value: number }
+  : never;
+```
+
+The type on the left is not assignable to (is not a subtype of) the type on the right! `"INC" | "DEC"` is not a subtype of `"INC"` because not every union member of the type on the left is a subtype of the type on the right.
+
+At this point, we might realize that the relation that we were looking for is actually somewhat **opposite**. It's not totally opposite because we can't simply switch the left type with the right right as this wouldn't pass either:
+
+```ts
+type IsAssignable4 = { type: "INC" } extends {
+  type: "INC" | "DEC";
+  value: number;
+}
+  ? { type: "INC" | "DEC"; value: number }
+  : never;
+```
+
+This doesn't pass because now the type on the left doesn't have all of the properties of the type on the right.
+
+What we want here is to only check the `type` property in reverse:
+
+```ts
+type IsAssignable4 = "INC" extends "INC" | "DEC"
+  ? { type: "INC" | "DEC"; value: number }
+  : never;
+```
+
+And based on that we can rewrite our `IndexByType` in such a way:
+
+```ts
+type IndexByType<T extends { type: string }> = {
+  [K in T["type"]]: T extends any ? (K extends T["type"] ? T : never) : never;
+};
+```
+
+Now we get what we want for this input type:
+
+```ts
+type Result = {
+  INC: {
+    type: "INC" | "DEC";
+    value: number;
+  };
+  DEC: {
+    type: "INC" | "DEC";
+    value: number;
+  };
+  RESET: {
+    type: "RESET";
+  };
+};
+```
+
+This serves us well and has good support because it doesn't rely on any newer TypeScript features. However, there are some performance problems here and that is something that we have wanted to avoid from the beggining. We are checking each union member for each possible event type - that has quadratic complexity, the same one that we've tried to avoid. A slight difference is that now we are precomputing the indexed type once and gonan reuse it for fast access across many places, whereas before each such place was paying that cost on its own.
+
+It turns out that there is a better way to do this. Let's learn [key remapping in mapped types](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-1.html#key-remapping-in-mapped-types) that was introduced in TypeScript 4.1:
+
+```ts
+type IndexByType<T extends { type: string }> = {
+  [E in T as E["type"]]: E;
+};
+```
+
+It's much simpler and already behaves how we want it to. It doesn't have any problems when it comes to handling properties that have union types!
+
+Let's describe what happens here in plain english: iterate through the input union (`T`), assign the current member to `E`, set the key to its type (`E["type"]`) and the value to the current member itself (`E`).
+
+What is really neat here is that we get access to non-string type that we can use to compute the value as long as we "set" the key to a string type. This was not possible before this feature was implemented. We only could iterate over the strings as the current element of the iteration was always also used as the key. So, in the past, we had to retrieve any "non-primitive" type using our current key from some other type - and this is what basically we've been doing in the previous versions of this `IndexByType` type.
+
+Note: we can also use numbers and symbols as the type for the key. I've left it out for brevity of the explanation.
+
+One small issue with this solution is that values still have those string unions as type in them. This isn't incorrect but perhaps it can be viewed as a little bit confusing. Consider the situation from before:
+
+```ts
+{
+  actions: {
+    increment: assign((ctx, event) => {
+      return {
+        count: ctx.count + event.value,
+      };
+    }),
+  },
+}
+```
+
+In here we know that `event.type` can only be of type `"INC"` but if we provide a type for it based on the result of our `IndexByType` then it's going to be of type `"INC" | "DEC"`.
+
+As mentioned, this isn't incorrect and we don't plan to "fix" this in XState as that would potentially add unneccessary overhead to actually narrow this even further. The return of this work would also be questionable, cause if the user declares their event type like this then probably they use those types in their function signatures etc anyway. And that's the only moment where this should matter - when one pass the received `event` to some other code that expect a certain type.
+
+Just for fun we can think through how we could actually solve this problem. The simplest solution that we can try is this:
+
+```ts
+type IndexByType<T extends { type: string }> = {
+  [E in T as E["type"]]: E & { type: E["type"] };
+};
+```
+
+However, this doesn't work properly because the `E` on the right is already the type with a `"type"` property that is the union. After all, this is the exact type that we currently see as those values. We can't easily access the `E["type"]` from the left side (from the key part). So we have to introduce a second pass over this type.
+
+```ts
+type NarrowType<T> = {
+  [K in keyof T]: T[K] & { type: K };
+};
+
+type IndexByType<T extends { type: string }> = NarrowType<{
+  [E in T as E["type"]]: E;
+}>;
+```
+
+This one works but it suffers from the readability problem that we've discussed earlier:
+
+```ts
+type Result = {
+  INC: {
+    type: "INC" | "DEC";
+    value: number;
+  } & {
+    type: "INC";
+  };
+  DEC: {
+    type: "INC" | "DEC";
+    value: number;
+  } & {
+    type: "DEC";
+  };
+  RESET: {
+    type: "RESET";
+  } & {
+    type: "RESET";
+  };
+};
+```
+
+So the solution to this might be to reuse our `Compute` helper from before within `NarrowType`:
+
+```ts
+type NarrowType<T> = {
+  [K in keyof T]: Compute<T[K] & { type: K }>;
+};
+```
+
+and this returns a much more readable type:
+
+```ts
+type Result = {
+  INC: {
+    type: "INC";
+    value: number;
+  };
+  DEC: {
+    type: "DEC";
+    value: number;
+  };
+  RESET: {
+    type: "RESET";
+  };
+};
+```
+
+However, what if our input union would be defined like this?
+
+```ts
+interface ResetEvent {
+  type: "RESET";
+}
+type MyEvent = { type: "INC" | "DEC"; value: number } | ResetEvent;
+```
+
+With a union defined like this we would still get the same result as above. Using `Compute` always produce "anonymous types" so all that we can see is their content being "inlined". But in here we actually gave some name to one of the events - there is `ResetEvent` and it would be great if we could preserve that.
+
+So when do we actually need to use `Compute` in the first place? Only when the `T[K]["type"]` **isn't exactly** matching the `K`. Let's try the adjusted version of the `NarrowType` then:
+
+```ts
+type NarrowType<T> = {
+  [K in keyof T]: T[K]["type"] extends K ? T[K] : Compute<T[K] & { type: K }>;
+};
+```
+
+And with that we get:
+
+- preserved names for event types that have literal type property
+- narrowed down/computed event types for event types that are using unions for their type property
+
+```ts
+type Result = {
+  INC: {
+    type: "INC";
+    value: number;
+  };
+  DEC: {
+    type: "DEC";
+    value: number;
+  };
+  RESET: ResetEvent;
+};
+```
+
+It's also worth noting that our check isn't literally checking if `T[K]["type"]` is exactly the same as `K`. It's checking if it is a subtype of `K`. But we are working on a very strong, practical, assumption that each member of the union has a literal type as its type (or a union of those) and none of them is using `{ type: string }`.
