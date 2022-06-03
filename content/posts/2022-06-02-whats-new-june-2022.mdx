@@ -18,15 +18,15 @@ We’ve had a busy month and have plenty to share with you this June!
 
 ## Another Stately update
 
-In May we welcomed three new people to the Stately team. Kevin Maes and Anders Mellson join us as engineers, and Nick Perich as product designer. Watch all three of them introduce themselves in [our office hours livestream from May 20](https://youtu.be/4WwaSZ-ciRI?t=127).
+In May, we welcomed three new people to the Stately team. Kevin Maes and Anders Mellson join us as engineers, and Nick Perich as our product designer. Watch all three of them introduce themselves in [our office hours live stream from May 20](https://youtu.be/4WwaSZ-ciRI?t=127).
 
 ## XState Test v1 alpha
 
-Last week we released an alpha version of the XState Test package. XState Test helps you get maximum coverage with minimal code by generating your test paths from a state machine. Below are some of the major changes. 
+Last week we released an alpha version of the XState Test package. XState Test helps you get maximum coverage with minimal code by generating your test paths from a state machine. Below are some of the significant changes. 
 
 ### `TestModel` and test paths
 
-We substantially simplified how paths and plans work in `TestModel` including changing `getShortestPlans` and `getSimplePlans` to `getShortestPaths` and `getSimplePaths`. These functions now return an array of paths, instead of an array of plans which contain paths.
+We simplified how paths and plans work in `TestModel`, including changing `getShortestPlans` and `getSimplePlans` to `getShortestPaths` and `getSimplePaths`. These functions now return an array of paths instead of an array of plans which contain paths.
 
 We also added `getPaths`, which defaults to `getShortestPaths` and can be passed a `pathGenerator` to customize how paths are generated.
 
@@ -71,7 +71,7 @@ Now, we seek to cover all transitions by default, resulting in the following pat
 toggledOn → TOGGLE → toggledOff → TOGGLE → toggledOn
 ```
 
-We also moved `events` from `createTestModel` to `path.test` which allows for easier usage of per-test mocks and per-test context.
+We also moved `events` from `createTestModel` to `path.test`, which allows for easier usage of per-test mocks and per-test context.
 
 Old structure:
 
@@ -91,7 +91,7 @@ const paths = model.getPaths().forEach((path) => {
 });
   ```
 
-And we added `states` to `path.test()` which allows you to define your tests outside of your machine, keeping the machine itself easy to read:
+And we added `states` to `path.test()`, which allows you to define your tests outside of your machine, keeping the machine itself easy to read:
 
   ```ts
   const paths = model.getPaths().forEach((path) => {
@@ -106,7 +106,7 @@ And we added `states` to `path.test()` which allows you to define your tests out
 
 ### Event cases
 
-We moved event cases out of `events`, and into their own attribute called `eventCases`:
+We moved event cases out of `events` and into their own attribute called `eventCases`:
 
   ```ts
   const model = createTestModel(machine, {
@@ -135,13 +135,13 @@ We moved event cases out of `events`, and into their own attribute called `event
   });
   ```
 
-`eventCases` will also now always produce a new path, instead of only creating a path for the first case which matches.
+`eventCases` will now always produce a new path instead of only creating a path for the first case that matches.
 
 We also removed `.testCoverage()`, and instead made `getPlans`, `getShortestPlans` and `getSimplePlans` cover all states and transitions enabled by event cases by default.
 
 ### `createTestMachine` and `createTestModel`
 
-We added `createTestMachine`, which provides a slimmed-down API for creating machines which removes these types from the config type signature.
+We added `createTestMachine`, which provides a slimmed-down API for creating machines that removes these types from the config type signature.
 
 We also added validation on `createTestModel` to ensure you don’t include invalid machine configuration in your test machine. Invalid machine configs include `invoke`, `after`, and any actions with a `delay`.
 
@@ -149,7 +149,7 @@ We also added validation on `createTestModel` to ensure you don’t include inva
 
 ## XState v5 alpha
 
-XState v5 is now in alpha after many months of work by Mateusz and David. V5 has many new features, below are some of the highlights.
+XState v5 is now in alpha after many months of work by Mateusz and David. V5 has many new features; below are some of the highlights.
 
 ### `createMachine()`
 
@@ -167,9 +167,9 @@ The `Machine()` function has been removed. Use the `createMachine()` function in
 
 ### Assign actions
 
-Assign actions via `assign()` will now be executed “in order”, rather than automatically prioritized. Assign actions will be evaluated after previously defined actions are evaluated. Actions that read from `context` will have those intermediate values applied, rather than the final resolved value of all `assign()` actions taken, which was the previous behavior.
+Assign actions via `assign()` will now be executed “in order” rather than automatically prioritized. Assign actions will be evaluated after previously defined actions are evaluated. Actions that read from `context` will have those intermediate values applied rather than the final resolved value of all `assign()` actions taken, which was the previous behavior.
 
-The execution order shouldn’t change the behavior for most state machines. To maintain the previous behavior, ensure that `assign()` actions are defined before any other actions.
+The execution order shouldn’t change the behavior of most state machines. To maintain the previous behavior, ensure that `assign()` actions are defined before any other actions.
 
 ### Machine context
 
@@ -200,20 +200,20 @@ All generic types containing `TContext` and `TEvent` will now follow the same, c
 
 1.  `TContext`
 2.  `TEvent`
-3.  … All other generic types, including `TStateSchema,`TTypestate\`, etc.
+3.  … all other generic types, including `TStateSchema, `TTypestate\`, etc.
 
 ```diff
 -const service = interpret<SomeCtx, SomeSchema, SomeEvent>(someMachine);
 +const service = interpret<SomeCtx, SomeEvent, SomeSchema>(someMachine);
 ```
 
-### Removed the context parameter from machine’s transition method
+### Removed the context parameter from the machine’s transition method
 
 We also removed the third parameter (context) from the Machine’s transition method. If you want to transition with a particular context value, you should create appropriate `State` using `State.from`. For example, instead of `machine.transition('green', 'TIMER', { elapsed: 100 })`, you should do the following: `machine.transition(State.from('green', { elapsed: 100 }), 'TIMER')`.
 
 ### Dev tools
 
-Dev tools integration has been simplified. Redux dev tools support is no longer the default but can be included from `xstate/devTools/redux`:
+We have simplified dev tools integration. Redux dev tools support is no longer the default, but you can include it from `xstate/devTools/redux`:
 
 ```js
 import { interpret } from 'xstate';
@@ -252,7 +252,7 @@ const service = interpret(someMachine, {
 
 ### Actions and guards
 
-The `execute` option for an interpreted service has been removed. If you don’t want to execute actions, we recommended that you don’t hardcode implementation details into the base `machine` that will be interpreted, and extend the machine’s `options.actions` instead. By default, the interpreter will execute all actions according to SCXML semantics, immediately upon transition.
+We have removed the `execute` option for an interpreted service. If you don’t want to execute actions, we recommend that you don’t hardcode implementation details into the base `machine` that will be interpreted. Instead, you should extend the machine’s `options.actions`. The interpreter will execute all actions according to SCXML semantics immediately upon transition by default.
 
 The `in: ...` property for transitions has been removed and replaced with guards. We recommended you use `stateIn()` and `not(stateIn())` guard creators instead:
 
@@ -274,7 +274,7 @@ XState v5 now has support for higher-level guards, which are guards that can com
 
 - `and([guard1, guard2, /* ... */])` returns `true` if _all_ guards evaluate to truthy, otherwise `false`
 - `or([guard1, guard2, /* ... */])` returns `true` if _any_ guard evaluates to truthy, otherwise `false`
-- `not(guard1)` returns `true` if a single guard evaluates to `false`, otherwise `true`
+- `not(guard1)` returns `true` if a single guard evaluates to `false` otherwise, `true`
 
 ```js
 import { and, or, not } from 'xstate/guards';
@@ -345,7 +345,7 @@ SOME_EVENT: {
 }
 ```
 
-The `cond` property in transition config objects has been renamed to `guard`. This is a breaking change. The change unifies terminology for guarded transitions and guard predicates which were previously called “cond” or “conditional” predicates:
+We’ve renamed the `cond` property in transition config objects to `guard`. This is a breaking change. The change unifies terminology for guarded transitions and guard predicates which we previously called “cond” or “conditional” predicates:
 
 ```diff
 someState: {
@@ -359,9 +359,9 @@ someState: {
 }
 ```
 
-The interface for guard objects has changed. Notably, all guard parameters should be placed in the `params` property of the guard object:
+The interface for guard objects has changed. Notably, you should place all guard parameters in the `params` property of the guard object:
 
-The following example is taken from [Custom Guards](https://xstate.js.org/docs/guides/guards.html#custom-guards):
+The following example is from [Custom Guards](https://xstate.js.org/docs/guides/guards.html#custom-guards):
 
 ```diff
 -cond: {
@@ -391,9 +391,9 @@ someState: {
 
 ### History
 
-The `state.history` property has been removed. This does not affect the machine “history” mechanism.
+We’ve removed the `state.history` property; this does not affect the machine “history” mechanism.
 
-Storing previous state should now be done explicitly:
+Storing the previous state should now be done explicitly:
 
 ```js
 let previousState;
@@ -449,16 +449,16 @@ The following handlers have also been removed, as they are redundant and can all
 - `service.onSend()`
 - `service.onChange()`
 
-The `service.send(...)` method no longer returns the next state and is a `void` (fire-and-forget) function. The `service.sender(...)` method has been removed as redundant, use `service.send(...)` instead.
+The `service.send(...)` method no longer returns the next state and is a `void` (fire-and-forget) function. We’ve removed the redundant `service.sender(...)` method; use `service.send(...)` instead.
 
 
 ### Activities
 
-Activities have been removed, this is a breaking change. Since activities can be considered invoked services, they can be implemented as such. Activities are services that do not send any events back to the parent machine, nor do they receive any events, other than a “stop” signal when the parent changes to a state where the activity is no longer active. You can model this the same way as a callback service is modeled.
+In another breaking change, we have removed activities. Since you could consider activities as invoked services, you can implement them as such. Activities are services that do not send any events back to the parent machine, nor do they receive any events other than a “stop” signal when the parent changes to a state where the activity is no longer active. You can model this the same way as a callback service.
 
 ### And so much more…
 
-We also removed previously deprecated properties, added support for prefix wildcard event descriptors and much much more. Read all the release notes and in the [XState v5 tag release notes](https://github.com/statelyai/xstate/releases/tag/xstate%405.0.0-alpha.0).
+We also removed previously deprecated properties, added support for prefix wildcard event descriptors, and much more. Read all the release notes and in the [XState v5 tag release notes](https://github.com/statelyai/xstate/releases/tag/xstate%405.0.0-alpha.0).
 
 ## Light mode in the Stately visual editor
 
@@ -472,6 +472,6 @@ Toggle “Switch to light mode” in the editor’s menu to view the editor in l
 
 ## And there’s more to come!
 
-Want to know more about what we’ve got planned? [Check out our Roadmap](https://xstate.js.org/docs/roadmap/). Got any feedback, or want to suggest features? [Share your thoughts in the XState discussions](https://github.com/statelyai/xstate/discussions).
+Want to know more about what we’ve got planned? [Check out our Roadmap](https://xstate.js.org/docs/roadmap/). Got any feedback or want to suggest features? [Share your thoughts in the XState discussions](https://github.com/statelyai/xstate/discussions).
 
 We’re also looking for your feedback on XState snippets, errors in XState, and more in our [Stately RFCs (Requests for comments)](https://github.com/statelyai/rfcs).
