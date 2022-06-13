@@ -66,11 +66,22 @@ By default, a post will use the blog’s default open graph image (`/public/og-i
 Images must be in `.png` file format. Use the open graph templates in Canva, or ask @laurakalbag to create an image for you.
 
 To override the default image with a new image:
-1. Save your image in the `/public` folder with the same filename as its corresponding blog post. *Note: the corresponding filename is not necessary for the functioning of the open graph images, but improves the maintainability of the public folder.*
+
+1. Save your image in the `/public` folder with the same filename as its corresponding blog post. _Note: the corresponding filename is not necessary for the functioning of the open graph images, but improves the maintainability of the public folder._
 2. Add the `ogImage` field to the frontmatter of the blog post using the absolute URL:
+
 ```
   ogImage: "https://stately.ai/blog/2019-11-13-no-disabling-a-button-is-not-app-logic.png"
 ```
+
+#### Creating your own image using Figma
+
+We have a Figma file containing the images used for the blog posts. You can use this as a template to create your custom image. To create an image, you need to:
+
+1. Install our desktop font from the [assets repo](https://github.com/statelyai/assets/tree/main/fonts/desktop-fonts).
+2. Install [Figma Desktop](https://www.figma.com/downloads/) on your machine (this needs to run on your device at least once for Figma to pick up the font you installed in step 1).
+3. Open [our Figma file](https://www.figma.com/file/M1xwuMVxii1MRKL14yGFIP/Stately-Social-Media?node-id=13%3A317) and look under the "Open Graph" page.
+4. Clone an existing image, adjust it to your liking and export it as a png file. See example:
 
 ### Test meta tags and Open Graph locally
 
