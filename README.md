@@ -83,6 +83,8 @@ We have a Figma file containing the images used for the blog posts. You can use 
 3. Open [our Figma file](https://www.figma.com/file/M1xwuMVxii1MRKL14yGFIP/Stately-Social-Media?node-id=13%3A317) and look under the "Open Graph" page.
 4. Clone an existing image, adjust it to your liking and export it as a png file. See example:
 
+https://user-images.githubusercontent.com/167574/173333000-3f83b0a7-2ada-40a8-b578-4e41fdf3a63a.mp4
+
 ### Test meta tags and Open Graph locally
 
 1. Run the development server to spawn a local server on port 3000:<br/>
