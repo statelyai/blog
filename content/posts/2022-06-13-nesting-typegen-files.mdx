@@ -1,0 +1,38 @@
+---
+title: "Nesting XState typegen files"
+description: What is file nesting in VS Code and how to enable it for XState's generated type files.
+tags:
+  - stately
+  - extension
+  - open source
+  - xstate
+  - vscode
+author:
+  - Anders Bech Mellson
+publishedAt: "2022-06-13"
+ogImage: "https://stately.ai/blog/2022-06-13-nesting-typegen-files.png"
+---
+
+Our latest [XState VS Code extension](https://marketplace.visualstudio.com/items?itemName=statelyai.stately-vscode) update has made it easy to enable file nesting for type gen files. But what is it?
+
+## Explorer File Nesting
+
+VS Code [introduced file nesting](https://code.visualstudio.com/updates/v1_67#_explorer-file-nesting) in version 1.67 back in April of 2022. This feature is elegant as it allows you to group related files in the explorer view of VS Code.
+
+Our friend; Erik Rasmussen quickly found that this feature works well with the generated type files for XState. Thanks to Erik for his great idea!
+
+<Tweet id="1522611081528573956" />
+
+## Show me
+
+This is how the explorer in VS Code looks without file nesting enabled when you have a machine source file alongside a generated type file for that machine.
+
+![VS Code explorer view with an XState machine alongside the types generated for it.](./images/without-typegen.png)
+
+And this is how it looks after enabling file nesting for typegen files. Now it allows you to hide the generated file behind the source if you want to.
+
+![Animated GIF showing how it looks when you toggle nesting of a generated type file.](./images/with-typegen.gif)
+
+If you’re using our VS Code extension and haven’t manually enabled file nesting for typegen files, you will see a helper prompt allowing you to enable file nesting with 1 click.
+
+Ps. If you’re unsure what typegen is in XState, read this post where it was introduced: https://stately.ai/blog/introducing-typescript-typegen-for-xstate.
