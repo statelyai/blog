@@ -1,0 +1,165 @@
+---
+title: XState vs Redux
+description: awd
+tags:
+  - ""
+  - xstate
+  - open source
+  - typescript
+  - react
+  - redux
+author:
+  - - Matt Pocock
+originalURL: ""
+excerpt: ""
+publishedAt: "2022-05-10"
+---
+
+Intro
+
+## tl;dr
+
+- XState can totally replace Redux as a global store
+- XState is more flexible - it can also operate at the component level, replacing local component state
+- XState can live alongside Redux, with Redux handling the global state and XState handling the local state
+- We think XState's side effect management is better than redux-saga, redux-observable etc.
+- XState is as good as Redux at only re-rendering when needed
+- We think applications built with XState are easier to maintain than those built with Redux
+
+## Background
+
+We love Redux. The Redux maintainers are friends of ours, and we've taken a lot of inspiration from the way they work. The Redux docs are some of the best in the open-source world, and `@reduxjs/toolkit` has revolutionised how Redux apps are developed.
+
+However, if we were to choose a state manager to build a frontend app today, we'd choose XState.
+
+### Which flavour of Redux?
+
+In this article, I'm going to refer to take 'Redux' to mean 'Modern Redux' - the version that uses `@reduxjs/toolkit`. The '2018 Redux' techniques (like `createStore`, `combineReducers`) are largely discouraged and [you should probably be using Redux Toolkit](https://redux.js.org/introduction/why-rtk-is-redux-today).
+
+## Replacing Redux
+
+> Can I use XState as a global store?
+
+Let's start the comparison here. You can replace 100% of your Redux code with XState code, and your app will work the same. XState can act as a global store which can receive events, update a data store, and manage side effects.
+
+Just like Redux, XState can work across frameworks - you can use it in Vanilla JS, React, React Native, Vue, Svelte, or even in Node. Anywhere that JavaScript runs, both XState and Redux will run.
+
+That means if you're committed to the Flux architecture, where your data is mostly stored at the root of your app, you can do the same thing in XState.
+
+### Reducers vs Statecharts
+
+Both XState and Redux have a similar setup for global state. You set up a single global 'root' of your app, composed of multiple smaller parts. In Redux, these are reducers, which mostly look like this:
+
+```ts
+const reducer = (state = { todos: [] }, event) => {
+  if (event.type === "ADD_TODO") {
+    return {
+      ...state,
+      todos: state.todos.concat(event.todo),
+    };
+  }
+  return state;
+};
+```
+
+You take in a state and an event. Based on how the event (for instance, `ADD_TODO`) interacts with the current state (a list of todo items), you return the new state.
+
+Redux Toolkit adds some sugar syntax over this, including `immer` for safe mutable updates:
+
+```ts
+export const todoSlice = createSlice({
+  name: "todo",
+  initialState: {
+    todos: [],
+  },
+  reducers: {
+    addTodo: (state, event) => {
+      state.todos.push(event.todo);
+    },
+  },
+});
+```
+
+<!-- Example here showing the differences -->
+
+## Why XState?
+
+> If they do the same thing, why would I choose XState over Redux?
+
+XState lets you visualise your code, making maintenance a breeze.
+
+XState makes impossible things impossible.
+
+XState has built-in side effect management.
+
+XState is more flexible.
+
+## What's the learning curve?
+
+### Best of friends
+
+You can use XState and Redux together _in the same app_. XState doesn't _need_ to be
+
+### Bundle Size
+
+### Architecture
+
+## Themes
+
+Side effect management (middleware vs native)
+
+Reducers vs Statecharts
+
+Application architecture
+
+## Questions
+
+Can you use XState as a Redux replacement?
+
+Yes.
+
+---
+
+Can you handle a single global store with XState?
+
+Yes.
+
+---
+
+How does XState handle side effects?
+
+XState has native, all-in-one control of side effects.
+
+---
+
+Can you use middleware with XState?
+
+It depends on what you're planning on using the middleware for.
+
+---
+
+Can XState and Redux live together?
+
+Yes, in several different ways.
+
+---
+
+Can Redux handle 'selecting' state to reduce renders?
+
+Yes, with `useInterpret` and `useSelector`.
+
+---
+
+Redux has strong opinions about your app architecture. What are XState's opinions?
+
+---
+
+Redux's dev tools are awesome. What does XState have?
+
+---
+
+How does the TypeScript experience compare?
+
+---
+
+Reducers vs Statecharts
