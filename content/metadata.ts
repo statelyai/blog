@@ -32,7 +32,7 @@ export const makeMetadata = ({
   title,
   description,
   authors: AUTHORS,
-  canonical: originalURL,
+  canonical: originalURL || undefined,
   openGraph: {
     url,
     title,
