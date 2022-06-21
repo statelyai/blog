@@ -117,7 +117,7 @@ const PostPage: React.FC<{
         title={post.title}
         description={post.description}
         url={`${[DEFAULT_URL, post.slug].join("/")}`}
-        originalURL={post.originalURL}
+        originalURL={post.originalURL || undefined}
         article={{
           authors: [post.author],
           publishedTime: post.publishedAt,
