@@ -11,7 +11,7 @@ author:
   - Matt Pocock
 originalURL: ""
 excerpt: "XState can be used wherever JavaScript runs, whether on the backend or frontend. Because the code it creates can be visualized, it's great at handling complex use cases."
-publishedAt: "2022-06-20"
+publishedAt: "2022-06-21"
 ---
 
 # What is XState used for?
@@ -22,7 +22,7 @@ Let's look at each use case one-by-one.
 
 ## On the web
 
-XState can be used in any frontend application to manage state. It has first-class integrations for [React](TODO), [Vue](TODO), [Svelte](TODO), as well as an upcoming [Solid](TODO) integration. It also works well in [Angular](TODO) without any integrations needed.
+XState can be used in any frontend application to manage state. It has first-class integrations for [React](https://reactjs.org/), [Vue](https://vuejs.org/), [Svelte](https://svelte.dev/), as well as an upcoming [Solid](https://www.solidjs.com/) integration. It also works well in [Angular](https://angularjs.org/) without any integrations needed.
 
 You can try it in a Vanilla JS app by running this simple piece of code:
 
@@ -60,29 +60,29 @@ A great example of this is the library [Zag.js](https://zagjs.com/components/rea
 
 ### Global state
 
-You can also use XState to manage global state in your apps. A common pattern is the [Flux](TODO) architecture, where you dispatch events to a single top-level store. Parts of your app can subscribe to updates from that store, using [selectors](TODO).
+You can also use XState to manage global state in your apps. A common pattern is the [Flux](https://facebook.github.io/flux/docs/in-depth-overview/) architecture, where you dispatch events to a single top-level store. Parts of your app can subscribe to updates from that store, using [selectors](https://redux.js.org/usage/deriving-data-selectors).
 
-XState can replace global state managers like [Redux](TODO) or [Vuex](TODO), with one major benefit - your global state can be visualised and [visually edited](TODO). XState gives you the ability to create a global store, dispatch events to it, and subscribe to only the pieces that matter. See our specific instructions in [React](TODO) for more info.
+XState can replace global state managers like [Redux](https://redux.js.org/) or [Vuex](https://vuex.vuejs.org/), with one major benefit - your global state can be visualised and [visually edited](https://stately.ai/editor). XState gives you the ability to create a global store, dispatch events to it, and subscribe to only the pieces that matter. See our specific instructions in [React](https://xstate.js.org/docs/recipes/react.html#global-state-react-context) for more info.
 
 ## Native/extensions
 
-XState is also extremely useful in [React Native](TODO) or [Electron](TODO) apps, Browser extensions and IDE extensions. Since XState doesn't use any browser API's, you can use it anywhere JavaScript runs.
+XState is also extremely useful in [React Native](https://reactnative.dev/) or [Electron](https://www.electronjs.org/) apps, Browser extensions and IDE extensions. Since XState doesn't use any browser API's, you can use it anywhere JavaScript runs.
 
 For instance, we use XState at Stately to [co-ordinate our VSCode extension](https://github.com/statelyai/xstate-tools/blob/6a91d6a5cdd4cf73c882175a2ad5fbe3b2a9910d/apps/extension/client/src/editorWebviewScript.ts#L90). [Centered](https://www.centered.app/) uses XState extensively in their Electron and React Native apps to co-ordinate timers, control app updates and handle complex user interactions.
 
 ## Backend
 
-You can use XState in [Node.js](TODO) or [Deno](TODO) to build [lambda functions](TODO) or persistent servers.
+You can use XState in [Node.js](https://nodejs.org/en/) or [Deno](https://deno.land/) to build [serverless functions](https://vercel.com/docs/concepts/functions/serverless-functions) or persistent servers.
 
-For lambda functions, XState exposes a function called [`waitFor`](TODO), which allows you to wait for a state machine to be in a certain state. This allows you to use XState inside `async` functions with ease.
+For lambda functions, XState exposes a function called [`waitFor`](https://xstate.js.org/docs/guides/interpretation.html#waitfor), which allows you to wait for a state machine to be in a certain state. This allows you to use XState inside `async` functions with ease.
 
-To learn more about XState in the backend, see our [recent video](TODO) introducing the topic.
+To learn more about XState in the backend, see our [recent video](https://www.youtube.com/watch?v=qqyQGEjWSAw) introducing the topic.
 
 ## Scripting and CLI's
 
 XState can be used when running scripts or CLI's to co-ordinate long-running processes.
 
-The most famous example of this in the wild is the frontend framework [Gatsby](TODO). They use XState in their build process and development server to co-ordinate file-system changes and parallelize multiple processes. This means their entire build system is visualisable - an incredibly boon for such a complex process.
+The most famous example of this in the wild is the frontend framework [Gatsby](https://www.gatsbyjs.com/). They use XState in their build process and development server to co-ordinate file-system changes and parallelize multiple processes. This means their entire build system is visualisable - an incredibly boon for such a complex process.
 
 ## Summary
 
