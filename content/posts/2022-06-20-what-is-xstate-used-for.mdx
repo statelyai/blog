@@ -1,6 +1,6 @@
 ---
 title: What is XState used for?
-description: XState can be used wherever JavaScript runs, whether on the backend or frontend. Because the code it creates can be visualized, it's great at handling complex use cases.
+description: XState can be used wherever JavaScript runs, whether on the backend or frontend. Because the code it creates can be visualized, it’s great at handling complex use cases.
 tags:
   - xstate
   - react
@@ -11,13 +11,13 @@ author:
   - Matt Pocock
 originalURL: ""
 ogImage: "https://stately.ai/blog/2022-06-21-what-is-xstate-used-for.png"
-excerpt: "XState can be used wherever JavaScript runs, whether on the backend or frontend. Because the code it creates can be visualized, it's great at handling complex use cases."
+excerpt: "XState can be used wherever JavaScript runs, whether on the backend or frontend. Because the code it creates can be visualized, it’s great at handling complex use cases."
 publishedAt: "2022-06-21"
 ---
 
-XState can be used wherever JavaScript runs, whether on the backend or frontend. Because the code it creates can be visualized, it's great at handling complex use cases - being able to see what a complex piece of code does can be extremely useful.
+XState can be used wherever JavaScript runs, whether on the backend or frontend. Because the code it creates can be visualized, it’s great at handling complex use cases - being able to see what a complex piece of code does can be extremely useful.
 
-Let's look at each use case one-by-one.
+Let’s look at each use case one-by-one.
 
 ## On the web
 
@@ -47,15 +47,15 @@ const machine = createMachine({
 interpret(machine).start();
 ```
 
-In this example, the machine will wait for 2 seconds, then call `alert()` to let you know it's alive.
+In this example, the machine will wait for 2 seconds, then call `alert()` to let you know it’s alive.
 
-There are plenty of ways XState can be used on the frontend - let's talk about two of the most common patterns:
+There are plenty of ways XState can be used on the frontend - let’s talk about two of the most common patterns:
 
 ### Complex components
 
 Most frontend apps split their code into components - individual pieces which can be reused across the app. If need to build a complex component, you can use XState to co-ordinate it.
 
-A great example of this is the library [Zag.js](https://zagjs.com/components/react/accordion), which is using XState-style syntax and statecharts to build reusable components across frameworks. You can even [see them visualized](https://state-machine-viz.vercel.app/accordion) using Stately's tools.
+A great example of this is the library [Zag.js](https://zagjs.com/components/react/accordion), which is using XState-style syntax and statecharts to build reusable components across frameworks. You can even [see them visualized](https://state-machine-viz.vercel.app/accordion) using Stately’s tools.
 
 ### Global state
 
@@ -65,7 +65,7 @@ XState can **replace global state managers like [Redux](https://redux.js.org/) o
 
 ## Native/extensions
 
-XState is also extremely useful in [React Native](https://reactnative.dev/) or [Electron](https://www.electronjs.org/) apps, Browser extensions and IDE extensions. Since XState doesn't use any browser API's, you can use it anywhere JavaScript runs.
+XState is also extremely useful in [React Native](https://reactnative.dev/) or [Electron](https://www.electronjs.org/) apps, Browser extensions and IDE extensions. Since XState doesn’t use any browser API’s, you can use it anywhere JavaScript runs.
 
 For instance, we use XState at Stately to [co-ordinate our VSCode extension](https://github.com/statelyai/xstate-tools/blob/6a91d6a5cdd4cf73c882175a2ad5fbe3b2a9910d/apps/extension/client/src/editorWebviewScript.ts#L90). [Centered](https://www.centered.app/) uses XState extensively in their Electron and React Native apps to co-ordinate timers, control app updates and handle complex user interactions.
 
@@ -77,12 +77,12 @@ For lambda functions, XState exposes a function called [`waitFor`](https://xstat
 
 To learn more about XState in the backend, see our [recent video](https://www.youtube.com/watch?v=qqyQGEjWSAw) introducing the topic.
 
-## Scripting and CLI's
+## Scripting and CLIs
 
-XState can be used when running scripts or CLI's to co-ordinate long-running processes.
+XState can be used when running scripts or CLIs to co-ordinate long-running processes.
 
 The most famous example of this in the wild is the frontend framework [Gatsby](https://www.gatsbyjs.com/). They use XState in their build process and development server to co-ordinate file-system changes and parallelize multiple processes. This means their entire build system is visualisable - an incredibly boon for such a complex process.
 
 ## Summary
 
-XState works anywhere JS runs - and folks are using it in the wild for _all sorts_ or use cases. Any time you're building something that feels remotely complex, you can use XState to simplify your code and enable powerful visual tooling.
+XState works anywhere JS runs - and folks are using it in the wild for _all sorts_ of use cases. Any time you’re building something that feels remotely complex, you can use XState to simplify your code and enable powerful visual tooling.
