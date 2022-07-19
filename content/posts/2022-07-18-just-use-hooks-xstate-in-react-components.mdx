@@ -171,7 +171,7 @@ This separation of code also means that **team members who are more familiar wit
 
 ### Caveats
 
-If the only thing you need to do in a single component is toggle a boolean flag then creating a machine and, on top of that, a hook, may feel like a fair amount of ceremony. Splitting code into two different files has the usual tradeoffs. Also, understanding how changing the the `initialOn` prop works with the state machine's own internal state can be a bit tricky although we'd still need to transition the machine to a non-initial state, in a similar way, from within a component that calls `useMachine()`.
+If you only have one component and all you need to do is toggle a boolean flag, then creating a machine and a hook on top of that may feel like unnecessary ceremony. Splitting code into two different files has the usual tradeoffs. Also, understanding how changing the the `initialOn` prop works with the state machine's own internal state can be a bit tricky although we'd still need to transition the machine to a non-initial state, in a similar way, from within a component that calls `useMachine()`.
 
 ### Summary
 
