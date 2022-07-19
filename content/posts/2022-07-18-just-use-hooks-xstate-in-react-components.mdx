@@ -18,11 +18,11 @@ excerpt: "XState can be easily added to React components by using custom machine
 ogImage: "https://stately.ai/blog/2022-07-18-just-use-hooks-xstate-in-react-components.png"
 ---
 
-Are you a React developer using XState to model your application logic? Perhaps you’ve heard of XState but have been looking for an easy way to try it out in one of your projects. If so, then I’d like to share with you a pattern I was introduced to when first diving into codebase at Stately, that of using custom machine hooks. This lightweight, reusable way to integrate XState into React components is a delight to work with and I think you might like it as much as I do!
+Are you a React developer using [XState](https://xstate.js.org/) to model your application logic? Perhaps you’ve heard of XState but have been looking for an easy way to try it out in one of your projects. If so, then I’d like to share with you a pattern I was introduced to when first diving into codebase at Stately, that of using **custom machine hooks**. This lightweight, reusable way to integrate XState into React components is a delight to work with and I think you might like it as much as I do!
 
 ### Introduction
 
-In this post I’ll review the most common way to use the `@xstate/react` library in a project. I’ll then demonstrate how encapsulation and reuse of state machines can be achieved by using hooks in your components, with some examples. I’ll also touch on the advantages and disadvantages to using this level of abstraction.
+In this post I’ll review the most common way to use the [`@xstate/react`](https://xstate.js.org/docs/packages/xstate-react/) library in a project. I’ll then demonstrate how encapsulation and reuse of state machines can be achieved by using hooks in your components, with some examples. I’ll also touch on the advantages and disadvantages to using this level of abstraction.
 
 For more background, you can check out [“Just Use Props”: An opinionated guide to React and XState](https://dev.to/mattpocockuk/just-use-props-an-opinionated-guide-to-react-and-xstate-fc9) by Matt Pocock.
 
@@ -162,7 +162,7 @@ Our hook returns an array of just these values much like `useState` or `useMachi
 
 ### Using the hook in a component
 
-What does this look like for the Toggler component to now use our `useToggleMachine` hook? It looks pretty good!
+What does this look like for the `Toggler` component to now use our `useToggleMachine` hook? It looks pretty good!
 
 ```tsx
 const Toggler = () => {
@@ -174,7 +174,7 @@ const Toggler = () => {
 
 In that example, we use the value of `isActive` to specify the button’s text but it could easily be used for other purposes in this component or as a prop to pass down to child components.
 
-For the Toggler component’s `onChange` handler, we set its value to be the `toggle` function. Since that is already wrapping XState’s `send()` method, we don’t even need to wrap this in an anonymous function. It all just works as is, in a tidy functional style.
+For the `Toggler` component’s `onChange` handler, we set its value to be the `toggle` function. Since that is already wrapping XState’s `send()` method, we don’t even need to wrap this in an anonymous function. It all just works as is, in a tidy functional style.
 
 ### Reusability
 
