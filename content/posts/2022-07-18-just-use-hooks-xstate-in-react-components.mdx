@@ -1,5 +1,5 @@
 ---
-title: '"Just Use Hooks": XState in React Components'
+title: '“Just Use Hooks”: XState in React Components'
 description:
   Use custom machine hooks to integrate XState machines into your React
   components.
@@ -22,9 +22,9 @@ Are you a React developer using XState to model your application logic? Perhaps 
 
 ### Introduction
 
-In this post I’ll review the most common way to use `XState/react` library in a project. I'll then demonstrate how encapsulation and reuse of state machines can be achieved by using hooks in your components, with some examples. I'll also touch on the advantages and disadvantages to using this level of abstraction.
+In this post I’ll review the most common way to use `XState/react` library in a project. I’ll then demonstrate how encapsulation and reuse of state machines can be achieved by using hooks in your components, with some examples. I’ll also touch on the advantages and disadvantages to using this level of abstraction.
 
-For more background, you can check out ["Just Use Props": An opinionated guide to React and XState](https://dev.to/mattpocockuk/just-use-props-an-opinionated-guide-to-react-and-xstate-fc9) by Matt Pocock.
+For more background, you can check out [“Just Use Props”: An opinionated guide to React and XState](https://dev.to/mattpocockuk/just-use-props-an-opinionated-guide-to-react-and-xstate-fc9) by Matt Pocock.
 
 After years of usage in the wild, and in response to confusion and frustration about hooks, the React Team has been putting a lot of effort into making the use of hooks clearer and simpler. Now is the perfect time to re-explore how hooks, when used effectively, can help make component creation easier.
 
@@ -36,7 +36,7 @@ As a reference, here is the [Quick Start example](https://xstate.js.org/docs/pac
 
 ![The example from XState/react documentation that shows a toggle machine being created with the createMachine function and that machine passed to the useMachine hook.](2022-07-18-useMachine-hook-example.png)
 
-This example shows how you can then evaluate `state.value` to render the corresponding UI for the toggle state and you can also call `send('TOGGLE')` in a button's `onClick` handler to toggle the state.
+This example shows how you can then evaluate `state.value` to render the corresponding UI for the toggle state and you can also call `send('TOGGLE')` in a button’s `onClick` handler to toggle the state.
 
 Similarly, one could access other state methods and properties like `state.matches()`, `state.can()`, `state.hasTag()`, or even `state.context` to evaluate state and show the correct UI.
 
@@ -44,7 +44,7 @@ Similarly, one could access other state methods and properties like `state.match
 
 But what if your component really doesn’t need access to all of those features when using a machine? That’s where the custom machine hook comes into play. We can still create a machine and pass it to the `useMachine` hook but this can all be done inside of the custom hook.
 
-Here's an example of what that custom hook might look like, including a [React/TypeScript CodeSandbox version](https://codesandbox.io/s/usetogglemachine-example-1-y47c6o):
+Here’s an example of what that custom hook might look like, including a [React/TypeScript CodeSandbox version](https://codesandbox.io/s/usetogglemachine-example-1-y47c6o):
 
 ```ts
 import { useMachine } from "@xstate/react";
@@ -96,7 +96,7 @@ Why might we opt for this extra layer of abstraction? Well, consider what we nee
 2. Pass the machine to the `useMachine` hook.
 3. Expose the most relevant pieces to our component.
 
-From this hook, we can expose a minimal interface to components. In fact, we don't even need to export the machine at all. By encapsulating the XState code, we allow components to focus on their core task, rendering UI as a function of data/props. Sweet!
+From this hook, we can expose a minimal interface to components. In fact, we don’t even need to export the machine at all. By encapsulating the XState code, we allow components to focus on their core task, rendering UI as a function of data/props. Sweet!
 
 Our `useToggleMachine` hook now fully manages a toggle state for any component that uses it. This is now more resuable since a single component can create multiple instances of `useToggleMachine`. Similarly, multiple components can instantiate this hook one or more times to keep track of multiple, separate toggle states.
 
@@ -106,7 +106,7 @@ Let’s dive deeper into a the details of this `useToggleMachine` hook.
 
 #### Hook Params
 
-If you recall, we initialized our machine to start out in its “off” state by specifying `initial: ‘off’` in the machines config object. But we’re also receiving an `initialOn` value as the one and only argument passed into this hook. If that value is false or omitted, since it defaults to false, then the inital value will be in sync with the machine's default state.
+If you recall, we initialized our machine to start out in its “off” state by specifying `initial: ‘off’` in the machines config object. But we’re also receiving an `initialOn` value as the one and only argument passed into this hook. If that value is false or omitted, since it defaults to false, then the inital value will be in sync with the machine’s default state.
 
 But what if we want to start out with `initialOn` passed in as `true`? We need a way to immediately transiton our machine away from its own initial state to be synchronized with the incoming `initialOn` value. We accomplish this by using the infamous `useEffect` hook.
 
@@ -122,7 +122,7 @@ We can include `initialOn` in the dependency array for `useEffect` and our machi
 
 #### Return Values
 
-We've looked at the input param for `useToggleMachine` so now let's look at its return values.
+We’ve looked at the input param for `useToggleMachine` so now let’s look at its return values.
 
 ```ts
 const isOn = state.matches("on");
@@ -131,9 +131,9 @@ const toggle = () => send("TOGGLE");
 return [isOn, toggle];
 ```
 
-We have a boolean `isOn` value which is derived from the state of the machine, the raison d'être of this hook. This is a simple mapping of one of two machine states to a boolean in this example. But you can imagine how states of a more complex machine might be derived from evaluating matches on the current state, possible next events, and even tags. Vist the [docs on state methods](https://xstate.js.org/docs/guides/states.html#state-methods-and-properties) for details.
+We have a boolean `isOn` value which is derived from the state of the machine, the raison d’être of this hook. This is a simple mapping of one of two machine states to a boolean in this example. But you can imagine how states of a more complex machine might be derived from evaluating matches on the current state, possible next events, and even tags. Vist the [docs on state methods](https://xstate.js.org/docs/guides/states.html#state-methods-and-properties) for details.
 
-We also have a `toggle` function which enables us to toggle the state of the machine. It's an anonymous function wrapping the call to XState's `send('TOGGLE')`.
+We also have a `toggle` function which enables us to toggle the state of the machine. It’s an anonymous function wrapping the call to XState’s `send('TOGGLE')`.
 
 Our hook returns an array of just these values much like `useState` or `useMachine` would and they should be destructured in the component.
 
@@ -149,9 +149,9 @@ const Toggler = () => {
 };
 ```
 
-In that example, we use the value of `isOn` to specify the button's text but it could easily be used for other purposes in this component or as a prop to pass down to child components.
+In that example, we use the value of `isOn` to specify the button’s text but it could easily be used for other purposes in this component or as a prop to pass down to child components.
 
-For the Toggler component's `onChange` handler, we set its value to be the `toggle` function. Since that is already wrapping XState's `send()` method, we don't even need to wrap this in an anonymous function. It all just works as is, in a tidy functional style.
+For the Toggler component’s `onChange` handler, we set its value to be the `toggle` function. Since that is already wrapping XState’s `send()` method, we don’t even need to wrap this in an anonymous function. It all just works as is, in a tidy functional style.
 
 ### Reusability
 
@@ -171,14 +171,14 @@ This separation of code also means that **team members who are more familiar wit
 
 ### Caveats
 
-If you only have one component and all you need to do is toggle a boolean flag, then creating a machine and a hook on top of that may feel like unnecessary ceremony. Splitting code into two different files has the usual tradeoffs. Also, understanding how changing the the `initialOn` prop works with the state machine's own internal state can be a bit tricky although we'd still need to transition the machine to a non-initial state, in a similar way, from within a component that calls `useMachine()`.
+If you only have one component and all you need to do is toggle a boolean flag, then creating a machine and a hook on top of that may feel like unnecessary ceremony. Splitting code into two different files has the usual tradeoffs. Also, understanding how changing the the `initialOn` prop works with the state machine’s own internal state can be a bit tricky although we’d still need to transition the machine to a non-initial state, in a similar way, from within a component that calls `useMachine()`.
 
 ### Summary
 
-We saw a baseline example of how components usually use the `useMachine` hook from `XState/react` with a [complete example](https://codesandbox.io/s/usetogglemachine-example-1-y47c6o?file=/src/index.tsx) of how to separate the machine into its own custom `useToggleMachine` hook for comparison. We covered implementation details for this hook, as well as how to wire it up in a React component. I've offered several benefits that I believe make this abstraction worthwhile like incremental adoption and future feature scaling.
+We saw a baseline example of how components usually use the `useMachine` hook from `XState/react` with a [complete example](https://codesandbox.io/s/usetogglemachine-example-1-y47c6o?file=/src/index.tsx) of how to separate the machine into its own custom `useToggleMachine` hook for comparison. We covered implementation details for this hook, as well as how to wire it up in a React component. I’ve offered several benefits that I believe make this abstraction worthwhile like incremental adoption and future feature scaling.
 
 ### Next Steps
 
-Again, the toggle example is a small yet usable example for creating a machine with XState and wrapping it in a hook. But we can take this even further. What about combining multiple machines into a single hook? How about overriding implmentation details of a hook on a per usage basis? I'll be exploring these patterns and more in some upcoming blog posts so stay tuned!
+Again, the toggle example is a small yet usable example for creating a machine with XState and wrapping it in a hook. But we can take this even further. What about combining multiple machines into a single hook? How about overriding implmentation details of a hook on a per usage basis? I’ll be exploring these patterns and more in some upcoming blog posts so stay tuned!
 
 In the meantime, if you like using XState then keep creating your own machines and try wrapping those in custom hooks to use in your components. Additonally, you can build upon machine/hook examples in these posts for your own purposes and even find machines in the [Discovery section of the Stately Studio](https://stately.ai/registry/discover) and turn those into hooks. Whatever path you take, I hope you **get hooked on using XState** to make your UI more robust and more reusable!
