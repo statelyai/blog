@@ -129,7 +129,7 @@ Let’s dive deeper into a the details of this `useToggleMachine` hook.
 
 #### Hook params
 
-If you recall, we initialized our machine to start out in its “off” state by specifying `initial: ‘off’` in the machines config object. But we’re also receiving an `initialActive` value as the one and only argument passed into this hook. If that value is false or omitted, since it defaults to false, then the inital value will be in sync with the machine’s default state.
+If you recall, we initialized our machine to start out in its “inactive” state by specifying `initial: ‘inactive’` in the machines config object. But we’re also receiving an `initialActive` value as the one and only argument passed into this hook. If that value is false or omitted, since it defaults to false, then the inital value will be in sync with the machine’s default state.
 
 But what if we want to start out with `initialActive` passed in as `true`? We need a way to immediately transiton our machine away from its own initial state to be synchronized with the incoming `initialActive` value. We accomplish this by using the infamous `useEffect` hook.
 
