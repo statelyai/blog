@@ -1,5 +1,5 @@
 ---
-title: '“Just Use Hooks”: XState in React Components'
+title: "“Just Use Hooks”: XState in React Components"
 description:
   Use custom machine hooks to integrate XState machines into your React
   components.
@@ -32,9 +32,37 @@ After years of usage in the wild, and in response to confusion and frustration a
 
 For those of you who are already using XState with React, you’re probably already used to creating a machine using `createMachine()` and then passing that machine to the `useMachine` hook from within a component.
 
-As a reference, here is the [Quick Start example](https://xstate.js.org/docs/packages/xstate-react/#quick-start) from the `@xstate/react` docs, where a `toggleMachine` is created and then passed to `useMachine` for use in a component.
+Here is a modified version of the [Quick Start example](https://xstate.js.org/docs/packages/xstate-react/#quick-start) from the `@xstate/react` docs, where a `toggleMachine` is created and then passed to `useMachine` for use in a component.
 
-![The example from XState/react documentation that shows a toggle machine being created with the createMachine function and that machine passed to the useMachine hook.](2022-07-18-useMachine-hook-example.png)
+```tsx
+import { useMachine } from "@xstate/react";
+import { createMachine } from "xstate";
+
+const toggleMachine = createMachine({
+  id: "toggle",
+  initial: "inactive",
+  states: {
+    inactive: {
+      on: { TOGGLE: "active" },
+    },
+    active: {
+      on: { TOGGLE: "inactive" },
+    },
+  },
+});
+
+export const Toggler = () => {
+  const [state, send] = useMachine(toggleMachine);
+
+  return (
+    <button onClick={() => send("TOGGLE")}>
+      {state.value === "inactive"
+        ? "Click to activate"
+        : "Active! Click to deactivate"}
+    </button>
+  );
+};
+```
 
 This example shows how you can then evaluate `state.value` to render the corresponding UI for the toggle state and you can also call `send('TOGGLE')` in a button’s `onClick` handler to toggle the state.
 
@@ -58,33 +86,33 @@ const toggleMachine = createMachine({
     events: {} as Event,
   },
   id: "toggle",
-  initial: "off",
+  initial: "inactive",
   states: {
-    off: {
-      on: { TOGGLE: "on" },
+    inactive: {
+      on: { TOGGLE: "active" },
     },
-    on: {
-      on: { TOGGLE: "off" },
+    active: {
+      on: { TOGGLE: "inactive" },
     },
   },
 });
 
 export const useToggleMachine = (
-  initialOn: boolean = false
+  initialActive: boolean = false
 ): [boolean, () => void] => {
   const [state, send] = useMachine(toggleMachine);
 
   useEffect(() => {
-    if (initialOn && state.matches("off")) {
+    if (initialActive && state.matches("inactive")) {
       send("TOGGLE");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialOn]);
+  }, [initialActive]);
 
-  const isOn = state.matches("on");
+  const isActive = state.matches("active");
   const toggle = () => send("TOGGLE");
 
-  return [isOn, toggle];
+  return [isActive, toggle];
 };
 ```
 
@@ -106,32 +134,32 @@ Let’s dive deeper into a the details of this `useToggleMachine` hook.
 
 #### Hook params
 
-If you recall, we initialized our machine to start out in its “off” state by specifying `initial: ‘off’` in the machines config object. But we’re also receiving an `initialOn` value as the one and only argument passed into this hook. If that value is false or omitted, since it defaults to false, then the inital value will be in sync with the machine’s default state.
+If you recall, we initialized our machine to start out in its “off” state by specifying `initial: ‘off’` in the machines config object. But we’re also receiving an `initialActive` value as the one and only argument passed into this hook. If that value is false or omitted, since it defaults to false, then the inital value will be in sync with the machine’s default state.
 
-But what if we want to start out with `initialOn` passed in as `true`? We need a way to immediately transiton our machine away from its own initial state to be synchronized with the incoming `initialOn` value. We accomplish this by using the infamous `useEffect` hook.
+But what if we want to start out with `initialActive` passed in as `true`? We need a way to immediately transiton our machine away from its own initial state to be synchronized with the incoming `initialActive` value. We accomplish this by using the infamous `useEffect` hook.
 
 ```ts
 useEffect(() => {
-  if (initialOn && state.matches("off")) {
+  if (initialActive && state.matches("inactive")) {
     send("TOGGLE");
   }
-}, [initialOn]);
+}, [initialActive]);
 ```
 
-We can include `initialOn` in the dependency array for `useEffect` and our machine will override its own initial state only if and when that value changes as the hook is initialized. Otherwise, our hook maintains the source of truth for the toggle state.
+We can include `initialActive` in the dependency array for `useEffect` and our machine will override its own initial state only if and when that value changes as the hook is initialized. Otherwise, our hook maintains the source of truth for the toggle state.
 
 #### Return values
 
 We’ve looked at the input param for `useToggleMachine` so now let’s look at its return values.
 
 ```ts
-const isOn = state.matches("on");
+const isActive = state.matches("active");
 const toggle = () => send("TOGGLE");
 
-return [isOn, toggle];
+return [isActive, toggle];
 ```
 
-We have a boolean `isOn` value which is derived from the state of the machine, the raison d’être of this hook. This is a simple mapping of one of two machine states to a boolean in this example. But you can imagine how states of a more complex machine might be derived from evaluating matches on the current state, possible next events, and even tags. Vist the [docs on state methods](https://xstate.js.org/docs/guides/states.html#state-methods-and-properties) for details.
+We have a boolean `isActive` value which is derived from the state of the machine, the raison d’être of this hook. This is a simple mapping of one of two machine states to a boolean in this example. But you can imagine how states of a more complex machine might be derived from evaluating matches on the current state, possible next events, and even tags. Vist the [docs on state methods](https://xstate.js.org/docs/guides/states.html#state-methods-and-properties) for details.
 
 We also have a `toggle` function which enables us to toggle the state of the machine. It’s an anonymous function wrapping the call to XState’s `send('TOGGLE')`.
 
@@ -141,15 +169,15 @@ Our hook returns an array of just these values much like `useState` or `useMachi
 
 What does this look like for the Toggler component to now use our `useToggleMachine` hook? It looks pretty good!
 
-```ts
+```tsx
 const Toggler = () => {
-  const [isOn, toggle] = useToggleMachine(false); // Or pass true.
+  const [isActive, toggle] = useToggleMachine(false); // Or pass true.
 
-  return <button onClick={toggle}>Click me ({isOn ? "✅" : "❌"})</button>;
+  return <button onClick={toggle}>Click me ({isActive ? "✅" : "❌"})</button>;
 };
 ```
 
-In that example, we use the value of `isOn` to specify the button’s text but it could easily be used for other purposes in this component or as a prop to pass down to child components.
+In that example, we use the value of `isActive` to specify the button’s text but it could easily be used for other purposes in this component or as a prop to pass down to child components.
 
 For the Toggler component’s `onChange` handler, we set its value to be the `toggle` function. Since that is already wrapping XState’s `send()` method, we don’t even need to wrap this in an anonymous function. It all just works as is, in a tidy functional style.
 
@@ -171,7 +199,7 @@ This separation of code also means that **team members who are more familiar wit
 
 ### Caveats
 
-If you only have one component and all you need to do is toggle a boolean flag, then creating a machine and a hook on top of that may feel like unnecessary ceremony. Splitting code into two different files has the usual tradeoffs. Also, understanding how changing the the `initialOn` prop works with the state machine’s own internal state can be a bit tricky although we’d still need to transition the machine to a non-initial state, in a similar way, from within a component that calls `useMachine()`.
+If you only have one component and all you need to do is toggle a boolean flag, then creating a machine and a hook on top of that may feel like unnecessary ceremony. Splitting code into two different files has the usual tradeoffs. Also, understanding how changing the the `initialActive` prop works with the state machine’s own internal state can be a bit tricky although we’d still need to transition the machine to a non-initial state, in a similar way, from within a component that calls `useMachine()`.
 
 ### Summary
 
