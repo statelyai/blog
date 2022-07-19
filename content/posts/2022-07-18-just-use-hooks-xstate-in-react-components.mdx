@@ -32,7 +32,7 @@ After years of usage in the wild, and in response to confusion and frustration a
 
 For those of you who are already using XState with React, you’re probably already used to creating a machine using `createMachine()` and then passing that machine to the `useMachine` hook from within a component.
 
-Here is the code from the [Quick Start example](https://xstate.js.org/docs/packages/xstate-react/#quick-start) in the `@xstate/react` docs, where a `toggleMachine` ([view in the Editor](https://stately.ai/registry/editor/5e6286ca-5075-42da-9af8-99358530a0ac)) is created and then passed to `useMachine` for use in a component.
+Here is the code from the [Quick Start example](https://xstate.js.org/docs/packages/xstate-react/#quick-start) in the `@xstate/react` docs, where a `toggleMachine` ([view in the Editor](https://stately.ai/registry/editor/5e6286ca-5075-42da-9af8-99358530a0ac)) is created with `createMachine()` and then passed to `useMachine()` for use in a component.
 
 ```tsx
 import { useMachine } from "@xstate/react";
