@@ -28,7 +28,7 @@ For more background, you can check out [“Just Use Props”: An opinionated gui
 
 After years of usage in the wild, and in response to confusion and frustration about hooks, the React Team has been putting a lot of effort into making the use of hooks clearer and simpler. Now is the perfect time to re-explore how hooks, when used effectively, can help make component creation easier.
 
-### XState in React Components
+### XState in React components
 
 For those of you who are already using XState with React, you’re probably already used to creating a machine using `createMachine()` and then passing that machine to the `useMachine` hook from within a component.
 
@@ -40,7 +40,7 @@ This example shows how you can then evaluate `state.value` to render the corresp
 
 Similarly, one could access other state methods and properties like `state.matches()`, `state.can()`, `state.hasTag()`, or even `state.context` to evaluate state and show the correct UI.
 
-### A Custom Machine Hook
+### A custom machine hook
 
 But what if your component really doesn’t need access to all of those features when using a machine? That’s where the custom machine hook comes into play. We can still create a machine and pass it to the `useMachine` hook but this can all be done inside of the custom hook.
 
@@ -104,7 +104,7 @@ Related: If you’re wondering about how to create a global machine hook then ha
 
 Let’s dive deeper into a the details of this `useToggleMachine` hook.
 
-#### Hook Params
+#### Hook params
 
 If you recall, we initialized our machine to start out in its “off” state by specifying `initial: ‘off’` in the machines config object. But we’re also receiving an `initialOn` value as the one and only argument passed into this hook. If that value is false or omitted, since it defaults to false, then the inital value will be in sync with the machine’s default state.
 
@@ -120,7 +120,7 @@ useEffect(() => {
 
 We can include `initialOn` in the dependency array for `useEffect` and our machine will override its own initial state only if and when that value changes as the hook is initialized. Otherwise, our hook maintains the source of truth for the toggle state.
 
-#### Return Values
+#### Return values
 
 We’ve looked at the input param for `useToggleMachine` so now let’s look at its return values.
 
@@ -165,7 +165,7 @@ const [isDarkMode, toggleLightDarkMode] = useToggleMachine(true);
 
 In a future blog post we can explore ways to compose machine hooks to build up more sophisticated machines from reusable parts, not unlike how small reusable functions are typically composed to create larger functions.
 
-### Team Specialization
+### Team specialization
 
 This separation of code also means that **team members who are more familiar with XState can create and manage machine hooks** with autonomy. Meanwhile, their teammates, who may be less familiar with state machines or with XState, can still rapidly churn out UI components that will, nevertheless, be backed by the power of state machines. This greatly **facilitates incremental adoption**. You can begin using XState in small bits and pieces right away, neither needing to design your entire application as a large statechart nor rewrite everything to fit that way of working.
 
@@ -177,7 +177,7 @@ If you only have one component and all you need to do is toggle a boolean flag, 
 
 We saw a baseline example of how components usually use the `useMachine` hook from `XState/react` with a [complete example](https://codesandbox.io/s/usetogglemachine-example-1-y47c6o?file=/src/index.tsx) of how to separate the machine into its own custom `useToggleMachine` hook for comparison. We covered implementation details for this hook, as well as how to wire it up in a React component. I’ve offered several benefits that I believe make this abstraction worthwhile like incremental adoption and future feature scaling.
 
-### Next Steps
+### Next steps
 
 Again, the toggle example is a small yet usable example for creating a machine with XState and wrapping it in a hook. But we can take this even further. What about combining multiple machines into a single hook? How about overriding implmentation details of a hook on a per usage basis? I’ll be exploring these patterns and more in some upcoming blog posts so stay tuned!
 
