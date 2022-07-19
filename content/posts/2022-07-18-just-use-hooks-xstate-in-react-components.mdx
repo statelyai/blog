@@ -149,7 +149,7 @@ const Toggler = () => {
 };
 ```
 
-In that example, we use the value of `isOn` to specify the button's text but it could easily be used for other purposes in this component as a prop to pass down to child components.
+In that example, we use the value of `isOn` to specify the button's text but it could easily be used for other purposes in this component or as a prop to pass down to child components.
 
 For the Toggler component's `onChange` handler, we set its value to be the `toggle` function. Since that is already wrapping XState's `send()` method, we don't even need to wrap this in an anonymous function. It all just works as is, in a tidy functional style.
 
