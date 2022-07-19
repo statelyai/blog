@@ -79,12 +79,7 @@ import { useMachine } from "@xstate/react";
 import { useEffect } from "react";
 import { createMachine } from "xstate";
 
-type Event = { type: "TOGGLE" };
-
 const toggleMachine = createMachine({
-  schema: {
-    events: {} as Event,
-  },
   id: "toggle",
   initial: "inactive",
   states: {
