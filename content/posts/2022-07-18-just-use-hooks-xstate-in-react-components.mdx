@@ -153,7 +153,7 @@ In that example, we use the value of `isOn` to specify the button's text but it 
 
 For the Toggler component's `onChange` handler, we set its value to be the `toggle` function. Since that is already wrapping XState's `send()` method, we don't even need to wrap this in an anonymous function. It all just works as is, in a tidy functional style.
 
-### Reuse
+### Reusability
 
 As you can see, this pattern separates our normal React component code from our state machine implementation which keeps files neat and focused. Hooks make for more reusable machines across many components and in different situations. A `useToggleMachine` may be used to represent a toggle switch in one component but it might also represent the showing or hiding of UI or something else in another component.
 
