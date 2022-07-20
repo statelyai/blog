@@ -1,23 +1,24 @@
-# Official Stately.ai engineering blog
+# Official Stately.ai blog
 
 A [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 - [Install](#install)
 - [Run locally](#run-locally)
 - [Create a new blog post](#create-a-new-blog-post)
+- [Writing style guide](#writing-style-guide)
 - [Shortcodes](#shortcodes)
 
 ## Install
 
-1. Clone the engineering blog repository to your machine:<br/>
-   `$ git clone git@github.com:statelyai/eng-blog.git`
-2. Navigate into the engineering blog folder:<br/>
-   `$ cd eng-blog`
+1. Clone the blog repository to your machine:<br/>
+   `$ git clone git@github.com:statelyai/blog.git`
+2. Navigate into the blog folder:<br/>
+   `$ cd blog`
 3. Install [yarn package manager](https://yarnpkg.com) globally if you don’t already have yarn installed on your machine:<br/>
    `$ npm install -g yarn`
 4. Install the dependencies for this project:<br/>
    `$ yarn`
-5. You’re ready to run the engineering blog
+5. You’re ready to run the blog
 
 ## Run locally
 
@@ -37,10 +38,10 @@ Blog posts are stored inside [content/posts](content/posts).
 4. Save your file to live refresh the local server and preview your post at [http://localhost:3000/](http://localhost:3000/). If your changes aren”t visible, you may need to stop and restart the local server to trigger a rebuild:<br/>
    `$ ^C`<br/>
    `$ yarn dev`
-5. Commit and push your Git branch to the eng-blog repository:<br/>
+5. Commit and push your Git branch to the blog repository:<br/>
    `$ git commit -am "Add new blog post"`<br/>
    `$ git push origin my-blog-post-branch-name`
-6. [Create a pull request on GitHub](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests) for your Git branch to the eng-blog repository to request that the post is published to the live site.
+6. [Create a pull request on GitHub](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests) for your Git branch to the blog repository to request that the post is published to the live site.
 
 ### Edit existing post
 
@@ -98,6 +99,10 @@ https://user-images.githubusercontent.com/167574/173333000-3f83b0a7-2ada-40a8-b5
 - [Twitter card validator](https://cards-dev.twitter.com/validator)
 - [LinkedIn post inspector](https://www.linkedin.com/post-inspector/)
 - [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/) (requires Facebook login)
+
+## Writing style guide
+
+The Stately team can access our writing style guide in the Stately Notion: Best Practices database. Eventually, we intend to make this style guide public.
 
 ## Shortcodes
 
