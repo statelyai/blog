@@ -102,7 +102,103 @@ https://user-images.githubusercontent.com/167574/173333000-3f83b0a7-2ada-40a8-b5
 
 ## Writing style guide
 
-The Stately team can access our writing style guide in the Stately Notion: Best Practices database. Eventually, we intend to make this style guide public.
+Below is a summary of the most useful best practices for writing on the Stately blog. These are not exhaustive! If you’re unsure and want an opinion or further guidance, let Laura know on [the Stately Discord](https://discord.gg/xstate)!
+
+### Use US English
+
+As we’re a company founded in the US. 
+
+Example:
+
+👍 Do: Visualizer<br/>
+👎 Don’t: Visualiser
+
+### Plain English
+
+Write clear and concise sentences. Use as few words as possible, but enough so people can easily understand your message the first time through.
+
+- Be inclusive, and avoid jargon only certain audiences would understand.
+- Organize text into small sections separated by headings and subheadings.
+- Use short, simple sentences.
+- Use bulleted or numbered lists to organize information.
+
+#### Avoid unclear words: thing, it, this, those, these
+
+Avoid unclear words that could be replaced by more specific words that clarify the meaning.
+
+Example:
+
+👍 Do: … when you create a machine. Create a machine by adding…<br/>
+👎 Don’t: … when you create a machine. Create it by adding…
+
+#### Avoid presumptuous language.
+
+Avoid phrases the following words and phrases that make assumptions about the reader’s knowledge and make them feel bad if they don’t understand.
+
+- Just
+- Simply
+- Of course
+- Naturally
+- Obviously
+- Clearly
+
+#### Writing good alternative text
+
+- When you use a graphic with legible text, the alt text must contain the graphic’s exact text.
+- Don’t include the words “image of” or “graphic of” as screenreaders will already provide that information to the user.
+    - Sometimes, it’s appropriate to say that a graphic is a drawing, caricature, photograph, diagram, if it’s relevant to its context.
+- Except for acronyms, avoid typing your alt text in all caps. All caps causes some screenreaders to spell the letters instead of speaking them as words.
+- Try to describe the image within the context it’s being used. Describe what’s notable inside the image. If the image is accompanied by text, don’t repeat information already used in the text.
+- Use a period “.” at the end of the alternative text. Many screenreaders will use this to identify the end of the text and give a natural pause before moving on to the next content.
+
+Example:
+
+![Statechart for a new viz machine with an initial state of preview transitioning to a release/open to public state.](/public/writing-guide-viz-image.png)
+
+👍 Do: Statechart for a new viz machine with an initial state of preview transitioning to a release/open to public state.<br/>
+👎 Don’t: Image of a statechart
+
+### Punctuation
+
+#### Speech marks and apostrophes
+
+- Use curly quotes for speech marks in text and straight quotes for quotes in code.
+- When using speech marks for whole sentences, the closing speech mark follows the sentence’s closing period, question mark or exclamation mark.
+
+Example of curly quotes:
+
+👍 Do: “This quote’s apostrophe is also curly, as well as the quote marks either side.”<br/>
+👎 Don’t: "This quote's apostrophe is straight, as well as the quote marks either side".
+
+Example of quote marks in code:
+
+👍 Do: `<img alt="fluffy dog wearing a top hat"/>`<br/>
+👎 Don’t: `<img alt=“fluffy dog wearing a top hat”/>`
+
+### Structuring content
+
+#### Headings
+
+Capitalize only the first word in a heading or title, unless it’s a name. Avoiding the overuse of capitals will aid readability and help readers distinguish between names and general terms.
+
+Example:
+
+👍 Do: **Delayed events and transitions**<br/>
+👎 Don’t: **Delayed Events And Transitions**
+
+#### Italics, bold , strong and emphasized text
+
+Avoid using italics, bold, strong and emphasized text unless absolutely necessary. A page with too much textual highlighting becomes confusing and annoying.
+
+#### Link text
+
+When including links in text, be sure the linked text is descriptive of its destination and/or purpose. Use unique link titles for each link destination. Never use “click here.”
+
+👍 Do: [Finite-state machine article on Wikipedia](https://en.wikipedia.org/wiki/Finite-state_machine).<br/>
+👎 Don’t: For the Finite-state machine article on Wikipedia, [click here](https://en.wikipedia.org/wiki/Finite-state_machine.).<br/>
+👎 Don’t: Finite-state machine article on Wikipedia: [https://en.wikipedia.org/wiki/Finite-state_machine](https://en.wikipedia.org/wiki/Finite-state_machine).<br/>
+👎 Don’t: Finite-state machine article [on Wikipedia](https://en.wikipedia.org/wiki/Finite-state_machine).<br/>
+👎 Don’t: [Finite-state machine article](https://en.wikipedia.org/wiki/Finite-state_machine) on Wikipedia.
 
 ## Shortcodes
 
