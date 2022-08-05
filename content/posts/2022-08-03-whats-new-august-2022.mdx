@@ -20,7 +20,20 @@ Our [XState VS Code extension](https://marketplace.visualstudio.com/items?itemNa
 
 ### `xsm` snippet
 
-Use our new `xsm` snippet ([Anders says “think **X** **S**tate **M**achine”](https://youtu.be/EkhWpJfVLDo?t=155)) with the latest version of the extension to insert a state machine template into your code, with the cursor ready for you to type the name of the machine. Just give your machine a name, hit “Open visual editor,” and you’ll be able to continue creating your machine with the visual editor.
+Use our new `xsm` snippet ([Anders says “think **X** **S**tate **M**achine”](https://youtu.be/EkhWpJfVLDo?t=155)) with the latest version of the extension to insert a state machine template into your code, with the cursor ready for you to type the name of the machine. 
+
+```js
+import { createMachine } from 'xstate';
+const nameOfMachine = createMachine({
+  id: 'nameOf',
+  initial: 'initialState',
+  states: {
+    initialState: {},
+  }
+});
+```
+
+Just give your machine a name, hit “Open visual editor,” and you’ll be able to continue creating your machine with the visual editor.
 
 ![Statechart showing a no nodes selected state then an event of using cmd/ctrl + A transitioning to an all node selected state.](xsm-snippet.gif)
 
@@ -52,7 +65,7 @@ We’ve made some small changes that have significantly changed how machines loo
 
 ![State machine for editor improvements, starting in a July state, transitioning through an event of “Canvas improvements go live” with a description saying “We've made many small improvements to the canvas in the last month.” Ending in a parent state of August with a child state of “My machines are so easy to read!”.](august-22-editor-improvements.png)
 
-The transition line drawing algorithm has been improved further for straighter, more reasonable lines with fewer bends. The lines are now highlighted on hover, making them easier to select. We'll continue to improve the algorithm so that it's more intelligent about drawing even better lines.
+The transition line drawing algorithm has been improved further for straighter, more reasonable lines with fewer bends. The lines are now highlighted on hover, making them easier to select. We’ll continue to improve the algorithm so that it’s more intelligent about drawing even better lines.
 
 We’ve also removed the terminal squares at the end of the transition lines and put a little space between the transition lines and nodes. These subtle changes make the machines look less crowded, helping you focus more on your modeling.
 
