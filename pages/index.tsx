@@ -31,7 +31,7 @@ const Home: NextPage<{ posts: Post[] }> = ({ posts }) => {
             fontWeight="normal"
             fontSize={{ base: "4xl", md: "5xl" }}
           >
-            Engineering Blog
+            Blog
           </Heading>
           <List
             spacing="4"
