@@ -72,37 +72,30 @@ Similarly, one could access other state methods and properties like `state.match
 
 But what if your component really doesn’t need access to all of those features when using a machine? That’s where the custom machine hook comes into play. We can still create a machine and pass it to the `useMachine` hook but this can all be done inside of the custom hook.
 
-Here’s an example of what that custom hook might look like, including a [React/TypeScript CodeSandbox version](https://codesandbox.io/s/usetogglemachine-example-1-y47c6o):
+Here’s an example of what that custom hook might look like, including a [React/TypeScript CodeSandbox version](https://codesandbox.io/s/usetogglemachine-example-1-lazy-machine-8zcbvs?file=/src/Toggler.tsx):
 
 ```ts
 import { useMachine } from "@xstate/react";
 import { useEffect } from "react";
 import { createMachine } from "xstate";
 
-const toggleMachine = createMachine({
-  id: "toggle",
-  initial: "inactive",
-  states: {
-    inactive: {
-      on: { TOGGLE: "active" },
-    },
-    active: {
-      on: { TOGGLE: "inactive" },
-    },
-  },
-});
-
 export const useToggleMachine = (
   initialActive: boolean = false
 ): [boolean, () => void] => {
-  const [state, send] = useMachine(toggleMachine);
-
-  useEffect(() => {
-    if (initialActive && state.matches("inactive")) {
-      send("TOGGLE");
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialActive]);
+  const [state, send] = useMachine(() =>
+    createMachine({
+      id: "toggle",
+      initial: initialActive ? "active" : "inactive",
+      states: {
+        inactive: {
+          on: { TOGGLE: "active" },
+        },
+        active: {
+          on: { TOGGLE: "inactive" },
+        },
+      },
+    })
+  );
 
   const isActive = state.matches("active");
   const toggle = () => send("TOGGLE");
@@ -131,9 +124,12 @@ Let’s dive deeper into a the details of this `useToggleMachine` hook.
 
 If you recall, we initialized our machine to start out in its “inactive” state by specifying `initial: 'inactive'` in the machines config object. But we’re also receiving an `initialActive` value as the one and only argument passed into this hook. If that value is false or omitted, since it defaults to false, then the inital value will be in sync with the machine’s default state.
 
-But what if we want to start out with `initialActive` passed in as `true`? We need a way to immediately transiton our machine away from its own initial state to be synchronized with the incoming `initialActive` value. We accomplish this by using the infamous `useEffect` hook.
+But what if we want to start out with `initialActive` passed in as `true`? We need a way to immediately transiton our machine away from its own initial state to be synchronized with the incoming `initialActive` value.
+
+The original version of this post included an example that used the infamous `useEffect` hook to dynamically establish the initial state, based on the `initialActive` prop passed into the hook.
 
 ```ts
+// This example is deprecated
 useEffect(() => {
   if (initialActive && state.matches("inactive")) {
     send("TOGGLE");
@@ -141,7 +137,34 @@ useEffect(() => {
 }, [initialActive]);
 ```
 
-We can include `initialActive` in the dependency array for `useEffect` and our machine will override its own initial state only if and when that value changes as the hook is initialized. Otherwise, our hook maintains the source of truth for the toggle state.
+Some readers noted in their feedback that they prefer to avoid using the `useEffect` hook altogether for understandable reasons. The `state` really should be included in the dependency array to make the linter happy and using `useEffect` here feels generally awkward.
+
+Instead, I've updated the example by wrapping the call to `createMachine` in a function passed to `useMachine`, utilizing a sort of ["lazily created machine"](https://xstate.js.org/docs/packages/xstate-react/#usemachine-machine-options).
+
+```ts
+const [state, send] = useMachine(() =>
+  createMachine({
+    id: "toggle",
+    initial: initialActive ? "active" : "inactive",
+    states: {
+      inactive: {
+        on: { TOGGLE: "active" },
+      },
+      active: {
+        on: { TOGGLE: "inactive" },
+      },
+    },
+  })
+);
+```
+
+This gives our machine config object access to the incoming `initialActive` prop so that we can dynamically assign the machine's initial value. It's a subtle but significant change.
+
+```ts
+initial: initialActive ? "active" : "inactive",
+```
+
+You can read about alternative methods and proposals in our RFC on [_input_](https://github.com/statelyai/rfcs/pull/9).
 
 #### Return values
 
@@ -198,7 +221,7 @@ If you only have one component and all you need to do is toggle a boolean flag, 
 
 ### Summary
 
-We saw a baseline example of how components traditionally employ the `useMachine` hook from `XState/react` with a [complete example](https://codesandbox.io/s/usetogglemachine-example-1-y47c6o?file=/src/index.tsx) of how to separate the machine into its own custom `useToggleMachine` hook for comparison. We covered implementation details for this hook, as well as how to wire it up in a React component. I’ve offered several benefits that I believe make this abstraction worthwhile like incremental adoption and future feature scaling.
+We saw a baseline example of how components traditionally employ the `useMachine` hook from `XState/react` with a [complete example](https://codesandbox.io/s/usetogglemachine-example-1-lazy-machine-8zcbvs?file=/src/Toggler.tsx) of how to separate the machine into its own custom `useToggleMachine` hook for comparison. We covered implementation details for this hook, as well as how to wire it up in a React component. I’ve offered several benefits that I believe make this abstraction worthwhile like incremental adoption and future feature scaling.
 
 ### Next steps
 
