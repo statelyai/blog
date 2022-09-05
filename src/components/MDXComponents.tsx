@@ -1,6 +1,7 @@
 import { Tweet, YouTube } from "mdx-embed";
 import { Viz } from "./Viz";
 import { Text, Heading, Box } from "@chakra-ui/react";
+import { Announcement } from "./Announcement";
 
 export const MDXComponents = {
   p: (props: any) => <Text {...props} as="p" />,
@@ -26,4 +27,5 @@ export const MDXComponents = {
     </Box>
   ),
   Viz,
+  Announcement,
 };

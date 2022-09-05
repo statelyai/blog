@@ -1,5 +1,5 @@
 import { MDXRemote, MDXRemoteSerializeResult } from "next-mdx-remote";
-import { Post } from "../src/types";
+import { ElementNode, Post, TextNode } from "../src/types";
 import { GetStaticPaths, GetStaticProps } from "next";
 import { getAllPosts } from "../src/posts";
 import { Layout } from "../src/components/Layout";
@@ -10,27 +10,114 @@ import {
   UnorderedList,
   ListItem,
   Link as ChakraLink,
+  Flex,
 } from "@chakra-ui/react";
-import { ArrowBackIcon, EditIcon } from "@chakra-ui/icons";
+import { ArrowBackIcon, ArrowUpIcon, EditIcon } from "@chakra-ui/icons";
 import Link from "next/link";
 import { MDXComponents } from "../src/components/MDXComponents";
 import { Seo } from "../src/Seo";
 import { DEFAULT_URL } from "../content/metadata";
-import { formatDate } from "../src/utils";
+import { formatDate, isElementNode } from "../src/utils";
 import { serializePost } from "../src/serializePost";
+import React, { ElementType, useEffect } from "react";
+import { createMachine } from "xstate";
+import { useMachine } from "@xstate/react";
+
+const TOC: React.FC<{ toc: ElementNode | TextNode }> = ({ toc }) => {
+  if (!isElementNode(toc)) {
+    return <>{toc.value}</>;
+  }
+
+  const Tag =
+    toc.tagName === "a"
+      ? (props) => (
+          <ChakraLink
+            {...props}
+            display="block"
+            padding="2"
+            color="gray.300"
+            fontSize="md"
+            _hover={{ color: "white", textDecoration: "underline" }}
+          />
+        )
+      : (toc.tagName as ElementType);
+  return (
+    <Tag {...toc.properties}>
+      {toc.children.map((child, index) => (
+        <TOC key={index} toc={child} />
+      ))}
+    </Tag>
+  );
+};
+
+const scrollMachine = createMachine({
+  id: "scroll machine",
+  initial: "racing",
+  exit: ["disableSmoothScroll"],
+  states: {
+    racing: {
+      after: {
+        threshold: {
+          target: "scrolled",
+        },
+      },
+      invoke: {
+        src: "listenToWindowScroll",
+      },
+      on: {
+        scrolled: "scrolled",
+      },
+    },
+    scrolled: {
+      entry: ["enableSmoothScroll"],
+      on: {
+        disableScroll: {
+          actions: ["disableSmoothScroll"],
+        },
+      },
+    },
+  },
+});
 
 const PostPage: React.FC<{
   posts: Post[];
   post: Post;
-  mdx: MDXRemoteSerializeResult;
+  mdx: { serializedContent: MDXRemoteSerializeResult; toc: ElementNode | null };
 }> = ({ posts, post, mdx }) => {
+  // Enable smooth scrolling either after the initial scroll due to existing hash in the URL or 1 second after the page is loaded (safe threshold)
+  useMachine(scrollMachine, {
+    services: {
+      listenToWindowScroll: () => (sendBack) => {
+        const onScroll = () => {
+          sendBack({ type: "scrolled" });
+        };
+        window?.addEventListener("scroll", onScroll);
+        return () => {
+          window?.removeEventListener("scroll", onScroll);
+        };
+      },
+    },
+    actions: {
+      enableSmoothScroll: () => {
+        document.documentElement.style.scrollBehavior = "smooth";
+      },
+      disableSmoothScroll: () => {
+        console.log("disableSmoothScroll");
+        document.documentElement.style.scrollBehavior = "auto";
+      },
+    },
+    delays: {
+      threshold: 100,
+    },
+  });
+
   return (
     <>
       <Seo
         title={post.title}
         description={post.description}
         url={`${[DEFAULT_URL, post.slug].join("/")}`}
-        originalURL={post.originalURL}
+        originalURL={post.originalURL || undefined}
         article={{
           authors: [post.author],
           publishedTime: post.publishedAt,
@@ -39,7 +126,30 @@ const PostPage: React.FC<{
         }}
         ogImage={post.ogImage}
       />
-      <Layout posts={posts}>
+      <Layout
+        posts={posts}
+        renderSidebar={() => (
+          <Flex
+            flexDirection="column"
+            alignItems="flex-start"
+            position="sticky"
+            bottom="4"
+            gap="6"
+          >
+            <Button
+              justifyContent="center"
+              aria-label="scroll to top"
+              leftIcon={<ArrowUpIcon />}
+              as="a"
+              textDecoration="none"
+              href="#"
+            >
+              Scroll to top
+            </Button>
+            <TOC toc={mdx.toc} />
+          </Flex>
+        )}
+      >
         <Box
           as="article"
           className="blog-post"
@@ -111,7 +221,7 @@ const PostPage: React.FC<{
             borderStyle="solid"
             borderColor="gray.700"
           >
-            <MDXRemote {...mdx} components={MDXComponents} />
+            <MDXRemote {...mdx.serializedContent} components={MDXComponents} />
           </Box>
         </Box>
       </Layout>

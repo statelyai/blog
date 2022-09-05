@@ -32,7 +32,7 @@ export const PageFooter: React.FC = () => (
           <ChakraLink
             href="https://stately.ai/privacy"
             display="block"
-            padding="5"
+            padding="3"
             paddingBottom={{ base: "5", md: "0" }}
             color="gray.300"
             borderRightWidth={{ base: "0", md: "1px" }}
@@ -46,9 +46,25 @@ export const PageFooter: React.FC = () => (
         </Box>
         <Box as="li">
           <ChakraLink
+            href="https://stately.ai/code-of-conduct/"
+            display="block"
+            padding="3"
+            paddingBottom={{ base: "5", md: "0" }}
+            color="gray.300"
+            borderRightWidth={{ base: "0", md: "1px" }}
+            borderBottomWidth={{ base: "1px", md: "0" }}
+            borderStyle="solid"
+            borderColor="gray.700"
+            _hover={{ color: "white", textDecoration: "underline" }}
+          >
+            Code of conduct
+          </ChakraLink>
+        </Box>
+        <Box as="li">
+          <ChakraLink
             href="https://xstate.js.org/docs"
             display="block"
-            padding="5"
+            padding="3"
             paddingBottom={{ base: "5", md: "0" }}
             color="gray.300"
             borderRightWidth={{ base: "0", md: "1px" }}
@@ -64,7 +80,7 @@ export const PageFooter: React.FC = () => (
           <ChakraLink
             href="https://twitter.com/statelyai"
             display="block"
-            padding="5"
+            padding="3"
             paddingBottom={{ base: "5", md: "0" }}
             color="gray.300"
             borderRightWidth={{ base: "0", md: "1px" }}
@@ -80,7 +96,7 @@ export const PageFooter: React.FC = () => (
           <ChakraLink
             href="https://youtube.com/c/statelyai"
             display="block"
-            padding="5"
+            padding="3"
             paddingBottom={{ base: "5", md: "0" }}
             color="gray.300"
             borderRightWidth={{ base: "0", md: "1px" }}
@@ -96,7 +112,7 @@ export const PageFooter: React.FC = () => (
           <ChakraLink
             href="https://discord.gg/xstate"
             display="block"
-            padding="5"
+            padding="3"
             paddingBottom={{ base: "5", md: "0" }}
             color="gray.300"
             _hover={{ color: "white", textDecoration: "underline" }}

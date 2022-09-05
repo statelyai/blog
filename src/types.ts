@@ -1,4 +1,5 @@
 import { NextSeoProps } from "next-seo";
+import type { Node } from "unist";
 
 export interface PostFrontmatter {
   title: string;
@@ -57,3 +58,17 @@ export type GetNonNullableDeep<T, Path> = Path extends []
   : Path extends [infer Head, ...infer Tail]
   ? GetNonNullableDeep<NonNullable<Prop<T, Head>>, Tail>
   : never;
+
+interface BaseNode extends Node {
+  properties: Record<string, any>;
+}
+export interface ElementNode extends BaseNode {
+  tagName: string;
+  type: "element";
+  children: (ElementNode | TextNode)[];
+}
+
+export interface TextNode extends BaseNode {
+  tye: "text";
+  value: string;
+}

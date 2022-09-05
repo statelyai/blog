@@ -1,4 +1,4 @@
-import "../styles/globals.css";
+import "../styles/globals.scss";
 import "../styles/nprogress.css";
 import "../styles/highlight.css";
 import "../styles/post.scss";
@@ -38,19 +38,19 @@ function MyApp({ Component, pageProps }: AppProps) {
           <link
             rel="alternate"
             type="application/rss+xml"
-            title="Subscribe to Stately engineering blog"
+            title="Subscribe to Stately blog"
             href="/blog/feeds/rss.xml"
           />
           <link
             rel="alternate"
             type="application/atom+xml"
-            title="Subscribe to Stately engineering blog"
+            title="Subscribe to Stately blog"
             href="/blog/feeds/atom.xml"
           />
           <link
             rel="alternate"
             type="application/feed+json"
-            title="Subscribe to Stately engineering blog"
+            title="Subscribe to Stately blog"
             href="/blog/feeds/feed.json"
           />
           <link rel="icon" href="/favicon.ico" sizes="any" />
