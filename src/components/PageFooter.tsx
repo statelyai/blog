@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  Box,
-  Link as ChakraLink,
-  Wrap,
-  List,
-} from "@chakra-ui/react";
+import { Box, Link as ChakraLink, Wrap } from "@chakra-ui/react";
 
 export const PageFooter: React.FC = () => (
   <Box
@@ -33,10 +28,7 @@ export const PageFooter: React.FC = () => (
         spacing="0"
         justify="center"
       >
-        <Box
-          as="li"
-          margin="0"
-        >
+        <Box as="li" margin="0">
           <ChakraLink
             href="https://stately.ai/privacy"
             display="block"
@@ -137,7 +129,7 @@ export const PageFooter: React.FC = () => (
         textTransform="uppercase"
         letterSpacing="0.1em"
       >
-        Copyright &copy; Stately, 2022
+        Copyright &copy; Stately, {new Date().getFullYear()}
       </Box>
     </Box>
   </Box>
