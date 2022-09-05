@@ -176,6 +176,7 @@ export const PageHeader: React.FC<{ posts: Post[] }> = ({ posts }) => {
                 bg="gray.900"
                 border="1px solid"
                 borderColor="gray.700"
+                zIndex="1"
               >
                 <List alignItems="flex-start">
                   {result.map((p) => (
@@ -239,7 +240,7 @@ export const PageHeader: React.FC<{ posts: Post[] }> = ({ posts }) => {
                   <MenuItem
                     onClick={onCopy}
                     key={feed}
-                    title="copy"
+                    aria-label="Copy the RSS feed URL"
                     icon={
                       hasCopied ? <CheckIcon color="green.400" /> : <CopyIcon />
                     }
