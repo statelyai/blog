@@ -15,6 +15,7 @@ import Link from "next/link";
 import { Seo } from "../src/Seo";
 import { formatDate } from "../src/utils";
 import { generateFeed } from "../src/feed";
+import React from "react";
 
 const Home: NextPage<{ posts: Post[] }> = ({ posts }) => {
   return (

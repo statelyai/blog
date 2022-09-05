@@ -37,40 +37,43 @@ const LayoutSidebar: React.FC<BoxProps> = ({ children, ...props }) => {
 export const Layout: React.FC<{
   posts: Post[];
   renderSidebar?: () => ReactNode;
-}> = ({ posts, renderSidebar, children }) => (
-  <Box
-    display="flex"
-    flexDirection="column"
-    height="100%"
-    maxWidth="1300"
-    marginLeft="auto"
-    marginRight="auto"
-  >
-    <PageHeader posts={posts} />
-    {typeof renderSidebar === "function" ? (
-      <Box
-        as="main"
-        display="flex"
-        flexDirection={{ base: "column", md: "row" }}
-        paddingInline={{ md: "6" }}
-      >
-        <LayoutSidebar display={{ base: "none", md: "block" }}>
-          {renderSidebar()}
-        </LayoutSidebar>
-        {children}
-      </Box>
-    ) : (
-      <Box
-        as="main"
-        display="flex"
-        flexDirection="column"
-        alignItems={{ base: "left", md: "center" }}
-        flex="1"
-        paddingInline="6"
-      >
-        {children}
-      </Box>
-    )}
-    <PageFooter />
-  </Box>
-);
+}> = ({ posts, renderSidebar = () => null, children }) => {
+  const Sidebar = renderSidebar();
+  return (
+    <Box
+      display="flex"
+      flexDirection="column"
+      height="100%"
+      maxWidth="1300"
+      marginLeft="auto"
+      marginRight="auto"
+    >
+      <PageHeader posts={posts} />
+      {Sidebar ? (
+        <Box
+          as="main"
+          display="flex"
+          flexDirection={{ base: "column", md: "row" }}
+          paddingInline={{ md: "6" }}
+        >
+          <LayoutSidebar display={{ base: "none", md: "block" }}>
+            {Sidebar}
+          </LayoutSidebar>
+          {children}
+        </Box>
+      ) : (
+        <Box
+          as="main"
+          display="flex"
+          flexDirection="column"
+          alignItems={{ base: "left", md: "center" }}
+          flex="1"
+          paddingInline="6"
+        >
+          {children}
+        </Box>
+      )}
+      <PageFooter />
+    </Box>
+  );
+};
