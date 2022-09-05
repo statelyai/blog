@@ -239,7 +239,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
-  const posts = await getAllPosts();
+  const posts = await getAllPosts({ withContent: true });
   const post = posts.find((post) => post.slug === ctx.params.slug);
 
   return {
