@@ -41,7 +41,6 @@ async function serializePostImpl(post: Post): Promise<{
               listElement: "ul",
               customizeTOC: (toc: ElementNode) => {
                 visit(toc, "element", (node: ElementNode | TextNode) => {
-                  console.log("visit");
                   if (isElementNode(node) && node.tagName === "nav") {
                     node.children.unshift({
                       type: "element",
