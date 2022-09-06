@@ -9,7 +9,22 @@ import { serialize } from "next-mdx-remote/serialize";
 import type { Post, ElementNode, TextNode } from "./types";
 import { isElementNode } from "./utils";
 
-export async function serializePost(post: Post): Promise<{
+export async function serializePost(post: Post) {
+  const { toc, serializedContent } = await serializePostImpl(post);
+  let tocRef = toc;
+  if (tocRef) {
+    const tocListElement = tocRef.children[1] as ElementNode;
+    if (tocListElement.children.length === 0) {
+      tocRef = null;
+    }
+  }
+  return {
+    serializedContent,
+    toc: tocRef,
+  };
+}
+
+async function serializePostImpl(post: Post): Promise<{
   serializedContent: MDXRemoteSerializeResult;
   toc: ElementNode | null;
 }> {

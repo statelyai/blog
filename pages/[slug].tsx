@@ -19,7 +19,7 @@ import { Seo } from "../src/Seo";
 import { DEFAULT_URL } from "../content/metadata";
 import { formatDate, isElementNode } from "../src/utils";
 import { serializePost } from "../src/serializePost";
-import React, { ElementType, useEffect } from "react";
+import React, { ElementType } from "react";
 import { createMachine } from "xstate";
 import { useMachine } from "@xstate/react";
 
@@ -102,7 +102,6 @@ const PostPage: React.FC<{
         document.documentElement.style.scrollBehavior = "smooth";
       },
       disableSmoothScroll: () => {
-        console.log("disableSmoothScroll");
         document.documentElement.style.scrollBehavior = "auto";
       },
     },
@@ -128,27 +127,29 @@ const PostPage: React.FC<{
       />
       <Layout
         posts={posts}
-        renderSidebar={() => (
-          <Flex
-            flexDirection="column"
-            alignItems="flex-start"
-            position="sticky"
-            bottom="4"
-            gap="6"
-          >
-            <Button
-              justifyContent="center"
-              aria-label="scroll to top"
-              leftIcon={<ArrowUpIcon />}
-              as="a"
-              textDecoration="none"
-              href="#"
+        renderSidebar={() =>
+          mdx.toc ? (
+            <Flex
+              flexDirection="column"
+              alignItems="flex-start"
+              position="sticky"
+              bottom="4"
+              gap="6"
             >
-              Scroll to top
-            </Button>
-            <TOC toc={mdx.toc} />
-          </Flex>
-        )}
+              <Button
+                justifyContent="center"
+                aria-label="scroll to top"
+                leftIcon={<ArrowUpIcon />}
+                as="a"
+                textDecoration="none"
+                href="#"
+              >
+                Scroll to top
+              </Button>
+              <TOC toc={mdx.toc} />
+            </Flex>
+          ) : null
+        }
       >
         <Box
           as="article"
@@ -240,7 +241,13 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async (ctx) => {
   const posts = await getAllPosts();
-  const post = posts.find((post) => post.slug === ctx.params.slug);
+  const post = posts.find((post) => post.slug === ctx.params?.slug);
+
+  if (!post) {
+    return {
+      notFound: true,
+    };
+  }
 
   return {
     props: {
