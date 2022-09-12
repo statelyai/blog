@@ -13,8 +13,302 @@ tags:
   - react
 author:
   - - Kevin Maes
-originalURL: ''
-excerpt: ''
+originalURL: ""
+excerpt: ""
 publishedAt: 2022-9-12
 ---
-Here goes the content of your post
+
+### Introduction
+
+Are you a React developer using [XState](https://xstate.js.org/) to model your application logic? In a previous post I wrote about how to [create custom XState machine hooks for use in a React application](https://stately.ai/blog/just-use-hooks-xstate-in-react-components) and, as an example, I referenced a basic implementation of [a `useToggleMachine` hook](https://codesandbox.io/s/usetogglemachine-example-1-lazy-machine-8zcbvs?file=/src/Toggler.tsx). In this post we'll take the next step and explore the idea of **passing callback functions as params** to our custom machine hooks.
+
+### What does passing callback params look like?
+
+In our previous example we passed in a `initialActive` boolean parameter to the `useToggleMachine` hook. We can use the same pattern to pass in a callback function. Let's add a `onToggle` callback to the hook's params:
+
+```ts
+export const useToggleMachine = (
+  initialActive: boolean,
+  onToggle: (isActive: boolean) => void
+) => {
+  // ...
+};
+```
+
+We should decide if that callback will be required or optional which will likely depend on whether the component is solely responsible for implementing the callback's functionality or if the callback is meant to augment the implementation of the hook. In our example, since we're really just notifying the component of a state change that's definitely maintained by the state machine hook, we'll make the callback optional.
+
+```ts
+export const useToggleMachine = (
+  initialActive: boolean,
+  onToggle?: (isActive: boolean) => void
+) => {
+  // ...
+};
+```
+
+Notice that we've also typed the function signature with TypeScript, indicating that the callback will be invoked with a single `isActive` boolean argument. This flag is similar to the boolean returned from the hook but here we're interested in handling the state change as its own event as opposed to tracking the ongoing value of the machine's current state.
+
+### Why pass callbacks?
+
+Part of a hook's purpose is encapsulation, and it's quite possible that your state machine and its surrounding hook do a fine job of handling everything without the need to pass in extra parameters. However, there may be cases where you may want to have the component define or handle some of this implementation outside of the machine hook. Let's looks at a few of these.
+
+(handle effects, UI updates, or functionality _outside_ of your machine hook.)
+
+#### Responding to a machine's state changes
+
+In the previous post I showed how you can return an `isActive` boolean flag from the `useToggleMachine` hook so that the parent component can use it to conditionally render a representation of the toggle state.
+
+```tsx
+const [isActive, toggle] = useToggleMachine();
+```
+
+However, using a callback allows the hook to notify us of a state change the moment it happens or as soon as a state transition completes. This saves the component from needing to compare the current value of `isActive` to the previous value in order to react to a change.
+
+#### Handling async server calls or external API calls
+
+It is also possible that you might choose to handle async calls to a server outside of the machine hook. There could be another non-machine hook your component uses to actually make the call, some flavor of `useQuery` or `useMutation` from libraries like [SWR](https://swr.vercel.app/), [React Query](https://react-query.tanstack.com/), or [Apollo Client](https://www.apollographql.com/docs/react/). In this case, you might want to pass a callback to the machine hook that should be called when the machine enters a particular state.
+
+#### Error handling, logging, and debugging
+
+Receiving notification when your callback is invoked lets you handle errors and other events. This might mean showing a toast, logging to an external service, or it may allow you to temporarily debug your machine without digging into the code of the hook or the machine itself.
+
+#### Resusability
+
+Additionally, by abstracting some of this implementation, your hook can remain more generic and reusable which, along with encapsulation, is also one of the purposes of using a hook. You'll have to find the right balance of responsibilities between the machine hook, the component, and any other hooks you may use.
+
+### Adding actions to the machine
+
+In XState, the way to handle effects is by using [`actions`](https://xstate.js.org/docs/guides/actions.html#api). When responding to the TOGGLE event in our `toggleMachine` example, regardless of in which state it happens, we could register an `onToggle` action.
+
+```ts
+export const toggleMachine = {
+  id: "toggle",
+  initial: "inactive",
+  states: {
+    inactive: {
+      on: {
+        TOGGLE: {
+          // Define an array of actions to be performed when the TOGGLE event is received
+          actions: ["notifyOnToggle"],
+          target: "active",
+        },
+      },
+    },
+    active: {
+      on: {
+        TOGGLE: {
+          // Same for this state.
+          actions: ["notifyOnToggle"],
+          target: "inactive",
+        },
+      },
+    },
+  },
+};
+```
+
+There are a few things about actions that are worth noting in regards to how I'll be using them here.
+
+First, it's good to adhere to XState best practices by referencing the action name as a string value instead of inlining functions. This allows us to define the actions in a separate object which we can [pass into `useMachine` as the second argument](https://xstate.js.org/docs/packages/xstate-react/#usemachine-machine-options).
+
+The [documentation about actions](https://xstate.js.org/docs/guides/actions.html#api) also mentions the following (I'll paraphrase):
+
+1. Actions are usually synchronous or at least they should be treated as such as we should not `await` their completion.
+2. Actions are treated as fire and forget.
+3. Actions should not directly impact the system should they fail.
+
+### Invoking the callback param from actions
+
+In our options object, the second argument to `useMachine`, we can then define the actual implementation of our `notifyOnToggle` action which is really to just call our `onToggle` callback with a boolean indicating our `isActive` status.
+
+```ts
+const [state, send] = useMachine(
+  () =>
+    createMachine({
+      ...toggleMachine,
+      initial: "inactive",
+    }),
+  {
+    actions: {
+      notifyOnToggle: (context, event, meta) => {
+        onToggle?.(meta.state.matches("active"));
+      },
+    },
+  }
+);
+```
+
+Things could get even more interesting if we were to modify the signature of `onToggle` and pass it other values from `context` or from `event`.
+
+```ts
+// Example
+onToggle({
+  isActive: meta.state.matches("active"),
+  numOfToggles: context.numChange,
+});
+```
+
+If the signature of `onToggle` matches that of an XState action, you could even pass the entire action implementation in as the callback itself.
+
+```ts
+{
+  actions: {
+    notifyOnToggle: onToggle,
+  },
+}
+```
+
+Another more explicit route could be to pass in multiple callback params and map them to discrete actions.
+
+When responding to the TOGGLE event in our `toggleMachine` example, we could add an `activate` action to the `inactive` state and also a `deactivate` action to the `active` state.
+
+```ts
+export const toggleMachine = {
+  id: "toggle",
+  initial: "inactive",
+  states: {
+    inactive: {
+      on: {
+        TOGGLE: {
+          // Define an array of actions to be performed when the TOGGLE event is received
+          actions: ["activate"],
+          target: "active",
+        },
+      },
+    },
+    active: {
+      on: {
+        TOGGLE: {
+          // Same for this state.
+          actions: ["deactivate"],
+          target: "inactive",
+        },
+      },
+    },
+  },
+};
+```
+
+We could then pass in two callbacks to the hook.
+
+```ts
+export const useToggleMachine = (
+  initialActive: boolean,
+  onActivate: () => void
+  onDeactivate: () => void
+) => {
+  // ...
+};
+```
+
+And call them from their respective actions without having to pass in any additional arguments indicating the current state since it's understood from the separation of the two callbacks.
+
+```ts
+const [state, send] = useMachine(
+  () =>
+    createMachine({
+      ...toggleMachine,
+      initial: "inactive",
+    }),
+  {
+    actions: {
+      activate: (context, event) => {
+        onActivation?.();
+      },
+      deactivate: (context, event) => {
+        onDeactivation?.();
+      },
+    },
+  }
+);
+```
+
+One more thing to notice is that none of the examples above have us waiting for our callback to complete. In fact, our callback consistently returns `void` according to its signature - returning neither a value nor a promise-wrapped value. In that way we've implemented our action as a fire-and-forget operation.
+
+### Using `invoke` to handle async actions
+
+But what if we really do care about the result of our callback? We said we might use a callback to make an async call to a server and in that case we would be interested in the result of that call. In that case, we could use a machine's `invoke` feature to handle the async call properly.
+
+```ts
+export const toggleMachine = {
+  id: "toggle",
+  initial: "inactive",
+  states: {
+    inactive: {
+      on: {
+        TOGGLE: {
+          target: "togglingActive",
+        },
+      },
+    },
+    active: {
+      // ...
+    },
+    togglingActive: {
+      invoke: {
+        id: "togglingActive",
+        src: "togglingActive",
+      },
+      onDone: {
+        target: "active",
+      },
+      onError: {
+        target: "inactive",
+      },
+    },
+  },
+};
+```
+
+We can now pass in an async `doToggle` function as our callback param, provided that it returns a promise.
+
+```ts
+export const useToggleMachine = (
+  initialActive: boolean,
+  doToggle: async () => Promise<void>
+) => {
+  // ...
+};
+```
+
+Here is our `togglingActive` definition under `services` in our options object, passed as the second argument to `useMachine`. The source of the `toggleActive` invoke is our async callback function.
+
+```ts
+const [state, send] = useMachine(
+  () =>
+    createMachine({
+      ...toggleMachine,
+      initial: "inactive",
+    }),
+  {
+    invoke: {
+      togglingActive: doToggle,
+    },
+  }
+);
+```
+
+Regardless of whether `doToggle` succeeds or fails, we will transition the machine to the correct state as defined in the machine's config.
+
+### The good and the bad
+
+#### Benefits
+
+We now have a way to tap into our hook either to be notified of internal changes as they occur or to be able to effect change or delegate that responsibility elsewhere. In most of the examples above, our component (and its authors) still don't need to know much about the workings of XState if using an existing machine hook that already connects the callback param(s) to the machine's actions or invoke. They pass in a function and the function will get called at the appropriate time.
+
+#### Drawbacks
+
+Adding callback params to your custom machine hook does increase the surface area of its API and there are are tradeoffs in complexity and duties.
+
+Your component is no longer just a dumb component that renders based on the state of the machine. It is now a bit more involved in handling or delegating effect management.
+
+However, we can remind ourselves as to what the machine and our hook still do for us:
+
+- Establishes the possible states and defines transitions between states
+- Manages how and when those state transitions happen
+- Handles the change of our context values
+- Allows us to map our callbacks and outward facing effects to everything that's predictable in the machine.
+
+### Conclusion
+
+Hopefully, this post has given you some ideas on why and how to use callback params in your custom machine hooks. If you have used this pattern or other similar patterns then I'd love to hear about your experiences!
