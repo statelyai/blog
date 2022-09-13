@@ -1,7 +1,7 @@
 ---
 title: Passing callback params to machine hooks
 description: >-
-  We'll explore how and why to pass callback functions as params to your custom
+  We’ll explore how and why to pass callback functions as params to your custom
   machine hooks.
 tags:
   - callbacks
@@ -20,7 +20,7 @@ publishedAt: 2022-9-12
 
 ### Introduction
 
-Are you a React developer using [XState](https://xstate.js.org/) to model your application logic? In a previous post I wrote about how to [create custom XState machine hooks for use in a React application](https://stately.ai/blog/just-use-hooks-xstate-in-react-components) and, as an example, I referenced a basic implementation of [a `useToggleMachine` hook](https://codesandbox.io/s/usetogglemachine-example-1-lazy-machine-8zcbvs?file=/src/Toggler.tsx). In this post we'll take the next step and explore the idea of **passing callback functions as params** to our custom machine hooks.
+Are you a React developer using [XState](https://xstate.js.org/) to model your application logic? In a previous post I wrote about how to [create custom XState machine hooks for use in a React application](https://stately.ai/blog/just-use-hooks-xstate-in-react-components) and, as an example, I referenced a basic implementation of [a `useToggleMachine` hook](https://codesandbox.io/s/usetogglemachine-example-1-lazy-machine-8zcbvs?file=/src/Toggler.tsx). In this post we’ll take the next step and explore the idea of **passing callback functions as params** to our custom machine hooks.
 
 ### What does passing callback params look like?
 
@@ -39,7 +39,7 @@ export const useToggleMachine = (
 };
 ```
 
-We can use the same pattern to pass in a callback function. Let's add an `onToggle` callback to the hook's params:
+We can use the same pattern to pass in a callback function. Let’s add an `onToggle` callback to the hook’s params:
 
 ```ts
 export const useToggleMachine = (
@@ -50,7 +50,7 @@ export const useToggleMachine = (
 };
 ```
 
-Notice that we've also typed the function signature with TypeScript. Since we'll use it to notify our component of a state change that's inherently maintained by the machine hook, we'll consider it optional.
+Notice that we’ve also typed the function signature with TypeScript. Since we’ll use it to notify our component of a state change that’s inherently maintained by the machine hook, we’ll consider it optional.
 
 ```ts
 export const useToggleMachine = (
@@ -62,11 +62,11 @@ export const useToggleMachine = (
 };
 ```
 
-The callback's signature also includes an `isActive` boolean argument. This flag is similar to the boolean returned from the hook but here we're interested in handling the state change as its own event as opposed to tracking the ongoing value of the machine's current state.
+The callback’s signature also includes an `isActive` boolean argument. This flag is similar to the boolean returned from the hook but here we’re interested in handling the state change as its own event as opposed to tracking the ongoing value of the machine’s current state.
 
 ### Why pass callbacks?
 
-Part of a hook's purpose is encapsulation. If your state machine and hook handle everything internally then you don't need to pass in extra parameters. However, there may be cases where you may want to have the component define or handle some of this implementation outside of the machine hook. Let's looks at a few of these.
+Part of a hook’s purpose is encapsulation. If your state machine and hook handle everything internally then you don’t need to pass in extra parameters. However, there may be cases where you may want to have the component define or handle some of this implementation outside of the machine hook. Let’s looks at a few of these.
 
 #### Getting notified about state machine changes
 
@@ -88,7 +88,7 @@ Receiving notification when your callback is invoked lets you handle errors and 
 
 #### Resusability
 
-By abstracting some of this implementation, your hook can remain more generic and reusable which, along with encapsulation, is also one of the purposes of using a hook. You'll have to find the right balance of responsibilities between the machine hook, the component, and any other hooks you may use.
+By abstracting some of this implementation, your hook can remain more generic and reusable which, along with encapsulation, is also one of the purposes of using a hook. You’ll have to find the right balance of responsibilities between the machine hook, the component, and any other hooks you may use.
 
 ### Adding actions to the machine
 
@@ -234,11 +234,11 @@ const [state, send] = useMachine(
 );
 ```
 
-Again, none of the examples above have us waiting for our callback to complete. In fact, our callback's signature indicates a return value of `void` (neither value nor promise).
+Again, none of the examples above have us waiting for our callback to complete. In fact, our callback’s signature indicates a return value of `void` (neither value nor promise).
 
 ### Using `invoke` to handle async actions
 
-But what if we really do care about the result of our callback? If we use a callback to make an async call to a server then we would surely be interested in the result of that call. In that case, we could use a machine's `invoke` feature to handle the async call properly.
+But what if we really do care about the result of our callback? If we use a callback to make an async call to a server then we would surely be interested in the result of that call. In that case, we could use a machine’s `invoke` feature to handle the async call properly.
 
 ```ts
 export const toggleMachine = {
@@ -299,7 +299,7 @@ const [state, send] = useMachine(
 );
 ```
 
-Regardless of whether `doToggle` succeeds or fails, we will transition the machine to the correct state as defined in the machine's config.
+Regardless of whether `doToggle` succeeds or fails, we will transition the machine to the correct state as defined in the machine’s config.
 
 ### The good and the bad
 
@@ -307,9 +307,9 @@ Regardless of whether `doToggle` succeeds or fails, we will transition the machi
 
 We now have a way to tap into our hook either to be notified of state changes or to directly effect change (or delegate responsibility elsewhere).
 
-In our examples, the component (and its authors) still don't need to know much about the workings of XState which depending on the knowledge and makeup of a team, could be an advantage.
+In our examples, the component (and its authors) still don’t need to know much about the workings of XState which depending on the knowledge and makeup of a team, could be an advantage.
 
-As long as the hook connects the callback param to the machine's actions or invokes, the component and even its effects should stay in sync with the machine's state.
+As long as the hook connects the callback param to the machine’s actions or invokes, the component and even its effects should stay in sync with the machine’s state.
 
 #### Drawbacks
 
@@ -326,4 +326,4 @@ However, we can remind ourselves as to what the machine and our hook still do fo
 
 ### Conclusion
 
-Hopefully, this post has given you some ideas on why and how to use callback params in your custom machine hooks. If you have used this pattern or other similar patterns then I'd love to hear about your experiences!
+Hopefully, this post has given you some ideas on why and how to use callback params in your custom machine hooks. If you have used this pattern or other similar patterns then I’d love to hear about your experiences!
