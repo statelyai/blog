@@ -171,7 +171,7 @@ If the signature of `onToggle` matches that of an XState action, you could even 
 
 To be even more explicit, we could pass in multiple callback params and map them to discrete actions.
 
-When responding to the TOGGLE event in our `toggleMachine` example, we can add an `activate` action to the `inactive` state and also a `deactivate` action to the `active` state.
+When responding to the `TOGGLE` event in our `toggleMachine` example, we can add an `activate` action to the `inactive` state and also a `deactivate` action to the `active` state.
 
 ```ts
 export const toggleMachine = {
