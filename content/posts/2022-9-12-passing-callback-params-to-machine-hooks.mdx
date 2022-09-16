@@ -80,7 +80,7 @@ However, using a callback alerts the component of a state changes the moment it 
 
 We might choose to handle async calls to a server outside of our machine hook, possibly using an async hook like `useQuery` or `useMutation` from libraries like [SWR](https://swr.vercel.app/), [React Query](https://react-query.tanstack.com/), or [Apollo Client](https://www.apollographql.com/docs/react/). In this case, we could pass a callback to the machine hook that should be called when its machine enters a particular state.
 
-#### Error handling, logging, and debugging
+### Error handling, logging, and debugging
 
 Receiving notification when your callback is invoked lets you handle errors and other events. We could show a toast, log to an external service, or temporarily debug our machine without digging into the hook’s code or the machine itself.
 
