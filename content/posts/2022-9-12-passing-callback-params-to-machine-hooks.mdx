@@ -78,7 +78,7 @@ const [isActive, toggle] = useToggleMachine();
 
 However, using a callback alerts the component of a state changes the moment it happens, as soon as a transition completes. This saves the component from needing to compare the current value of `isActive` to the previous value in order to respond to a change.
 
-#### Handling async server calls or external API calls
+### Handling async server calls or external API calls
 
 We might choose to handle async calls to a server outside of our machine hook, possibly using an async hook like `useQuery` or `useMutation` from libraries like [SWR](https://swr.vercel.app/), [React Query](https://react-query.tanstack.com/), or [Apollo Client](https://www.apollographql.com/docs/react/). In this case, we could pass a callback to the machine hook that should be called when its machine enters a particular state.
 
