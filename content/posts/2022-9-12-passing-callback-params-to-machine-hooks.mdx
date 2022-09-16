@@ -84,7 +84,7 @@ We might choose to handle async calls to a server outside of our machine hook, p
 
 Receiving notification when your callback is invoked lets you handle errors and other events. We could show a toast, log to an external service, or temporarily debug our machine without digging into the hook’s code or the machine itself.
 
-#### Resusability
+### Reusability
 
 By abstracting some of this implementation, your hook can remain more generic and reusable which, along with encapsulation, is also one of the purposes of using a hook. You’ll have to find the right balance of responsibilities between the machine hook, the component, and any other hooks you may use.
 
