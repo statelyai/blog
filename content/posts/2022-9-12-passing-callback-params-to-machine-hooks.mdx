@@ -125,7 +125,7 @@ According to the [docs](https://xstate.js.org/docs/guides/actions.html#api), act
 2. Treated as fire and forget.
 3. Not supposed to directly impact the system, should they fail.
 
-### Wiring up the callback param from actions
+## Wiring up the callback param from actions
 
 In our [options object](https://xstate.js.org/docs/packages/xstate-react/#usemachine-machine-options), the second argument to `useMachine`, we can define the implementation of our `notifyOnToggle` action. In our case, this is really a call to the `onToggle` callback with a boolean arg indicating our `isActive` status.
 
