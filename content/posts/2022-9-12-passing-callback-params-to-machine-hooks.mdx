@@ -88,7 +88,7 @@ Receiving notification when your callback is invoked lets you handle errors and 
 
 By abstracting some of this implementation, your hook can remain more generic and reusable which, along with encapsulation, is also one of the purposes of using a hook. You’ll have to find the right balance of responsibilities between the machine hook, the component, and any other hooks you may use.
 
-### Adding actions to the machine
+## Adding actions to the machine
 
 In XState, the way to handle effects is by using [`actions`](https://xstate.js.org/docs/guides/actions.html#api). When responding to the TOGGLE event in our `toggleMachine` example, we can register an `onToggle` action.
 
