@@ -95,7 +95,7 @@ By abstracting some of this implementation, your hook can remain more generic an
 In XState, the way to handle effects is by using [`actions`](https://xstate.js.org/docs/guides/actions.html#api). When responding to the TOGGLE event in our `toggleMachine` example, we can register an `onToggle` action.
 
 ```ts
-export const toggleMachine = {
+const toggleMachine = createMachine({
   id: "toggle",
   initial: "inactive",
   states: {
@@ -118,7 +118,7 @@ export const toggleMachine = {
       },
     },
   },
-};
+});
 ```
 
 According to the [docs](https://xstate.js.org/docs/guides/actions.html#api), actions are (paraphrasing):
@@ -132,20 +132,35 @@ According to the [docs](https://xstate.js.org/docs/guides/actions.html#api), act
 In our [options object](https://xstate.js.org/docs/packages/xstate-react/#usemachine-machine-options), the second argument to `useMachine`, we can define the implementation of our `notifyOnToggle` action. In our case, this is really a call to the `onToggle` callback with a boolean arg indicating our `isActive` status.
 
 ```ts
-const [state, send] = useMachine(
-  () =>
-    createMachine({
-      ...toggleMachine,
-      initial: "inactive",
-    }),
-  {
-    actions: {
-      notifyOnToggle: (context, event, meta) => {
-        onToggle?.(meta.state.matches("active"));
+const toggleMachine = createMachine({
+  id: "toggle",
+  initial: "inactive",
+  states: {
+    inactive: {
+      on: {
+        TOGGLE: {
+          target: "active",
+        },
       },
     },
-  }
-);
+    active: {
+      on: {
+        TOGGLE: {
+          actions: ["notifyOnToggle"],
+          target: "inactive",
+        },
+      },
+    },
+  },
+});
+
+const [state, send] = useMachine(toggleMachine, {
+  actions: {
+    notifyOnToggle: (context, event, meta) => {
+      onToggle?.(meta.state.matches("active"));
+    },
+  },
+});
 ```
 
 Things could get even more interesting if we were to modify the signature of `onToggle` and pass it other values from `context` or from `event`.
