@@ -64,7 +64,7 @@ export const useToggleMachine = (
 
 The callback’s signature also includes an `isActive` boolean argument. This flag is similar to the boolean returned from the hook but here we’re interested in handling the state change as its own event as opposed to tracking the ongoing value of the machine’s current state.
 
-### Why pass callbacks?
+## Why pass callbacks?
 
 Part of a hook’s purpose is encapsulation. If your state machine and hook handle everything internally then you don’t need to pass in extra parameters. However, there may be cases where you may want to have the component define or handle some of this implementation outside of the machine hook. Let’s looks at a few of these.
 
