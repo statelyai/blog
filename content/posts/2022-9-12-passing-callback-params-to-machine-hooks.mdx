@@ -90,33 +90,34 @@ By abstracting some of this implementation, your hook can remain more generic an
 
 ## Adding actions to the machine
 
-In XState, the way to handle effects is by using [`actions`](https://xstate.js.org/docs/guides/actions.html#api). When responding to the TOGGLE event in our `toggleMachine` example, we can register an `onToggle` action.
+In XState, the way to handle effects is by using [`actions`](https://xstate.js.org/docs/guides/actions.html#api). When responding to the TOGGLE event in our `toggleMachine` example, we can register an `notifyOnToggle` action.
 
 ```ts
-const toggleMachine = createMachine({
-  id: "toggle",
-  initial: "inactive",
-  states: {
-    inactive: {
-      on: {
-        TOGGLE: {
-          // Define an array of actions to be performed when the TOGGLE event is received
-          actions: ["notifyOnToggle"],
-          target: "active",
+const createToggleMachine = (initialActive: boolean) =>
+  (toggleMachine = createMachine({
+    id: "toggle",
+    initial: initialActive ? "active" : "inactive",
+    states: {
+      inactive: {
+        on: {
+          TOGGLE: {
+            // Define an array of actions to be performed when the TOGGLE event is received
+            actions: ["notifyOnToggle"],
+            target: "active",
+          },
+        },
+      },
+      active: {
+        on: {
+          TOGGLE: {
+            // Same for this state.
+            actions: ["notifyOnToggle"],
+            target: "inactive",
+          },
         },
       },
     },
-    active: {
-      on: {
-        TOGGLE: {
-          // Same for this state.
-          actions: ["notifyOnToggle"],
-          target: "inactive",
-        },
-      },
-    },
-  },
-});
+  }));
 ```
 
 According to the [docs](https://xstate.js.org/docs/guides/actions.html#api), actions are (paraphrasing):
@@ -130,35 +131,72 @@ According to the [docs](https://xstate.js.org/docs/guides/actions.html#api), act
 In our [options object](https://xstate.js.org/docs/packages/xstate-react/#usemachine-machine-options), the second argument to `useMachine`, we can define the implementation of our `notifyOnToggle` action. In our case, this is really a call to the `onToggle` callback with a boolean arg indicating our `isActive` status.
 
 ```ts
-const toggleMachine = createMachine({
-  id: "toggle",
-  initial: "inactive",
-  states: {
-    inactive: {
-      on: {
-        TOGGLE: {
-          target: "active",
+const createToggleMachine = (initialActive: boolean) =>
+  createMachine({
+    id: "toggle",
+    initial: initialActive ? "active" : "inactive",
+    states: {
+      inactive: {
+        on: {
+          TOGGLE: {
+            actions: ["notifyOnToggle"],
+            target: "active",
+          },
+        },
+      },
+      active: {
+        on: {
+          TOGGLE: {
+            actions: ["notifyOnToggle"],
+            target: "inactive",
+          },
         },
       },
     },
-    active: {
-      on: {
-        TOGGLE: {
-          actions: ["notifyOnToggle"],
-          target: "inactive",
-        },
-      },
-    },
-  },
-});
+  });
 
-const [state, send] = useMachine(toggleMachine, {
+const [state, send] = useMachine(createToggleMachine(initialActive), {
   actions: {
-    notifyOnToggle: (context, event, meta) => {
-      onToggle?.(meta.state.matches("active"));
+    notifyOnToggle: (context, event) => {
+      // TODO: Check for the presence of the onToggle callback
+      // and pass it the current "active" status.
+      onToggle?.(/* true or false */);
     },
   },
 });
+```
+
+What about that last part, how do we know whether the toggle is active or inactive in order to pass it to the callback? One way is to use a "parameterized action" that can be defined in the statechart config. Instead of a `notifyOnToggle` string we can specify an object, including a `type` and custom `active` property. Now we can explicitly pass in a boolean value for `active`, per state.
+
+```ts
+states: {
+  inactive: {
+    on: {
+      TOGGLE: {
+        actions: [{ type: "notifyOnToggle", active: true }],
+        target: "active",
+      },
+    },
+  },
+  active: {
+    on: {
+      TOGGLE: {
+        actions: [{ type: "notifyOnToggle", active: false }],
+        target: "inactive",
+      },
+    },
+  },
+},
+```
+
+That object will be received in our action implementation, attached to a third "meta" argument.
+
+```ts
+actions: {
+  notifyOnToggle: (context, event, meta) => {
+    onToggle?.(meta.action.active);
+  },
+},
 ```
 
 Things could get even more interesting if we were to modify the signature of `onToggle` and pass it other values from `context` or from `event`.
@@ -166,25 +204,25 @@ Things could get even more interesting if we were to modify the signature of `on
 ```ts
 // Example
 onToggle({
-  isActive: meta.state.matches("active"),
+  isActive: meta.action.active,
   numOfToggles: context.numChange,
 });
 ```
 
-If the signature of `onToggle` matches that of an XState action, you could even pass the entire action implementation in as the callback itself.
+If the signature of `onToggle` matches that of an XState action, you could even assign the callback param itself as the value of the action for greater external access (assuming `onToggle` is required).
 
 ```ts
 {
   actions: {
-    // onToggle will be called with context, event, and meta args.
+    // The callback param, onToggle, will be called with context, event, and meta args.
     notifyOnToggle: onToggle,
   },
 }
 ```
 
-To be even more explicit, we could pass in multiple callback params and map them to discrete actions.
+Another way to distinguish between state changes (and avoid the boolean flag and parameterized actions) would be to pass in multiple callback params, mapping those to discrete actions.
 
-When responding to the `TOGGLE` event in our `toggleMachine` example, we can add an `activate` action to the `inactive` state and also a `deactivate` action to the `active` state.
+When responding to the `TOGGLE` event in our `toggleMachine` example, we can add an `notifyActivation` action to the `inactive` state and also a `notifyDeactivation` action to the `active` state.
 
 ```ts
 export const toggleMachine = {
@@ -194,8 +232,7 @@ export const toggleMachine = {
     inactive: {
       on: {
         TOGGLE: {
-          // Define an array of actions to be performed when the TOGGLE event is received
-          actions: ["activate"],
+          actions: ["notifyActivation"],
           target: "active",
         },
       },
@@ -203,8 +240,7 @@ export const toggleMachine = {
     active: {
       on: {
         TOGGLE: {
-          // Same for this state.
-          actions: ["deactivate"],
+          actions: ["notifyDeactivation"],
           target: "inactive",
         },
       },
@@ -213,19 +249,19 @@ export const toggleMachine = {
 };
 ```
 
-We could then pass in two callbacks to the hook.
+We could then pass in two callbacks to the hook (they can still be optional).
 
 ```ts
 export const useToggleMachine = (
   initialActive: boolean,
-  onActivate: () => void
-  onDeactivate: () => void
+  onActivation: () => void
+  onDeactivation: () => void
 ) => {
   // ...
 };
 ```
 
-We then call the callbacks from their respective actions without passing arguments indicating current state.
+We then call the callbacks from their respective actions without any arguments.
 
 ```ts
 const [state, send] = useMachine(
@@ -236,11 +272,11 @@ const [state, send] = useMachine(
     }),
   {
     actions: {
-      activate: (context, event) => {
-        onActivation?.();
+      notifyActivation: (context, event) => {
+        onActivation();
       },
-      deactivate: (context, event) => {
-        onDeactivation?.();
+      notifyDeactivation: (context, event) => {
+        onDeactivation();
       },
     },
   }
@@ -298,18 +334,11 @@ export const useToggleMachine = (
 Here is our `togglingActive` definition under `services` in our options object, passed as the second argument to `useMachine`. The source of the `toggleActive` invoke is our async callback function.
 
 ```ts
-const [state, send] = useMachine(
-  () =>
-    createMachine({
-      ...toggleMachine,
-      initial: "inactive",
-    }),
-  {
-    invoke: {
-      togglingActive: doToggle,
-    },
-  }
-);
+const [state, send] = useMachine(() => createToggleMachine(initialActive), {
+  invoke: {
+    togglingActive: doToggle,
+  },
+});
 ```
 
 Regardless of whether `doToggle` succeeds or fails, we will transition the machine to the correct state as defined in the machine’s config.
@@ -339,4 +368,4 @@ However, we can remind ourselves of what the machine and our hook still do for u
 
 ## Conclusion
 
-Hopefully, this post has given you some ideas on why and how to use callback params in your custom machine hooks. If you have used this or other similar patterns, I’d love to hear about your experiences!
+Hopefully, this post has given you some ideas on why and how to use callback params in your custom machine hooks so you can find the right balance between having your custom machine hook or your component handle functionality. If you have used this or other similar patterns, I’d love to hear about your experiences!
