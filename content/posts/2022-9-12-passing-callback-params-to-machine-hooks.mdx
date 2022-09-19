@@ -94,7 +94,7 @@ In XState, the way to handle effects is by using [`actions`](https://xstate.js.o
 
 ```ts
 const createToggleMachine = (initialActive: boolean) =>
-  (toggleMachine = createMachine({
+  createMachine({
     id: "toggle",
     initial: initialActive ? "active" : "inactive",
     states: {
@@ -117,7 +117,7 @@ const createToggleMachine = (initialActive: boolean) =>
         },
       },
     },
-  }));
+  });
 ```
 
 According to the [docs](https://xstate.js.org/docs/guides/actions.html#api), actions are (paraphrasing):
@@ -199,6 +199,8 @@ actions: {
 },
 ```
 
+Here is a more complete [CodeSandbox example for a single callback param](https://codesandbox.io/s/usetogglemachine-callback-params-example-1-fujl6m?file=/src/useToggleMachine.ts).
+
 Things could get even more interesting if we were to modify the signature of `onToggle` and pass it other values from `context` or from `event`.
 
 ```ts
@@ -220,33 +222,36 @@ If the signature of `onToggle` matches that of an XState action, you could even 
 }
 ```
 
+### Passing multiple callback params
+
 Another way to distinguish between state changes (and avoid the boolean flag and parameterized actions) would be to pass in multiple callback params, mapping those to discrete actions.
 
 When responding to the `TOGGLE` event in our `toggleMachine` example, we can add an `notifyActivation` action to the `inactive` state and also a `notifyDeactivation` action to the `active` state.
 
 ```ts
-export const toggleMachine = {
-  id: "toggle",
-  initial: "inactive",
-  states: {
-    inactive: {
-      on: {
-        TOGGLE: {
-          actions: ["notifyActivation"],
-          target: "active",
+const createToggleMachine = (initialActive: boolean) =>
+  createMachine({
+    id: "toggle",
+    initial: initialActive ? "active" : "inactive",
+    states: {
+      inactive: {
+        on: {
+          TOGGLE: {
+            actions: ["notifyActivation"],
+            target: "active",
+          },
+        },
+      },
+      active: {
+        on: {
+          TOGGLE: {
+            actions: ["notifyDeactivation"],
+            target: "inactive",
+          },
         },
       },
     },
-    active: {
-      on: {
-        TOGGLE: {
-          actions: ["notifyDeactivation"],
-          target: "inactive",
-        },
-      },
-    },
-  },
-};
+  });
 ```
 
 We could then pass in two callbacks to the hook (they can still be optional).
@@ -283,6 +288,8 @@ const [state, send] = useMachine(
 );
 ```
 
+Here is a [CodeSandbox example for passing multiple callback params](https://codesandbox.io/s/usetogglemachine-multiple-callback-params-example-2-m6pqoq?file=/src/Toggler.tsx).
+
 Again, none of the examples above have us waiting for our callback to complete. In fact, our callback’s signature indicates a return value of `void` (neither value nor promise).
 
 ## Using `invoke` to handle async actions
@@ -290,34 +297,35 @@ Again, none of the examples above have us waiting for our callback to complete. 
 But what if we really do care about the result of our callback? If we use a callback to make an async call to a server, then we would surely be interested in the result of that call. In that case, we could use a machine’s `invoke` feature to handle the async call properly.
 
 ```ts
-export const toggleMachine = {
-  id: "toggle",
-  initial: "inactive",
-  states: {
-    inactive: {
-      on: {
-        TOGGLE: {
-          target: "togglingActive",
+const createToggleMachine = (initialActive: boolean) =>
+  createMachine({
+    id: "toggle",
+    initial: "inactive",
+    states: {
+      inactive: {
+        on: {
+          TOGGLE: {
+            target: "togglingActive",
+          },
+        },
+      },
+      active: {
+        // ...
+      },
+      togglingActive: {
+        invoke: {
+          id: "togglingActive",
+          src: "togglingActive",
+        },
+        onDone: {
+          target: "active",
+        },
+        onError: {
+          target: "inactive",
         },
       },
     },
-    active: {
-      // ...
-    },
-    togglingActive: {
-      invoke: {
-        id: "togglingActive",
-        src: "togglingActive",
-      },
-      onDone: {
-        target: "active",
-      },
-      onError: {
-        target: "inactive",
-      },
-    },
-  },
-};
+  });
 ```
 
 Our hook now accepts an async `doToggle` function as a callback param, provided that it returns a promise.
