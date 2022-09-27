@@ -304,23 +304,35 @@ const createToggleMachine = (initialActive: boolean) =>
     states: {
       inactive: {
         on: {
-          TOGGLE: {
-            target: "togglingActive",
-          },
+          TOGGLE: "togglingActive",
         },
       },
       active: {
-        // ...
+        on: {
+          TOGGLE: "togglingInactive",
+        },
       },
       togglingActive: {
         invoke: {
-          id: "togglingActive",
-          src: "togglingActive",
+          id: "toggling",
+          src: "toggling",
           onDone: {
             target: "active",
           },
           onError: {
             target: "inactive",
+          },
+        },
+      },
+      togglingInactive: {
+        invoke: {
+          id: "toggling",
+          src: "toggling",
+          onDone: {
+            target: "inactive",
+          },
+          onError: {
+            target: "active",
           },
         },
       },
@@ -343,8 +355,8 @@ Here is our `togglingActive` definition under `services` in our options object, 
 
 ```ts
 const [state, send] = useMachine(() => createToggleMachine(initialActive), {
-  invoke: {
-    togglingActive: doToggle,
+  services: {
+    toggling: () => doToggle(),
   },
 });
 ```
