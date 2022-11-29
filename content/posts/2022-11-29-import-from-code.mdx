@@ -22,13 +22,15 @@ Importing from code is handy if you’ve already built machines while working wi
 
 <!--TODO:[code panel import from code screenshot]()-->
 
-You can import an existing machine from JavaScript and TypeScript using the code panel in the right tool menu. You can also create a new machine inside a project by importing code from the **Machines** list in the left drawer. 
+You can import an existing machine from JavaScript and TypeScript using the code panel in the right tool menu or from the **Machines** list in the left drawer.
 
 <!--TODO:[machines list import from code screenshot]()-->
 
 Your code should be formatted as a [`createMachine()` factory function](https://xstate.js.org/docs/guides/machines.html) before import. The importer has basic validation in case your machine has basic errors, including reminding you if the `createMachine` definition is missing.
 
-And please import your code into an existing machine with caution! Importing code from the code panel will overwrite the current machine in the editor.
+<!--TODO:[machines list new machine import from code screenshot]()-->
+
+And please import your code into an existing machine with caution! Importing code from the code panel will overwrite the current machine in the editor. You may have multiple `createMachine`s included in the code you insert in the text area, but the Studio will currently only import the first machine found in the code. We plan to support importing multiple machines in the future, if that’s a feature you’d love, please [upvote the multiple machine import feature request](https://statelyai.canny.io/editor/p/import-multiple-machines-from-one-code-import) on our board.
 
 ## Export code
 
