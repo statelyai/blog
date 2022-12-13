@@ -1,0 +1,40 @@
+---
+title: "New in the Studio: Machine disaster recovery"
+description: >-
+  We have introduced a new feature to the Stately Studio. A feature we hope
+  you'll never see. Let's call it disaster recovery, for lack of a better word.
+tags:
+  - recovery
+  - data safety
+  - offline
+  - backup
+  - editor
+  - studio
+  - code
+  - state machine
+  - community
+author:
+  - - Anders Bech Mellson
+ogImage: "https://stately.ai/blog/2022-12-22-machine-recovery.png"
+publishedAt: "2022-12-13"
+---
+
+We have introduced a new feature to the Stately Studio. A feature we hope you'll never see. Let's call it disaster recovery, for lack of a better word.
+
+At this moment in time, the Studio is using a traditional server-client architecture. Whenever you edit a machine, we will persist these changes to our central database, ready for you to use when you return - on any device with an internet connection.
+
+![The source file in the VS Code explorer called coolMachine.ts is listed above the typegen file called coolMachine.typegen.ts.](./images/studio_architecture_challenges.png)
+
+But what happens with your edits if your internet connection fails or the Stately backend is down? This is where our new feature comes into play.
+
+![Pressing the arrow icon toggle alongside the source file toggles the nesting of the generated type file.](./images/recovery_offline_error.gif)
+
+We try our best to detect any failure or missing connectivity when you edit your machines. If you hit any error state, we will inform you and start saving your work locally on your device.
+
+So next time you visit the Studio from that same device, we will compare what we saved with the machine from the server. And if they are different, we will give you the option to restore the safe copy to a new machine.
+
+![Pressing the arrow icon toggle alongside the source file toggles the nesting of the generated type file.](./images/recovery_restore_machine.gif)
+
+Hopefully, you'll never use this, but if you do, I hope you find this helpful.
+
+We have some exciting plans around an offline-first approach for the Studio. So hopefully we won't need this feature in the upcoming work on offline forst
