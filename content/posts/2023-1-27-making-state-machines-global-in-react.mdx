@@ -22,6 +22,7 @@ The `createActorContext(machine)` function returns a [React Context object](http
 Here’s how you would create a React Context for the actor and provide it in app scope:
 
 ```tsx
+// ./App.tsx
 import { createActorContext } from "@xstate/react";
 import { someMachine } from "../path/to/someMachine";
 
@@ -43,7 +44,8 @@ function App() {
 To consume the actor in a component, you can use the `useActor()` hook to get the `state` and `send` function, or you can use `useSelector(selector, compare?)` hook to derive a specific value from the snapshot:
 
 ```tsx
-import { SomeMachineContext } from "../path/to/SomeMachineContext";
+// ./SomeComponent.tsx
+import { SomeMachineContext } from "./App";
 
 function SomeComponent() {
   // Read full snapshot and get `send` function from `useActor()`
