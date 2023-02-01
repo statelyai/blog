@@ -19,7 +19,9 @@ The `createActorContext(machine)` function returns a [React Context object](http
 
 [▶️ Stately Stream: Simple React todo app with `createActorContext`](https://www.youtube.com/watch?v=M6KjEogxfQE)
 
-Here’s how you would create a React Context for the actor and provide it in app scope:
+## Creating an actor context
+
+Here’s how you would create a React Context for an actor created from a machine and provide it in app scope:
 
 ```tsx
 // ./App.tsx
@@ -40,6 +42,10 @@ function App() {
   );
 }
 ```
+
+This provider will make the actor available to any component that consumes it. You can also provide the actor context in any part of the component tree, such as a modal or a sidebar.
+
+## Consuming the actor context
 
 To consume the actor in a component, you can use the `useActor()` hook to get the `state` and `send` function, or you can use `useSelector(selector, compare?)` hook to derive a specific value from the snapshot:
 
@@ -67,7 +73,7 @@ As a reminder, the `useSelector(...)` hook is better when you want to control re
 If you only need the `actorRef`, which is a reference to the invoked actor, you can use the `useActorRef()` hook:
 
 ```tsx
-import { SomeMachineContext } from "../path/to/SomeMachineContext";
+import { SomeMachineContext } from "./App";
 
 function SomeComponent() {
   const actorRef = SomeMachineContext.useActorRef();
@@ -82,7 +88,9 @@ function SomeComponent() {
 }
 ```
 
-Lastly, if you need to provide implementation details to the machine, such as `actions`, `guards`, or `delays`, you can provide a similar machine in the `machine={...}` prop on the `Provider` component:
+## Providing custom machines
+
+Lastly, if you need to provide implementation details to the machine, such as `actions`, `guards`, or `delays`, you can provide a machine in the `machine={...}` prop on the `Provider` component:
 
 ```tsx
 import { SomeMachineContext } from "../path/to/SomeMachineContext";
@@ -107,4 +115,10 @@ function SomeComponent() {
 }
 ```
 
-Remember to wrap the custom machine in a function so that it’s lazily evaluated only once.
+Note: the machine that you pass in should come from the same machine the context was created from, otherwise the types will be incorrect. Also, remember to wrap the custom machine in a function so that it’s lazily evaluated only once.
+
+## Conclusion
+
+The `createActorContext(...)` function from `@xstate/react` is a convenient way to share state machines globally in any React application, or in any part of the component tree. It is available as of version `@xstate/react@3.1.0`. If you have any questions or feedback, please [let us know on Discord](https://discord.gg/xstate) to get help, ask questions, and give us your feedback.
+
+Happy modeling!
