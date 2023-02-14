@@ -90,7 +90,7 @@ function SomeComponent() {
 
 ## Providing custom machines
 
-Lastly, if you need to provide implementation details to the machine, such as `actions`, `guards`, or `delays`, you can provide a machine in the `machine={...}` prop on the `Provider` component:
+Lastly, if you need to provide implementation details to the machine, such as `actions`, `guards`, or `delays`, you can provide these options in the `options={...}` prop on the `Provider` component:
 
 ```tsx
 import { SomeMachineContext } from "../path/to/SomeMachineContext";
@@ -99,23 +99,19 @@ import { someMachine } from "../path/to/someMachine";
 function SomeComponent() {
   return (
     <SomeMachineContext.Provider
-      machine={() =>
-        someMachine.withConfig({
-          actions: {
-            doSomething: (ctx, ev) => {
-              // ...
-            },
+      options={{
+        actions: {
+          doSomething: (ctx, ev) => {
+            // ...
           },
-        })
-      }
+        },
+      }}
     >
       <SomeOtherComponent />
     </SomeMachineContext.Provider>
   );
 }
 ```
-
-Note: the machine that you pass in should come from the same machine the context was created from, otherwise the types will be incorrect. Also, remember to wrap the custom machine in a function so that it’s lazily evaluated only once.
 
 ## Conclusion
 
