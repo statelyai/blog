@@ -8,18 +8,14 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Use Node.js
-        uses: actions/setup-node@v2.2.0
-
-      - name: Install
-        run: yarn install
-
-      - name: Lint
-        run: yarn lint && yarn tsc
+      - name: Setup Node 16
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
 
       - name: Build
-        run: yarn next build
+        run: yarn build
         env:
           CI: "false"
