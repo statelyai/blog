@@ -15,7 +15,10 @@ jobs:
         with:
           node-version: 16.x
 
+      - name: Lint
+        run: yarn lint && yarn tsc
+
       - name: Build
-        run: yarn build
+        run: yarn next build
         env:
           CI: "false"
