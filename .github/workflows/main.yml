@@ -16,7 +16,7 @@ jobs:
           node-version: 16.x
 
       - name: Lint
-        run: yarn lint && yarn tsc
+        run: yarn && yarn lint && yarn tsc
 
       - name: Build
         run: yarn next build
