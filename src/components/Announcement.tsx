@@ -19,13 +19,12 @@ export const Announcement: React.FC<AnnouncementProps> = ({
       marginInline="-4"
       paddingInline="4"
       paddingBlock="4"
+      marginTop="8"
       direction="column"
-      gap="6"
-      border="4px solid"
-      borderColor="black"
-      boxShadow="0 0 0 4px var(--chakra-colors-whiteAlpha-200)"
+      gap="5"
+      alignItems="center"
     >
-      <Text margin="0!important">{children}</Text>
+      <Text margin="0!important" textAlign="left">{children}</Text>
       <Button
         justifyContent="center"
         bg="primary.500"
@@ -37,7 +36,6 @@ export const Announcement: React.FC<AnnouncementProps> = ({
         textDecoration="none"
         href={href}
         width="max-content"
-        target="_blank"
       >
         {cta}
       </Button>
