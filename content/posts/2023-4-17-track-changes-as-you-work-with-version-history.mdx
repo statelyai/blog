@@ -21,6 +21,8 @@ publishedAt: 2023-4-17
 
 Today we’re happy to introduce another pro feature for our Stately Studio subscribers; **Version History**. With this feature, you can save versions of your work as you go and refer back to them in the future. You can use those versions to compare changes, revert to a previous version, or even create a new machine from a version 🎉
 
+![Viewing the past version of your machine in the Editor.](./images/2023-4-17-example-version-view-plain.png)
+
 ## Why use Version History?
 
 Version history allows you to save the current state of your machine as snapshots that you can go back to at a later time. This allows for a much more flexible way of working and evolving your machine.
@@ -29,13 +31,19 @@ Version history allows you to save the current state of your machine as snapshot
 
 When you’re working on a machine, you often start with a high-level overview of the machine's states and transitions and then gradually add more detail as you go. That detail could include adding actions, guards, nested states, markdown descriptions, and images. Version history allows you to save each of these layers of detail as a version so that you can refer back to them, much like commits in a version control system.
 
+![Example of creating versions of your machine for different layers of detail.](./images/2023-4-17-example-why-layers-of-detail.png)
+
 ### Modeling experiments
 
 There are often many ways to model a system with statecharts, all of which are legitimate. Many decisions need to be made regarding state granularity, nesting, grouping or separating transitions and actions, context vs finite states, etc. Version history allows you to save each of these different versions so you can freely compare various approaches and be more experimental when modeling your software.
 
+![Example of creating versions of your machine for experimenting with different modeling approaches.](./images/2023-4-17-example-restore-from-version-list.png)
+
 ### Creating for different audiences
 
 You can also use version history to create different versions of your machine for different audiences. For example, you might want to create a version of your machine that is more detailed for your team and a version that is more high-level for your stakeholders. This can be done by creating screenshots of versions or even by creating new machines from your versions.
+
+![Example of creating versions of your machine intended for different audiences.](./images/2023-4-17-example-why-audiences.png)
 
 ### Staying organized
 
@@ -54,6 +62,8 @@ To save a version, click the **+ Save** button in the version history panel. A n
 ### Viewing past versions
 
 Clicking on a version in the list will show you the machine as it was at that point in time. You can still inspect properties of your machine along with canvas elements and you can switch between Design mode and Simulate mode to simulate this version of the machine.
+
+![Viewing the past version of your machine in the Editor, indicating the features for working with that version.](./images/2023-4-17-example-version-view-explained.png)
 
 #### Restoring a Version
 
@@ -74,6 +84,8 @@ Clicking the Close button in the header, clicking the Current version button in 
 ### Restoring a version from the version list
 
 As an added convenience, you can also restore a version directly from the version list in the Version History panel without first viewing that version. To do this, click the Restore button to the right of the version you want to restore. This will overwrite the current machine with the version you selected but can be undone using the Undo button.
+
+![Restoring your machine to a past version from the versions list.](./images/2023-4-17-example-restore-from-version-list.png)
 
 ## Accessing and sharing versions
 
