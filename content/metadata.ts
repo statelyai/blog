@@ -1,8 +1,7 @@
 import { MetadataOverrides } from "../src/types";
 
 export const DEFAULT_TITLE = "Stately Blog";
-export const DEFAULT_DESCRIPTION =
-  "The official blog of Stately.ai";
+export const DEFAULT_DESCRIPTION = "The official blog of Stately.ai";
 export const DEFAULT_URL = "https://stately.ai/blog";
 export const DEFAULT_OG_IMAGE = {
   url: "https://stately.ai/blog/og-image.png", // needs to be absolute URL
@@ -19,6 +18,7 @@ export const AUTHORS = [
   { name: "David K. 🎹", twitterHandle: "@DavidKPiano" },
   { name: "Andarist", twitterHandle: "@AndaristRake" },
   { name: "Jenny Truong", twitterHandle: "@jen_ayy_" },
+  { name: "Anders Bech Mellson", twitterHandle: "@andersmellson" },
 ] as const;
 
 export const makeMetadata = ({
@@ -45,9 +45,7 @@ export const makeMetadata = ({
         url: ogImage, // needs to be absolute URL
         width: 0,
         height: 0,
-        alt: `‘${title}’ by ${
-          article?.authors![0]
-        } on the Stately Blog.`, // TODO: multiple authors
+        alt: `‘${title}’ by ${article?.authors![0]} on the Stately Blog.`, // TODO: multiple authors
         type: "image/png",
       },
     ],
