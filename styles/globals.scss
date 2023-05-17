@@ -145,3 +145,9 @@ h1 {
   width: 1px !important;
   overflow: hidden !important;
 }
+
+iframe {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16/9;
+}
