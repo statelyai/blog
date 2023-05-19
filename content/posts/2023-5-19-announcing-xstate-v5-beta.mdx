@@ -14,7 +14,15 @@ excerpt: ""
 publishedAt: 2023-5-19
 ---
 
-We’re excited to announce the beta release of XState v5 and related packages after many years of development. XState v4 is a powerful, fully open-source (MIT-licensed) and zero-dependency state management & orchestration solution based on state machines, statecharts, and the actor model. It is currently being used in production by many companies in the frontend and backend of many applications. Over the last few years, we have gathered lots of valuable feedback from the community on the features they would like to see, as well as better ways to gradually adopt XState in their team and lessen the learning curve. We have added many new features and improvements that address these desires, so let’s dive in!
+We’re excited to announce the beta release of XState v5 and related packages after many years of development. XState v4 is a powerful, fully open-source (MIT-licensed) and zero-dependency state management & orchestration solution based on state machines, statecharts, and the actor model. It is currently being used in production by many companies in the frontend and backend of many applications. Over the last few years, we have gathered lots of valuable feedback from the community on the features they would like to see, as well as better ways to gradually adopt XState in their team and lessen the learning curve.
+
+You can try out XState v5 beta today by installing `xstate@beta`:
+
+```bash
+yarn add xstate@beta
+```
+
+We have added many new features and improvements that address these desires, so let’s dive in!
 
 ## Actor-first approach for any logic
 
@@ -77,33 +85,58 @@ In the unified argument object, there is a `self` property which is a reference 
 
 ## Higher-order guards
 
-- `and()`, `or()`, `not()`
-- Can be combined in many ways
+In XState v4, guards were simple functions that returned `true` or `false`. To negate a guard or combine guards, you had to create a new guard, which resulted in duplication or redundant code. In XState v5 beta, you can now use higher-order guards, which are functions that take in guards (referenced and/or inline) and return a guard function. There are 3 built-in higher-order guard functions: `and([...guards])`, `or([...guards])`, and `not(guard)`:
+
+(example)
+
+These higher-order guards can be combined in many different ways to express any complex condition.
 
 ## Predictable events and actions
 
-- Transient transitions will now receive original or raised event instead of null event
-- Actions will always execute in order
-- No need for flags
+In XState v4, actions and events had nuanced default behavior: `assign(...)` actions were prioritized over other actions, which made action order less predictable. Additionally, events were _nullified_ when going through eventless transitions, making it difficult to reference data from the original event. The `predictableActionArguments: true` flag was a necessary workaround for this. In XState v5 beta, actions are always executed in order, and events are always preserved, even when going through eventless transitions. No need for flags ⛳️
 
 ## Partial event descriptors
 
-- `on: { 'something.*' }`
+Partial event descriptors, also known as _partial wildcards_, are a powerful new feature in XState v5 beta that makes it easier to handle groups of events. In XState v4, you could use wildcards to handle any event that wasn't matched by any other transition, but you had to be careful to not accidentally handle events that you didn’t intend to handle. In XState v5 beta, you can use partial event descriptors to handle groups of events by placing a wildcard after the delimiter (`.*`), and you can be explicit about which events you want to handle:
+
+```ts
+const machine = createMachine({
+  // ...
+  on: {
+    // Will handle any event that starts with "pointer.":
+    // "pointer.down", "pointer.up", "pointer.move", etc.
+    "pointer.*": {
+      actions: "logPointerEvent",
+    },
+  },
+});
+```
 
 ## Examples
 
 - TodoMVC
 
+## Migration and breaking changes
+
+As with any major version, there are some breaking changes. We’ve tried to keep these to a minimum, but some of them are necessary to make XState v5 beta as powerful and flexible as possible. Here is the current guide for migrating from XState v4 to v5 and the list of breaking changes: https://stately.ai/docs/xstate-v5/migration
+
 ## In progress
 
+Now that the XState v5 beta API is mostly stabilized, we are working on the following:
+
+- Type safety is priority. We are working on using the latest TypeScript features to make XState v5 beta as type-safe as possible. This includes better type inference for as many parts of the machine as possible, such as `context`, events, guards, actions, finite state values, and more. For everything that is not possible to be inferred or specified, we are updating [XState Typegen](#todo) to generate accurate TypeScript types for your machines. And yes, we're still figuring out typestates.
 - VS Code extension support
+- The [XState VS Code extension](https://marketplace.visualstudio.com/items?itemName=statelyai.vscode-xstate) will be updated to support XState v5 beta.
 - Stately tools support
-- Inspector support
-- Type safety - typegen, inferring as much as possible, typestates
+- [Stately Studio](https://stately.ai/editor) will also be updated to support importing/exporting XState v5 machines, as well as provide visual tooling for the new features in XState v5 beta, such as machine input/output, partial events, higher-order guards, and more.
+- We're making the inspector protocol and `@xstate/inspect` much more flexible, to support XState v5 beta and beyond (even other state management libraries).
 
 ## Stately Studio
 
-- Will support v5
-- Toggle between V4 and V5 once stable (release candidate)
-- Forwards compatibility for things like input, output, etc.
-- Visualize actors & systems
+Speaking of Stately Studio, besides adding support for XState v5, we're taking the "everything is an actor" support to heart and will be building visual tooling for not only managing actor logic, but also entire actor systems and the communication between actors. This will be a huge step forward for visualizing and debugging complex systems, and we're excited to share more about this in the future.
+
+(CTA)
+
+## Conclusion
+
+(TODO)
