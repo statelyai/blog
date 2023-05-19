@@ -96,7 +96,7 @@ In XState v4, actions and events had nuanced default behavior: `assign(...)` act
 
 ## Partial event descriptors
 
-Partial event descriptors, also known as _partial wildcards_, are a powerful new feature in XState v5 beta that makes it easier to handle groups of events. In XState v4, you could use wildcards to handle any event that wasn't matched by any other transition, but you had to be careful to not accidentally handle events that you didn’t intend to handle. In XState v5 beta, you can use partial event descriptors to handle groups of events by placing a wildcard after the delimiter (`.*`), and you can be explicit about which events you want to handle:
+Partial event descriptors, also known as _partial wildcards_, are a powerful new feature in XState v5 beta that makes it easier to handle groups of events. In XState v4, you could use wildcards to handle any event that wasn’t matched by any other transition, but you had to be careful to not accidentally handle events that you didn’t intend to handle. In XState v5 beta, you can use partial event descriptors to handle groups of events by placing a wildcard after the delimiter (`.*`), and you can be explicit about which events you want to handle:
 
 ```ts
 const machine = createMachine({
@@ -123,17 +123,17 @@ As with any major version, there are some breaking changes. We’ve tried to kee
 
 Now that the XState v5 beta API is mostly stabilized, we are working on the following:
 
-- Type safety is priority. We are working on using the latest TypeScript features to make XState v5 beta as type-safe as possible. This includes better type inference for as many parts of the machine as possible, such as `context`, events, guards, actions, finite state values, and more. For everything that is not possible to be inferred or specified, we are updating [XState Typegen](#todo) to generate accurate TypeScript types for your machines. And yes, we're still figuring out typestates.
+- Type safety is priority. We are working on using the latest TypeScript features to make XState v5 beta as type-safe as possible. This includes better type inference for as many parts of the machine as possible, such as `context`, events, guards, actions, finite state values, and more. For everything that is not possible to be inferred or specified, we are updating [XState Typegen](#todo) to generate accurate TypeScript types for your machines. And yes, we’re still figuring out typestates.
 - The [XState VS Code extension](https://marketplace.visualstudio.com/items?itemName=statelyai.vscode-xstate) will be updated to support XState v5 beta.
 - [Stately Studio](https://stately.ai/editor) will also be updated to support importing/exporting XState v5 machines, as well as provide visual tooling for the new features in XState v5 beta, such as machine input/output, partial events, higher-order guards, and more.
-- We're making the inspector protocol and `@xstate/inspect` much more flexible, to support XState v5 beta and beyond (even other state management libraries).
+- We’re making the inspector protocol and `@xstate/inspect` much more flexible, to support XState v5 beta and beyond (even other state management libraries).
 
 ## Stately Studio
 
-Speaking of Stately Studio, besides adding support for XState v5, we're taking the "everything is an actor" support to heart and will be building visual tooling for not only managing actor logic, but also entire actor systems and the communication between actors. This will be a huge step forward for visualizing and debugging complex systems, and we're excited to share more about this in the future.
+Speaking of Stately Studio, besides adding support for XState v5, we’re taking the "everything is an actor" support to heart and will be building visual tooling for not only managing actor logic, but also entire actor systems and the communication between actors. This will be a huge step forward for visualizing and debugging complex systems, and we’re excited to share more about this in the future.
 
 (CTA)
 
 ## Conclusion
 
-We hope you enjoy XState v5 beta! We're excited to see what you build with it (I know everyone says this, but we truly mean it). If you have any questions, feel free to reach out to us on [Discord](https://discord.gg/xstate) or [Twitter](https://twitter.com/statelyai).
+We hope you enjoy XState v5 beta! We’re excited to see what you build with it (I know everyone says this, but we truly mean it). If you have any questions, feel free to reach out to us on [Discord](https://discord.gg/xstate) or [Twitter](https://twitter.com/statelyai).
