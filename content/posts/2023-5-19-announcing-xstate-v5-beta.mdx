@@ -1,0 +1,109 @@
+---
+title: Announcing XState v5 beta
+description: asdf
+tags:
+  - ""
+  - xstate
+  - xstate v5
+  - announcement
+  - beta
+author:
+  - - David Khourshid
+originalURL: ""
+excerpt: ""
+publishedAt: 2023-5-19
+---
+
+We’re excited to announce the beta release of XState v5 and related packages after many years of development. XState v4 is a powerful, fully open-source (MIT-licensed) and zero-dependency state management & orchestration solution based on state machines, statecharts, and the actor model. It is currently being used in production by many companies in the frontend and backend of many applications. Over the last few years, we have gathered lots of valuable feedback from the community on the features they would like to see, as well as better ways to gradually adopt XState in their team and lessen the learning curve. We have added many new features and improvements that address these desires, so let’s dive in!
+
+## Actor-first approach for any logic
+
+Actors are now first-class citizens. In v4, you could invoke/spawn promises, callbacks, observables, and other state machines of course, but these were special-cased, and you could only `interpret()` machines. In v5, you can invoke/spawn _anything_; actors can be created from any type of logic, and any type of logic can be interpreted:
+
+(Promise example)
+
+The composable building block to this is “actor logic”, which is an object consisting of `.transition(...)` and `.getInitialState(...)` methods, among other useful properties and methods. XState v5 beta provides the following actor logic creators:
+
+- `createMachine(machineDef)`
+- `fromTransition(fn, initialState)`
+- `fromPromise(promiseFn)`
+- `fromCallback(fn)`
+- `fromObservable(observableFn)`
+- `fromEventObservable(observableFn)`
+
+With this new actor logic abstraction, it will now be possible to create your own actor logic for any use-case; imagine `fromWebSocket(...)` or `fromWebWorker(...)`. Furthermore, higher-order actor functions can be made that bring additional functionality to actors, such as `withUndoRedo(actorLogic)` or `withLocalStoragePersistence(actorLogic)`. We’re still writing docs and examples on these new patterns, so keep on the lookout for them.
+
+## Deep persistence
+
+Actor persistence is a pattern where the internal state of an actor can be persisted and restored at any time. This is useful for server-side or client-side use-cases. In XState v4, machines can invoke/spawn actors, but those child actors are not persisted.
+
+In XState v5 beta, actors are now deeply (recursively) persisted. Invoked/spawn actors will be persisted, as well as actors invoked/spawned from those actors, and so on:
+
+(example)
+
+## Actor system
+
+As actors can spawn other actors, which in turn can spawn other actors, these connected actors form a natural hierarchy. This collection of connected actors is known as an actor system.
+
+In XState v5 beta, calling `interpret(...)` to create a root actor will also create an implicit actor system. This enables a key feature called the **receptionist pattern**, where actors can be registered and looked up by name. This is useful for actors that need to communicate with each other, but don’t necessarily know about each other.
+
+(example)
+
+## Actor input
+
+Providing input data for machines in v4 was not easy. You had to either create a factory machine function that took in some input data and returned a machine with that input data in context, or you had to create a new machine with `machine.withContext(...)` and pass the entire context with the input data inside. Since `context` should only be initially determined by the machine, this was not ideal, as it was possible to initialize a machine at some impossible state.
+
+In XState v5 beta, you can now provide input data to machines by passing it as the second argument to `interpret(machine, { input })`:
+
+(example)
+
+Furthermore, this works for any actor logic, not just machines:
+
+(example)
+
+## Unified arguments
+
+https://twitter.com/DavidKPiano/status/1555175849569263618
+
+The crowd has spoken. Most of you wanted a unified arguments object for all implementation functions which previously took multiple arguments, which made it hard to remember which argument to use or awkward to ignore certain arguments. In XState v5 beta, all implementation functions now take a single unified argument object, which contains `context`, `event`, and other properties relevant to the implementation function:
+
+(example)
+
+## Self reference
+
+In the unified argument object, there is a `self` property which is a reference to the actor itself. This enables new, flexible patterns for actor communication, as you can pass this `self` reference to other actors in events:
+
+(example)
+
+## Higher-order guards
+
+- `and()`, `or()`, `not()`
+- Can be combined in many ways
+
+## Predictable events and actions
+
+- Transient transitions will now receive original or raised event instead of null event
+- Actions will always execute in order
+- No need for flags
+
+## Partial event descriptors
+
+- `on: { 'something.*' }`
+
+## Examples
+
+- TodoMVC
+
+## In progress
+
+- VS Code extension support
+- Stately tools support
+- Inspector support
+- Type safety - typegen, inferring as much as possible, typestates
+
+## Stately Studio
+
+- Will support v5
+- Toggle between V4 and V5 once stable (release candidate)
+- Forwards compatibility for things like input, output, etc.
+- Visualize actors & systems
