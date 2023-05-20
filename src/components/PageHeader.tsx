@@ -205,7 +205,7 @@ export const PageHeader: React.FC<{ posts: Post[] }> = ({ posts }) => {
           <Wrap as={List} listStyleType="none" direction="row" wrap="wrap">
             <Box as="li">
               <ChakraLink
-                href="https://xstate.js.org/docs"
+                href="https://stately.ai/docs"
                 isExternal
                 display="block"
                 padding="2"
