@@ -101,7 +101,7 @@ In XState v4, actions and events had nuanced default behavior: `assign(...)` act
 
 ## Partial event descriptors
 
-Partial event descriptors, also known as _partial wildcards_, are a powerful new feature in XState v5 beta that makes it easier to handle groups of events. In XState v4, you could use wildcards to handle any event that wasn’t matched by any other transition, but you had to be careful to not accidentally handle events that you didn’t intend to handle. In XState v5 beta, you can use partial event descriptors to handle groups of events by placing a wildcard after the delimiter (`.*`), and you can be explicit about which events you want to handle:
+Partial event descriptors, also known as _partial wildcards_, are a powerful new feature in XState v5 beta that makes it easier to handle groups of events. In XState v4, you could use wildcards to handle any event that wasn’t matched by any other transition, but you had to be careful not to handle events that you didn’t intend to handle accidentally. In XState v5 beta, you can use partial event descriptors to handle groups of events by placing a wildcard after the delimiter (`.*`), and you can be explicit about which events you want to handle:
 
 ```ts
 const machine = createMachine({
