@@ -89,7 +89,7 @@ With this new actor logic abstraction, it will now be possible to create your ow
 
 Actor persistence is a pattern where the internal state of an actor can be persisted and restored at any time. This is useful for server-side or client-side use-cases. In XState v4, machines can invoke/spawn actors, but those child actors are not persisted.
 
-In XState v5 beta, actors are now deeply (recursively) persisted. Invoked/spawned actors will be persisted, as well as actors invoked/spawned from those actors, and so on:
+In XState v5 beta, actors are now deeply (recursively) persisted. Invoked/spawned actors will be persisted, as well as actors invoked/spawned from those actors, and so on. In the following example, the state of the `mainActor` will be persisted, as well as the state of the invoked `someCounter` actor. When the `restoredActor` is started, it will start at the persisted state of `mainActor`, which includes the persisted state of `someCounter`:
 
 ```ts
 const machine = createMachine({
@@ -100,12 +100,12 @@ const machine = createMachine({
   // ...
 });
 
-const actor = interpret(machine);
-actor.start();
+const mainActor = interpret(machine);
+mainActor.start();
 
 // Deeply persist state
 // Also persists the "someCounter" actor!
-const persistedState = actor.getPersistedState();
+const persistedState = mainActor.getPersistedState();
 
 // Restore state
 const restoredActor = interpret(machine, {
@@ -326,8 +326,6 @@ XState v5 beta API is mostly stabilized, and there is still a lot of work to be 
 ## Stately Studio
 
 Speaking of Stately Studio, besides adding support for XState v5, we’re taking the “everything is an actor” support to heart. We will be building visual tooling for not just managing actor logic but also entire actor systems and the communication between actors. This will be a huge step forward for visualizing and debugging complex systems, and we’re excited to share more about this in the future.
-
-(CTA)
 
 ## We hope you enjoy XState v5 beta!
 
