@@ -66,7 +66,13 @@ This already covers the vast majority of state management needs for most applica
 
 Actors are now first-class citizens. In v4, you could invoke/spawn promises, callbacks, observables, and other state machines, but these were special-cased, and you could only `interpret()` machines. In v5, you can invoke/spawn _anything_; actors can be created from any type of logic, and any type of logic can be interpreted:
 
-(Promise example)
+```ts
+import { interpret, fromPromise } from "xstate";
+
+const promiseActor = interpret(
+  fromPromise(() => fetch("https://api.example.com/users"))
+);
+```
 
 The composable building block to this is “actor logic,” which is an object consisting of `.transition(...)` and `.getInitialState(...)` methods, among other useful properties and methods. XState v5 beta provides the following actor logic creators:
 
