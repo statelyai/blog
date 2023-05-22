@@ -23,6 +23,45 @@ yarn add xstate@beta
 
 We have added many new features and improvements that address these desires, so let’s dive in!
 
+## Flattening the learning curve
+
+One of the biggest items of feedback we've received about XState is that although it is powerful, there is a substantial learning curve. There are some ~~new~~ old concepts to learn with XState, such as the actor model, state machines, and statecharts. With these concepts comes new terminology. In XState v5 beta and [the documentation](https://stately.ai/docs/xstate-v5), we have made a concerted effort to make XState as approachable as possible, and to reduce the learning curve as much as possible. Here are some of the changes we’ve made:
+
+- **Simplified terminology**. There shouldn't be multiple names for any of the concepts, so we have taken care to simplify terms wherever possible. The basic unit of abstraction in XState v5 beta is the **actor**, and we’ve removed some of the more confusing terms, such as “service” and “interpreter”. We've also renamed "compound states" to "parent states", "transient transitions" to "eventless transitions", "cond" to "guard", "internal" to "reenter", and more.
+- **Reduced API surface area**. Some of the new features, such as [input](#actor-input), obviated the need for redundant features, such as `machine.withContext(...)`. We’ve also removed redundant functionality, such as `actor.onTransition(...)` in favor of `actor.subscribe(...)`. [See all the breaking changes](https://stately.ai/docs/xstate-v5/migration).
+- **Examples, examples, examples**. We're adding many XState v5 beta examples [in the examples directory](https://github.com/statelyai/xstate/tree/next/examples) to help you get quickly understand how XState can help with your use-cases.
+- **Interactive documentation**. We’re working on adding interactive examples to the documentation, so you can visualize the concepts as you learn them. (TODO: example docs page)
+- **From zero to hello world as quickly as possible**. Our goal with XState v5 and the [updated documentation (work in progress)](https://stately.ai/docs/xstate-v5) is to make developers productive with XState _as quickly as possible_. A simple, complete counter example in XState looks like this:
+
+```ts
+import { createMachine, interpret, assign } from "xstate";
+
+const counterMachine = createMachine({
+  id: "counter",
+  context: {
+    count: 0,
+  },
+  on: {
+    inc: {
+      actions: assign({ count: ({ context }) => context.count + 1 }),
+    },
+    dec: {
+      actions: assign({ count: ({ context }) => context.count - 1 }),
+    },
+  },
+});
+
+const counterActor = interpret(counterMachine);
+counterActor.subscribe((state) => console.log(state.context.count));
+counterActor.start();
+
+counterActor.send({ type: "inc" }); // logs 1
+counterActor.send({ type: "inc" }); // logs 2
+counterActor.send({ type: "dec" }); // logs 1
+```
+
+This already covers the vast majority of state management needs for most applications. But what if you want to use XState for more complex use-cases? XState v5 beta has you covered.
+
 ## Actor-first approach for any logic
 
 Actors are now first-class citizens. In v4, you could invoke/spawn promises, callbacks, observables, and other state machines, but these were special-cased, and you could only `interpret()` machines. In v5, you can invoke/spawn _anything_; actors can be created from any type of logic, and any type of logic can be interpreted:
@@ -46,7 +85,30 @@ Actor persistence is a pattern where the internal state of an actor can be persi
 
 In XState v5 beta, actors are now deeply (recursively) persisted. Invoked/spawn actors will be persisted, as well as actors invoked/spawned from those actors, and so on:
 
-(example)
+```ts
+const machine = createMachine({
+  invoke: {
+    src: "counter",
+    id: "someCounter",
+  },
+  // ...
+});
+
+const actor = interpret(machine);
+actor.start();
+
+// Deeply persist state
+// Also persists the "someCounter" actor!
+const persistedState = actor.getPersistedState();
+
+// Restore state
+const restoredActor = interpret(machine, {
+  state: persistedState,
+});
+
+// Starts at recursively persisted state
+restoredActor.start();
+```
 
 ## Actor system
 
@@ -54,24 +116,86 @@ As actors can spawn other actors, which in turn can spawn other actors, these co
 
 In XState v5 beta, calling `interpret(...)` to create a root actor will also create an implicit actor system. This enables a key feature called the **receptionist pattern**, where actors can be registered and looked up by name. This is useful for actors that need to communicate with each other, but don’t necessarily know about each other.
 
-(example)
+For example, let's say you have a `shopMachine` that orchestrates the state of an online shop. If you want a notifier actor to be available to any machines spawned anywhere within the `shopMachine` system, you can register it by providing a `systemId`:
+
+```ts
+import { notifierMachine } from "../notifierMachine";
+import { shippingMachine } from "../shippingMachine";
+
+const shopMachine = createMachine({
+  invoke: {
+    src: notifierMachine,
+    systemId: "notifier",
+  },
+  // ...
+  states: {
+    // ...
+    shipping: {
+      invoke: {
+        src: shippingMachine,
+      },
+    },
+  },
+});
+
+const shopActor = interpret(shopMachine);
+shopActor.start();
+```
+
+Now, any actor within the `shopMachine` system can access the notifier actor by calling `actor.system.get("notifier")`:
+
+```ts
+const shippingMachine = createMachine({
+  // ...
+  on: {
+    "address.updated": {
+      actions: sendTo(({ system }) => system.get("notifier"), {
+        type: "notify",
+        message: "Shipping address updated",
+      }),
+    },
+  },
+});
+```
 
 ## Actor input
 
 Providing input data for machines in v4 was not easy. You had to either:
 
 - Create a factory machine function that took in some input data and returned a machine with that input data in context.
-- Create a new machine with `machine.withContext(...)` and pass the entire context with the input data inside. 
+- Create a new machine with `machine.withContext(...)` and pass the entire context with the input data inside.
 
 Since only the machine should initially determine `context`, this was not ideal, as it was possible to initialize a machine at some impossible state.
 
 In XState v5 beta, you can now provide input data to machines by passing it as the second argument to `interpret(machine, { input })`:
 
-(example)
+```ts
+const greetingMachine = createMachine({
+  context: ({ input }) => ({
+    greeting: `Hello, ${input.name}!`,
+  }),
+});
+
+const greetingActor = interpret(greetingMachine, {
+  input: {
+    name: "David",
+  },
+});
+```
 
 Furthermore, this works for any actor logic, not just machines:
 
-(example)
+```ts
+const promiseLogic = fromPromise(({ input }) =>
+  fetch(`https://api.example.com/users/${input.id}`).then((res) => res.json())
+);
+
+const promiseActor = interpret(promiseLogic, {
+  input: {
+    id: 42,
+  },
+});
+```
 
 ## Unified arguments
 
@@ -79,19 +203,79 @@ Furthermore, this works for any actor logic, not just machines:
 
 The crowd has spoken. Most of you wanted a unified arguments object for all implementation functions. Implementation functions previously took multiple arguments, making it hard to remember which argument to use or awkward to ignore certain arguments. In XState v5 beta, all implementation functions now take a single unified argument object, which contains `context`, `event`, and other properties relevant to the implementation function:
 
-(example)
+```ts
+const machine = createMachine({
+  context: {
+    count: 0,
+  },
+  on: {
+    inc: {
+      // Single argument, instead of:
+      // guard: (_, event) => ...
+      guard: ({ event }) => !Number.isNaN(event.value),
+      // Single argument, instead of:
+      // actions: (context, event) => ...
+      actions: ({ context, event }) => {
+        console.log(context, event);
+      },
+    },
+  },
+});
+```
 
 ## Self reference
 
 In the unified argument object, there is a `self` property that references the actor itself. This enables new, flexible patterns for actor communication, as you can pass this `self` reference to other actors in events:
 
-(example)
+```ts
+const pingMachine = createMachine({
+  invoke: {
+    src: "pong",
+    id: "pong",
+  },
+  on: {
+    ping: {
+      actions: sendTo("pong", ({ self }) => ({ type: "ping", sender: self })),
+    },
+  },
+});
+
+// ...
+
+const pongMachine = createMachine({
+  on: {
+    ping: {
+      actions: sendTo(({ event }) => event.sender, { type: "pong" }),
+    },
+  },
+});
+```
 
 ## Higher-order guards
 
 In XState v4, guards were simple functions that returned `true` or `false`. To negate a guard or combine guards, you had to create a new guard, which resulted in duplication or redundant code. In XState v5 beta, you can now use higher-order guards, which are functions that take in guards (referenced and/or inline) and return a guard function. There are 3 built-in higher-order guard functions: `and([...guards])`, `or([...guards])`, and `not(guard)`:
 
-(example)
+```ts
+import { createMachine, and, not } from "xstate";
+
+const userMachine = createMachine(
+  {
+    // ...
+    on: {
+      doSomething: {
+        guard: and(["isAuthenticated", "isAdmin", not("isBanned")]),
+      },
+    },
+  },
+  {
+    guards: {
+      isAuthenticated: ({ context }) => context.user !== undefined,
+      isAdmin: ({ context }) => context.user.role === "admin",
+      isBanned: ({ context }) => context.user.status === "banned",
+    },
+  }
+);
+```
 
 These higher-order guards can be combined in many different ways to express any complex condition.
 
@@ -118,7 +302,7 @@ const machine = createMachine({
 
 ## Examples
 
-- TodoMVC
+[See the TodoMVC example with React, TypeScript, and XState v5 beta](https://discord.com/channels/795785288994652170/795785288994652174/1110179749269086360)
 
 ## Migration and breaking changes
 
