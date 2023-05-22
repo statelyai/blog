@@ -58,7 +58,12 @@ In XState v5 beta, calling `interpret(...)` to create a root actor will also cre
 
 ## Actor input
 
-Providing input data for machines in v4 was not easy. You had to either create a factory machine function that took in some input data and returned a machine with that input data in context, or you had to create a new machine with `machine.withContext(...)` and pass the entire context with the input data inside. Since `context` should only be initially determined by the machine, this was not ideal, as it was possible to initialize a machine at some impossible state.
+Providing input data for machines in v4 was not easy. You had to either:
+
+- Create a factory machine function that took in some input data and returned a machine with that input data in context.
+- Create a new machine with `machine.withContext(...)` and pass the entire context with the input data inside. 
+
+Since only the machine should initially determine `context`, this was not ideal, as it was possible to initialize a machine at some impossible state.
 
 In XState v5 beta, you can now provide input data to machines by passing it as the second argument to `interpret(machine, { input })`:
 
