@@ -168,7 +168,7 @@ As actors can spawn other actors, which in turn can spawn other actors, these co
 
 In XState v5 beta, calling `interpret(...)` to create a root actor will also create an implicit actor system. This enables a key feature called the **receptionist pattern**. The receptionist pattern means actors can be registered and looked up by their `systemId`, which is useful for actors that need to communicate with each other but don’t directly know about each other (i.e., actors not in a parent-child relationship).
 
-For example, let's say you have a `checkoutMachine` that orchestrates the state of an online shop. If you want a notifier actor to be available to any machines spawned anywhere within the `checkoutMachine` system, you can register it by providing a `systemId`:
+For example, let’s say you have a `checkoutMachine` that orchestrates the state of an online shop. If you want a notifier actor to be available to any machines spawned anywhere within the `checkoutMachine` system, you can register it by providing a `systemId`:
 
 ```ts
 import { notifierMachine } from "../notifierMachine";
