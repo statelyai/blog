@@ -122,7 +122,7 @@ The composable building block to this is “actor logic,” which is an object c
 
 - `createMachine(machineDef)`: useful for more complex state machine/statechart logic; can spawn/invoke actors and declaratively handle effects
 - `fromTransition(fn, initialState)`: useful for basic reducer-like state management, similar to Redux, Zustand, Pinia, NgRx, etc.
-- `fromPromise(promiseFn)` - useful for async/await (promise-based) logic
+- `fromPromise(promiseFn)`: useful for async/await promise-based logic
 - `fromCallback(fn)` - useful for subscription-based or other free-form logic that can send events back to the parent actor
 - `fromObservable(observableFn)` - useful for subscribing to an observable stream of values
 - `fromEventObservable(observableFn)` - useful for subscribing to an observable stream of events
