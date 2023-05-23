@@ -131,7 +131,9 @@ With this new actor logic abstraction, it is now possible to create your own act
 
 ## Deep persistence
 
-Actor persistence is a pattern where the internal state of an actor can be persisted and restored at any time. In XState v4, machines can invoke/spawn actors, but those child actors are not persisted. In XState v5 beta, actors are now deeply (recursively) persisted. Invoked/spawned actors will be persisted, as well as actors invoked/spawned from those actors, and so on. In the following example, the state of the `mainActor` will be persisted, as well as the state of the invoked `someCounter` actor. When the `restoredActor` is started, it will start at the persisted state of `mainActor`, which includes the persisted state of `someCounter`:
+Actor persistence is a pattern where the internal state of an actor can be persisted and restored at any time. In XState v4, machines can invoke/spawn actors, but those child actors are not persisted. In XState v5 beta, actors are now deeply (recursively) persisted. Invoked/spawned actors will be persisted, as well as actors invoked/spawned from those actors, and so on. 
+
+In the following example, the state of the `mainActor` will be persisted, as well as the state of the invoked `someCounter` actor. When the `restoredActor` is started, it will start at the persisted state of `mainActor`, which includes the persisted state of `someCounter`:
 
 ```ts
 const machine = createMachine({
