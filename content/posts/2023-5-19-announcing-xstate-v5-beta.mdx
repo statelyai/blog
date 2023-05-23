@@ -125,7 +125,7 @@ The composable building block to this is “actor logic,” which is an object c
 - `fromPromise(promiseFn)`: useful for async/await promise-based logic
 - `fromCallback(fn)`: useful for subscription-based or other free-form logic that can send events back to the parent actor
 - `fromObservable(observableFn)`: useful for subscribing to an observable stream of values
-- `fromEventObservable(observableFn)` - useful for subscribing to an observable stream of events
+- `fromEventObservable(observableFn)`: useful for subscribing to an observable stream of events
 
 With this new actor logic abstraction, it is now possible to create your own actor logic for any use-case; imagine `fromWebSocket(...)`, `fromQuery(...)`, and `fromWebWorker(...)` logic creator functions. Furthermore, higher-order actor functions can be made that bring additional functionality to actors, such as `withUndoRedo(actorLogic)` or `withLocalStoragePersistence(actorLogic)`. We’re still writing documentation and examples on these new patterns, so keep on the lookout for them.
 
