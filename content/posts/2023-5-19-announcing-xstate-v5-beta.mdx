@@ -13,7 +13,7 @@ ogImage: "https://stately.ai/blog/2023-05-19-announcing-xstate-v5-beta.png"
 publishedAt: 2023-5-19
 ---
 
-We’re excited to announce the beta release of XState v5 and related packages after many years of development. XState v4 is a powerful, fully open-source (MIT-licensed) and zero-dependency state management & orchestration solution based on state machines, statecharts, and the actor model. It is currently being used in production by many companies in the frontend and backend of many applications. Over the last few years, we have gathered lots of valuable feedback from the community on features they would like to see and better ways to gradually adopt XState in their team and lessen the learning curve.
+We’re excited to announce the v5 beta release of XState and related packages after many years of development. XState is a powerful, fully open-source (MIT-licensed) and zero-dependency state management & orchestration solution based on state machines, statecharts, and the actor model. It is currently being used in production by many companies in the frontend and backend of many applications. Over the last few years, we have gathered lots of valuable feedback from the community on features they would like to see and better ways to gradually adopt XState in their team and lessen the learning curve.
 
 You can try out XState v5 beta today by installing `xstate@beta`:
 
@@ -31,7 +31,7 @@ One of the biggest items of feedback we've received about XState is that althoug
 - **Reduced API surface area**. Some of the new features, such as [input](#actor-input), obviated the need for redundant features, such as `machine.withContext(...)`. We’ve also removed redundant functionality, such as `actor.onTransition(...)` in favor of `actor.subscribe(...)`. [See all the breaking changes](https://stately.ai/docs/xstate-v5/migration).
 - **Examples, examples, examples**. We're adding many XState v5 beta examples [in the examples directory](https://github.com/statelyai/xstate/tree/next/examples) to help you get quickly understand how XState can help with your use-cases.
 - **Interactive documentation**. We’re working on adding interactive examples to the documentation, so you can visualize the concepts as you learn them. (TODO: example docs page)
-- **From zero to hello world as quickly as possible**. Our goal with XState v5 and the [updated documentation (work in progress)](https://stately.ai/docs/xstate-v5) is to make developers productive with XState _as quickly as possible_. A simple, complete counter example in XState looks like this:
+- **From zero to "hello world" as quickly as possible**. Our goal with XState v5 and the [updated documentation (work in progress)](https://stately.ai/docs/xstate-v5) is to make developers productive with XState quickly. A simple, complete counter example in XState looks like this:
 
 ```ts
 import { createMachine, interpret, assign } from "xstate";
@@ -55,16 +55,16 @@ const counterActor = interpret(counterMachine);
 counterActor.subscribe((state) => console.log(state.context.count));
 counterActor.start();
 
-counterActor.send({ type: "inc" }); // logs 1
-counterActor.send({ type: "inc" }); // logs 2
-counterActor.send({ type: "dec" }); // logs 1
+counterActor.send({ type: "increment" }); // logs 1
+counterActor.send({ type: "increment" }); // logs 2
+counterActor.send({ type: "decrement" }); // logs 1
 ```
 
-This kind of functionality already covers the vast majority of state management needs for most applications. But what if you want to use XState for more complex use-cases? XState v5 beta has you covered.
+This kind of functionality already covers the vast majority of state management needs for most applications. But if you want to use XState for more complex use-cases, XState v5 beta has you covered.
 
 ## Actor-first approach for any logic
 
-Actors are now first-class citizens. In v4, you could invoke/spawn promises, callbacks, observables, and other state machines, but these were special-cased, and you could only `interpret()` machines. In v5, you can invoke/spawn _anything_; actors can be created from any type of logic, and any type of logic can be interpreted:
+Actors are now first-class citizens. In v4, you could invoke/spawn promises, callbacks, observables, and other state machines, but these were special-cased, and you could only `interpret()` machines. In v5, you can invoke/spawn _anything_; actors can be created from any type of logic, and any type of logic can be interpreted, such as promises:
 
 ```ts
 import { interpret, fromPromise } from "xstate";
@@ -74,22 +74,62 @@ const promiseActor = interpret(
 );
 ```
 
-The composable building block to this is “actor logic,” which is an object consisting of `.transition(...)` and `.getInitialState(...)` methods, among other useful properties and methods. XState v5 beta provides the following actor logic creators:
+As well as other types of logic, like transition functions (similar to reducers), observables, and callback functions:
 
-- `createMachine(machineDef)`
-- `fromTransition(fn, initialState)`
-- `fromPromise(promiseFn)`
-- `fromCallback(fn)`
-- `fromObservable(observableFn)`
-- `fromEventObservable(observableFn)`
+```ts
+import { fromTransition } from "xstate";
 
-With this new actor logic abstraction, it will now be possible to create your own actor logic for any use-case; imagine `fromWebSocket(...)` or `fromWebWorker(...)`. Furthermore, higher-order actor functions can be made that bring additional functionality to actors, such as `withUndoRedo(actorLogic)` or `withLocalStoragePersistence(actorLogic)`. We’re still writing docs and examples on these new patterns, so keep on the lookout for them.
+const transitionLogic = fromTransition(
+  (state, event) => {
+    if (event.type === "increment") {
+      return { ...state, count: state.count + 1 };
+    } else if (event.type === "decrement") {
+      return { ...state, count: state.count - 1 };
+    }
+
+    return state;
+  },
+  { count: 0 }
+);
+```
+
+```ts
+import { fromObservable } from "xstate";
+import { interval } from "rxjs";
+
+const observableLogic = fromObservable(() => interval(1000));
+```
+
+```ts
+import { fromCallback } from "xstate";
+
+const callbackLogic = fromCallback((sendBack) => {
+  const handler = (ev) => {
+    sendBack(ev);
+  };
+
+  window.addEventListener("resize", handler);
+
+  return () => {
+    window.removeEventListener("resize", handler);
+  };
+});
+```
+
+The composable building block to this is “actor logic,” which is an object consisting of `.transition(...)`, `.getInitialState(...)`, and `.getSnapshot()` methods, among other useful properties and methods. XState v5 beta provides the following actor logic creators:
+
+- `createMachine(machineDef)` - useful for more complex state machine/statechart logic; can spawn/invoke actors and declaratively handle effects
+- `fromTransition(fn, initialState)` - useful for basic reducer-like state management, similar to Redux, Zustand, Pinia, NgRx, etc.
+- `fromPromise(promiseFn)` - useful for async/await (promise-based) logic
+- `fromCallback(fn)` - useful for subscription-based or other free-form logic that can send events back to the parent actor
+- `fromObservable(observableFn)` - useful for subscribing to an observable stream of values
+- `fromEventObservable(observableFn)` - useful for subscribing to an observable stream of events
+
+With this new actor logic abstraction, it is now possible to create your own actor logic for any use-case; imagine `fromWebSocket(...)`, `fromQuery(...)`, and `fromWebWorker(...)` logic creator functions. Furthermore, higher-order actor functions can be made that bring additional functionality to actors, such as `withUndoRedo(actorLogic)` or `withLocalStoragePersistence(actorLogic)`. We’re still writing documentation and examples on these new patterns, so keep on the lookout for them.
 
 ## Deep persistence
 
-Actor persistence is a pattern where the internal state of an actor can be persisted and restored at any time. This is useful for server-side or client-side use-cases. In XState v4, machines can invoke/spawn actors, but those child actors are not persisted.
-
-In XState v5 beta, actors are now deeply (recursively) persisted. Invoked/spawned actors will be persisted, as well as actors invoked/spawned from those actors, and so on. In the following example, the state of the `mainActor` will be persisted, as well as the state of the invoked `someCounter` actor. When the `restoredActor` is started, it will start at the persisted state of `mainActor`, which includes the persisted state of `someCounter`:
+Actor persistence is a pattern where the internal state of an actor can be persisted and restored at any time. In XState v4, machines can invoke/spawn actors, but those child actors are not persisted. In XState v5 beta, actors are now deeply (recursively) persisted. Invoked/spawned actors will be persisted, as well as actors invoked/spawned from those actors, and so on. In the following example, the state of the `mainActor` will be persisted, as well as the state of the invoked `someCounter` actor. When the `restoredActor` is started, it will start at the persisted state of `mainActor`, which includes the persisted state of `someCounter`:
 
 ```ts
 const machine = createMachine({
@@ -116,19 +156,21 @@ const restoredActor = interpret(machine, {
 restoredActor.start();
 ```
 
+This is useful for client-side (e.g. handling page refreshes) and server-side (e.g. persisting workflow state) use-cases alike. It is also possible to customize persistence/restoration logic for actors, and we will document those options soon.
+
 ## Actor system
 
 As actors can spawn other actors, which in turn can spawn other actors, these connected actors form a natural hierarchy. This collection of connected actors is known as an actor system.
 
-In XState v5 beta, calling `interpret(...)` to create a root actor will also create an implicit actor system. This enables a key feature called the **receptionist pattern**, where actors can be registered and looked up by name. This is useful for actors that need to communicate with each other, but don’t necessarily know about each other.
+In XState v5 beta, calling `interpret(...)` to create a root actor will also create an implicit actor system. This enables a key feature called the **receptionist pattern**, where actors can be registered and looked up by their `systemId`. This is useful for actors that need to communicate with each other, but don’t directly know about each other (i.e., actors that are not in a parent-child relationship).
 
-For example, let's say you have a `shopMachine` that orchestrates the state of an online shop. If you want a notifier actor to be available to any machines spawned anywhere within the `shopMachine` system, you can register it by providing a `systemId`:
+For example, let's say you have a `checkoutMachine` that orchestrates the state of an online shop. If you want a notifier actor to be available to any machines spawned anywhere within the `checkoutMachine` system, you can register it by providing a `systemId`:
 
 ```ts
 import { notifierMachine } from "../notifierMachine";
 import { shippingMachine } from "../shippingMachine";
 
-const shopMachine = createMachine({
+const checkoutMachine = createMachine({
   invoke: {
     src: notifierMachine,
     systemId: "notifier",
@@ -144,11 +186,11 @@ const shopMachine = createMachine({
   },
 });
 
-const shopActor = interpret(shopMachine);
-shopActor.start();
+const checkoutActor = interpret(checkoutMachine);
+checkoutActor.start();
 ```
 
-Now, any actor within the `shopMachine` system can access the notifier actor by calling `actor.system.get("notifier")`:
+Now, any actor within the `checkoutActor` system can access the notifier actor by calling `system.get("notifier")`:
 
 ```ts
 const shippingMachine = createMachine({
@@ -164,16 +206,18 @@ const shippingMachine = createMachine({
 });
 ```
 
+The implicit system and receptionist pattern make it much easier to model arbitrary actor-actor communication, event buses, and other event-driven patterns.
+
 ## Actor input
 
-Providing input data for machines in v4 was not easy. You had to either:
+There are cases where you want to specify initial "input data" for actors. Providing that input data in XState v4 was not easy. You had to either:
 
 - Create a factory machine function that took in some input data and returned a machine with that input data in context.
 - Create a new machine with `machine.withContext(...)` and pass the entire context with the input data inside.
 
-Since only the machine should initially determine `context`, this was not ideal, as it was possible to initialize a machine at some impossible state.
+Since only the machine should initially determine `context`, this was not ideal, as it was possible to initialize a machine at some impossible state. Additionally, you may want to consider some `context` properties _private_ (internal to the machine) and not externally configurable.
 
-In XState v5 beta, you can now provide input data to machines by passing it as the second argument to `interpret(machine, { input })`:
+In XState v5 beta, you can now provide input data to machines by passing it as the second argument to `interpret(machine, { input })`. This input data can be read by machines in the `context` initialization function:
 
 ```ts
 const greetingMachine = createMachine({
@@ -189,7 +233,7 @@ const greetingActor = interpret(greetingMachine, {
 });
 ```
 
-Furthermore, this works for any actor logic, not just machines:
+Furthermore, this works for any actor logic, not just state machines:
 
 ```ts
 const promiseLogic = fromPromise(({ input }) =>
@@ -259,7 +303,7 @@ const pongMachine = createMachine({
 
 ## Higher-order guards
 
-In XState v4, guards were simple functions that returned `true` or `false`. To negate a guard or combine guards, you had to create a new guard, which resulted in duplication or redundant code. In XState v5 beta, you can now use higher-order guards, which are functions that take in guards (referenced and/or inline) and return a guard function. There are 3 built-in higher-order guard functions: `and([...guards])`, `or([...guards])`, and `not(guard)`:
+In XState v4, guards were simple functions on the `.cond` transition property that returned `true` or `false` to determine if a transition would be taken. To negate a guard or combine guards, you had to create a new guard, which resulted in duplication or redundant code. In XState v5 beta, you can now use higher-order guards, which are functions that take in guards (referenced and/or inline) and return a guard function. There are 3 built-in higher-order guard functions: `and([...guards])`, `or([...guards])`, and `not(guard)`:
 
 ```ts
 import { createMachine, and, not } from "xstate";
@@ -269,6 +313,8 @@ const userMachine = createMachine(
     // ...
     on: {
       doSomething: {
+        // Higher-order guard
+        // Renamed from "cond" (v4) -> "guard" (v5)
         guard: and(["isAuthenticated", "isAdmin", not("isBanned")]),
       },
     },
@@ -283,7 +329,7 @@ const userMachine = createMachine(
 );
 ```
 
-These higher-order guards can be combined in many different ways to express any complex condition.
+These higher-order guards can be combined in many different ways to express any complex condition. In the future, Stately visual tooling will be able to visualize complex conditional logic expressed in guards.
 
 ## Predictable events and actions
 
@@ -325,7 +371,7 @@ XState v5 beta API is mostly stabilized, and there is still a lot of work to be 
 
 ## Stately Studio
 
-Speaking of Stately Studio, besides adding support for XState v5, we’re taking the “everything is an actor” support to heart. We will be building visual tooling for not just managing actor logic but also entire actor systems and the communication between actors. This will be a huge step forward for visualizing and debugging complex systems, and we’re excited to share more about this in the future.
+Speaking of Stately Studio, besides adding support for XState v5, we’re taking the “everything is an actor” support to heart. We will be building visual tooling for not just managing actor logic (state machines & statecharts) but also visualization of entire actor systems (architecture diagrams) and the communication between actors (sequence diagrams). This will be a huge step forward for visually understanding and debugging complex systems, and we’re excited to share more about this in the future.
 
 ## We hope you enjoy XState v5 beta!
 
