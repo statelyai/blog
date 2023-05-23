@@ -214,7 +214,7 @@ The implicit system and receptionist pattern make it much easier to model arbitr
 
 ## Actor input
 
-There are cases where you want to specify initial "input data" for actors. Providing that input data in XState v4 was not easy. You had to either:
+In some cases where you want to specify initial “input data” for actors. Providing that input data in XState v4 was not easy. You had to either:
 
 - Create a factory machine function that took in some input data and returned a machine with that input data in context.
 - Create a new machine with `machine.withContext(...)` and pass the entire context with the input data inside.
