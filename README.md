@@ -1,3 +1,9 @@
+# Archived 07.06.2023
+
+We have integrated the blog into our documentation site.
+
+You can find and contribute to this repo here https://github.com/statelyai/docs.
+
 # Official Stately.ai blog
 
 A [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
