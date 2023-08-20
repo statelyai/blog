@@ -1,0 +1,201 @@
+---
+title: Start with events
+description: Start with events description TODO
+tags:
+  - ""
+  - stately
+  - xstate
+  - state machine
+  - modeling
+  - tutorial
+  - introduction
+author:
+  - David Khourshid
+originalURL: ""
+excerpt: ""
+publishedAt: 2022-8-15
+---
+
+State machines and statecharts are powerful tools for modeling applications, but they can be a bit confusing or difficult to use at first. There's many concepts to learn, like states, transitions, actions, and guards, and making use of all of these these building blocks to model features can feel overwhelming. Thankfully, there is just one simple strategy you can use to get started:
+
+_Start with events._
+
+## What is an event?
+
+An event is a signal that something has happened. It can be a user interaction (such as a button click), a response from a server, or even an internal signal that some system sent itself.
+
+Events are very useful in modeling logic, because they provide a semantic way to describe what has happened. That information can then be sent to a a centralized place for handling that logic, instead of being handled ad-hoc throughout the codebase.
+
+- Higher level way of understanding everything that can happen in an application, and by whom
+
+## Gathering events
+
+Media player application example
+
+- Select a song
+- Play
+- Pause
+- Stop
+- Rewind
+- Fast forward
+- Seek
+- Volume up
+- Volume down
+- Mute
+- Unmute
+- Next track
+- Previous track
+- Shuffle
+- Repeat
+
+Non-user events
+
+- Song loaded
+- Song failed to load
+- Song finished playing
+
+These events can be grouped, e.g.:
+
+- `player.play`
+- `player.pause`
+- `song.loaded`
+- `song.finished`
+
+## Defining events
+
+- In code, events can be defined as objects:
+
+```js
+{
+  type: 'player.select',
+  song: 'foo.mp3'
+}
+```
+
+- Can define in TypeScript:
+
+```ts
+type PlayerEvent =
+  | {
+      type: "player.select";
+      songId: string;
+    }
+  | {
+      type: "player.play";
+    }
+  | {
+      type: "player.pause";
+    };
+
+type SongEvent =
+  | {
+      type: "song.loaded";
+      songId: string;
+    }
+  | {
+      type: "song.failed";
+      songId: string;
+    }
+  | {
+      type: "song.finished";
+      songId: string;
+    };
+```
+
+## Modeling logic with events
+
+- Can use a switch statement:
+
+```js
+function playerReducer(state, event) {
+  switch (event.type) {
+    case "player.select":
+      return {
+        ...state,
+        song: event.song,
+      };
+    case "player.play":
+      return {
+        ...state,
+        status: "playing",
+      };
+    case "player.pause":
+      return {
+        ...state,
+        status: "paused",
+      };
+    default:
+      return state;
+  }
+}
+```
+
+- Can use an object:
+
+```js
+const playerEventMap = {
+  "player.select": (state, event) => ({
+    ...state,
+    selectedSong: event.song,
+  }),
+  "player.play": (state, event) => ({
+    ...state,
+    status: "playing",
+  }),
+  "player.pause": (state, event) => ({
+    ...state,
+    status: "paused",
+  }),
+  // ...
+};
+
+function playerReducer(state, event) {
+  const handler = playerEventMap[event.type];
+  if (handler) {
+    return handler(state, event);
+  }
+  return state;
+}
+```
+
+- Can use XState:
+
+```js
+import { createMachine } from "xstate";
+
+const playerMachine = createMachine({
+  context: {
+    selectedSong: null,
+    status: "paused",
+  },
+  on: {
+    "player.select": {
+      actions: assign({
+        selectedSong: (ctx, event) => event.song,
+      }),
+    },
+    "player.play": {
+      actions: assign({
+        status: (ctx, event) => "playing",
+      }),
+    },
+    "player.pause": {
+      actions: assign({
+        status: (ctx, event) => "paused",
+      }),
+    },
+  },
+});
+```
+
+## Conclusion and next steps
+
+- Getting started with events is easy, because you can determine all the events that can happen in your app readily
+- You can use events to start modeling logic before thinking about states
+- Can use XState to handle events in a centralized and simpler way than manually using switch statements or event handler maps
+- Can explain everything that can happen in app in one centralized place
+
+Next steps:
+
+- Going from booleans to enums to finite states
+- Grouping events into finite states by behavior
